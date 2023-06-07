@@ -4,12 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Selectable
+  - Villagers
+  - Harvestable
+  - Ground
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - Selectable

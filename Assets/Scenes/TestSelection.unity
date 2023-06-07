@@ -1640,7 +1640,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1892815285}
-  - component: {fileID: 1892815284}
   - component: {fileID: 1892815286}
   m_Layer: 0
   m_Name: OutlineSelection
@@ -1649,19 +1648,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1892815284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892815283}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44e4a0b0e5d99f2478e32b81e62fb7fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selected: []
 --- !u!4 &1892815285
 Transform:
   m_ObjectHideFlags: 0

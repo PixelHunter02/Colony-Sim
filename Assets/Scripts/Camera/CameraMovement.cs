@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,12 +25,13 @@ public class CameraMovement : MonoBehaviour
 
     
     //zoom
-    private float _scrollSpeed = 5f;
     private CinemachineCameraOffset _cinemachineCameraOffset;
+    private Vector3 offset;
 
     private void Awake()
     {
         _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
+        offset = _cinemachineCameraOffset.m_Offset;
     }
 
     private void Update()
@@ -77,7 +79,33 @@ public class CameraMovement : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            _cinemachineCameraOffset.m_Offset = new Vector3(_cinemachineCameraOffset.m_Offset.x,0,_cinemachineCameraOffset.m_Offset.z+((context.ReadValue<Vector2>().y/120)*_scrollSpeed)) ;
+            if (context.ReadValue<Vector2>().y > 0)
+            {
+                offset.z += 5;
+                StopAllCoroutines();
+                StartCoroutine(Zoom());
+            }
+            else if (context.ReadValue<Vector2>().y < 0)
+            {
+                offset.z -= 5;
+                StopAllCoroutines();
+                StartCoroutine(Zoom());
+            }
+
+            
+        }
+    }
+
+    private IEnumerator Zoom()
+    {
+        float progress = 0; 
+        while(progress < 1)
+        {
+            Debug.Log(progress);
+            float timeElapsed = Time.deltaTime;
+            progress += timeElapsed/4;
+            _cinemachineCameraOffset.m_Offset = Vector3.Lerp(_cinemachineCameraOffset.m_Offset, offset, progress);
+            yield return null;
         }
     }
 }
