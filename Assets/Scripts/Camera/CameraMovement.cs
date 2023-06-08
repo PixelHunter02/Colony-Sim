@@ -18,11 +18,14 @@ public class CameraMovement : MonoBehaviour
     //Movement
     private Vector3 _moveDirection;
     private bool _cameraPanning;
-    private Vector2 _mousePosition;
+    private Vector3 _mousePosition;
     private Vector2 _lastMousePosition;
     [SerializeField] private float speed = 8f;
     
-
+    //Rotate
+    private bool rightClickPressed;
+    private Vector2 _lastRightClickPosition;
+    [SerializeField] private float rotationSensitivity;
     
     //zoom
     private CinemachineCameraOffset _cinemachineCameraOffset;
@@ -39,7 +42,12 @@ public class CameraMovement : MonoBehaviour
         MoveCameraKeyboard();
         CameraPanningMouse();
     }
-    
+
+    private void FixedUpdate()
+    {
+        RotateCamera();
+    }
+
     public void BeginMoveCameraKeyboard(InputAction.CallbackContext context)
     {
         var inputDirection = new Vector3(context.ReadValue<Vector2>().x, 0, context.ReadValue<Vector2>().y);
@@ -70,8 +78,8 @@ public class CameraMovement : MonoBehaviour
         if (_cameraPanning)
         {
             Debug.Log(_mousePosition);
-            _mousePosition = Mouse.current.position.ReadValue()-_lastMousePosition;
-            _moveDirection = new Vector3(_mousePosition.x, 0, _mousePosition.y)*Time.deltaTime*1.5f;
+            _mousePosition = followObject.transform.forward * (Mouse.current.position.y.ReadValue()-_lastMousePosition.y) + followObject.transform.right*(Mouse.current.position.x.ReadValue()-_lastMousePosition.x);
+            _moveDirection = new Vector3(_mousePosition.x, 0, _mousePosition.z)*Time.deltaTime*1.5f;
         }
     }
 
@@ -91,8 +99,6 @@ public class CameraMovement : MonoBehaviour
                 StopAllCoroutines();
                 StartCoroutine(Zoom());
             }
-
-            
         }
     }
 
@@ -106,6 +112,30 @@ public class CameraMovement : MonoBehaviour
             progress += timeElapsed/4;
             _cinemachineCameraOffset.m_Offset = Vector3.Lerp(_cinemachineCameraOffset.m_Offset, offset, progress);
             yield return null;
+        }
+    }
+
+    public void BeginRotateCamera(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            rightClickPressed = true;
+            _lastRightClickPosition = Mouse.current.position.ReadValue();
+        }
+        else if (context.phase == InputActionPhase.Canceled)
+        {
+            rightClickPressed = false;
+        }
+    }
+
+    private void RotateCamera()
+    {
+        if(rightClickPressed && Mouse.current.position.x.ReadValue() > 0)
+        {
+            var value = Mouse.current.position.ReadValue() - _lastRightClickPosition;
+            Vector3 rotation = followObject.transform.rotation.eulerAngles;
+            rotation.y += value.x * rotationSensitivity * Time.deltaTime;
+            followObject.transform.rotation = Quaternion.Euler(rotation);
         }
     }
 }

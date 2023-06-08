@@ -6,9 +6,30 @@ using UnityEngine.AI;
 
 public class Worker : MonoBehaviour
 {
-    public Roles roles;
-    public Tasks tasks;
+    /// <summary>
+    /// The Workers Role will give the worker boosted stats in a specifc craft as well as more abilities linked to that craft.
+    /// </summary>
+    public enum Role 
+    {
+        Default,
+        Lumberjack,
+        Farmer,
+        Fighter,
+    }
+    public Role role;
+    
+    /// <summary>
+    /// The workers Tasks represent the task that the worker is currently doing.
+    /// </summary>
+    public enum Tasks
+    {
+        None,
+        ChoppingTrees,
+        MovingResources,
+    }
+    public Tasks task;
 
+    
     public enum WorkerStates
     {
         Available,
@@ -16,22 +37,18 @@ public class Worker : MonoBehaviour
         Sleeping,
         Eating,
     }
-
     public WorkerStates _workerStates;
-    private bool walking;
+    
     private NavMeshAgent agent;
 
     private IEnumerator distanceCheck;
 
     private void Awake()
     {
-        roles = GetComponent<Roles>();
-        tasks = GetComponent<Tasks>();
         agent = GetComponent<NavMeshAgent>();
-        
     }
     
-    public void WorkerStateManagement(WorkerStates state, Vector3 movementPoint, Tasks.Jobs job)
+    public void WorkerStateManagement(WorkerStates state, Vector3 movementPoint)
     {
         switch (state)
         {
@@ -39,7 +56,6 @@ public class Worker : MonoBehaviour
                 break;
             case WorkerStates.Working:
                 agent.SetDestination(movementPoint);
-                walking = true;
                 StartCoroutine(DistanceCheck(movementPoint));
                 break;
         }
@@ -52,7 +68,6 @@ public class Worker : MonoBehaviour
         {
             yield return null;
         }
-        walking = false;
         agent.isStopped = true;
         Debug.Log("Reached Destination");
     }

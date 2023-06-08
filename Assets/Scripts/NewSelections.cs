@@ -40,18 +40,25 @@ public class NewSelections : MonoBehaviour
         if(context.phase == InputActionPhase.Started)
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100) && !selectedCharacters.Contains(hit.transform.gameObject)) 
+            if (Physics.Raycast(ray, out RaycastHit hit, 100)) 
             {
-
-                if (hit.transform.tag.Equals("Villagers") && clickState == "Select" && !IsMouseOverUI() && shiftPressed == false)
+                hit.transform.TryGetComponent(out HarvestableObjects harvestableObjects);
+                if (hit.transform.tag.Equals("Villagers") && clickState == "Select" && !IsMouseOverUI() && !shiftPressed)
                 {
+                    foreach (GameObject select in selectedCharacters)
+                    {
+                        if (select.GetComponent<Worker>()._workerStates != Worker.WorkerStates.Working)
+                        {
+                            select.transform.gameObject.GetComponent<Outline>().enabled = false;
+                        }
+                    }
                     selectedCharacters.Clear();
                     selectedCharacters.Add(hit.transform.gameObject);
                     hit.transform.gameObject.GetComponent<Outline>().enabled = true;
                     hit.transform.gameObject.GetComponent<Outline>().OutlineColor = Color.cyan;
                     hit.transform.gameObject.GetComponent<Outline>().OutlineWidth = 10;
                 }
-                else if (hit.transform.tag.Equals("Villagers") && clickState == "Select" && !IsMouseOverUI() && shiftPressed == true)
+                else if (hit.transform.tag.Equals("Villagers") && clickState == "Select" && !IsMouseOverUI() && shiftPressed && !selectedCharacters.Contains(hit.transform.gameObject))
                 {
                     selectedCharacters.Add(hit.transform.gameObject);
                     hit.transform.gameObject.GetComponent<Outline>().enabled = true;
@@ -59,15 +66,15 @@ public class NewSelections : MonoBehaviour
                     hit.transform.gameObject.GetComponent<Outline>().OutlineWidth = 10;
                 }
 
-                else if (hit.transform.tag.Equals("HarvestableLumberJack") && clickState == "Select" && !IsMouseOverUI())
+                else if (hit.transform.tag.Equals("Harvestable") && clickState == "Select" && !IsMouseOverUI())
                 {
                     for (int i = 0; i < selectedCharacters.Count; i++)
                     {
                         selectedCharacters[i].TryGetComponent<Worker>(out var worker);
-                        if (worker._workerStates == Worker.WorkerStates.Available && worker.roles.role == Roles.Role.Lumberjack)
+                        if (worker._workerStates == Worker.WorkerStates.Available && harvestableObjects.canInteract.Contains(worker.role))
                         {
                             worker._workerStates = Worker.WorkerStates.Working;
-                            worker.WorkerStateManagement(worker._workerStates,hit.transform.position,Tasks.Jobs.ChoppingTrees);
+                            worker.WorkerStateManagement(worker._workerStates,hit.transform.position);
                             break;
                         }
                     }
