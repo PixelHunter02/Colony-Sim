@@ -1,13 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using Input = UnityEngine.Windows.Input;
 
 
 public class CameraMovement : MonoBehaviour
@@ -23,18 +17,20 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float speed = 8f;
     
     //Rotate
-    private bool rightClickPressed;
+    private bool _rightClickPressed;
     private Vector2 _lastRightClickPosition;
     [SerializeField] private float rotationSensitivity;
+    private CinemachineVirtualCamera _cinemachineVirtualCamera;
     
     //zoom
     private CinemachineCameraOffset _cinemachineCameraOffset;
-    private Vector3 offset;
+    private Vector3 _offset;
 
     private void Awake()
     {
         _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
-        offset = _cinemachineCameraOffset.m_Offset;
+        _cinemachineVirtualCamera = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        _offset = _cinemachineCameraOffset.m_Offset;
     }
 
     private void Update()
@@ -54,9 +50,9 @@ public class CameraMovement : MonoBehaviour
         _moveDirection = followObject.transform.forward * inputDirection.z + followObject.transform.right * inputDirection.x;
     }
 
-    public void MoveCameraKeyboard()
+    private void MoveCameraKeyboard()
     {
-        followObject.transform.position += _moveDirection * Time.deltaTime * speed; 
+        followObject.transform.position += _moveDirection * (Time.deltaTime * speed); 
     }
     
     public void BeginPan(InputAction.CallbackContext context)
@@ -79,7 +75,7 @@ public class CameraMovement : MonoBehaviour
         {
             Debug.Log(_mousePosition);
             _mousePosition = followObject.transform.forward * (Mouse.current.position.y.ReadValue()-_lastMousePosition.y) + followObject.transform.right*(Mouse.current.position.x.ReadValue()-_lastMousePosition.x);
-            _moveDirection = new Vector3(_mousePosition.x, 0, _mousePosition.z)*Time.deltaTime*1.5f;
+            _moveDirection = new Vector3(_mousePosition.x, 0, _mousePosition.z) * (Time.deltaTime * 1.5f);
         }
     }
 
@@ -89,13 +85,15 @@ public class CameraMovement : MonoBehaviour
         {
             if (context.ReadValue<Vector2>().y > 0)
             {
-                offset.z += 5;
+                _offset.z += 5;
+                _offset.z = Mathf.Clamp(_offset.z, -25, 0);
                 StopAllCoroutines();
                 StartCoroutine(Zoom());
             }
             else if (context.ReadValue<Vector2>().y < 0)
             {
-                offset.z -= 5;
+                _offset.z -= 5;
+                _offset.z = Mathf.Clamp(_offset.z, -25, 0);
                 StopAllCoroutines();
                 StartCoroutine(Zoom());
             }
@@ -110,7 +108,7 @@ public class CameraMovement : MonoBehaviour
             Debug.Log(progress);
             float timeElapsed = Time.deltaTime;
             progress += timeElapsed/4;
-            _cinemachineCameraOffset.m_Offset = Vector3.Lerp(_cinemachineCameraOffset.m_Offset, offset, progress);
+            _cinemachineCameraOffset.m_Offset = Vector3.Lerp(_cinemachineCameraOffset.m_Offset, _offset, progress);
             yield return null;
         }
     }
@@ -119,22 +117,25 @@ public class CameraMovement : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            rightClickPressed = true;
+            _rightClickPressed = true;
             _lastRightClickPosition = Mouse.current.position.ReadValue();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            rightClickPressed = false;
+            _rightClickPressed = false;
         }
     }
 
     private void RotateCamera()
     {
-        if(rightClickPressed && Mouse.current.position.x.ReadValue() > 0)
+        if(_rightClickPressed && Mouse.current.position.x.ReadValue() > 0)
         {
             var value = Mouse.current.position.ReadValue() - _lastRightClickPosition;
             Vector3 rotation = followObject.transform.rotation.eulerAngles;
             rotation.y += value.x * rotationSensitivity * Time.deltaTime;
+            var vcamOffset = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+            vcamOffset.y += value.y * rotationSensitivity * Time.deltaTime;
+            _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(vcamOffset.y, 0, 15);
             followObject.transform.rotation = Quaternion.Euler(rotation);
         }
     }

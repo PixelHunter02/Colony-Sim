@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21975517, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.0807991, g: 0.3679245, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -92,8 +92,6 @@ GameObject:
   - component: {fileID: 6265913509800541749}
   - component: {fileID: 2511303835714797144}
   - component: {fileID: 8834477723631921225}
-  - component: {fileID: 1009153994986072626}
-  - component: {fileID: 7513878041937047966}
   - component: {fileID: 4419842829242877391}
   m_Layer: 6
   m_Name: Character
@@ -233,32 +231,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54d87338958a6243857496e0e553bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _workerStates: 0
---- !u!114 &1009153994986072626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1771544343734651997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f363c6234305b7541939fadb1d5d4fee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   role: 0
---- !u!114 &7513878041937047966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1771544343734651997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de1bcd11bba754e4483ba01aab5dcd75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  task: 0
+  workerStates: 0
 --- !u!195 &4419842829242877391
 NavMeshAgent:
   m_ObjectHideFlags: 0

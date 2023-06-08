@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
-using System;
+
 using UnityEngine;
 using UnityEngine.AI;
+using Slider = UnityEngine.UI.Slider;
 
 public class Worker : MonoBehaviour
 {
@@ -37,31 +37,38 @@ public class Worker : MonoBehaviour
         Sleeping,
         Eating,
     }
-    public WorkerStates _workerStates;
+    public WorkerStates workerStates;
     
     private NavMeshAgent agent;
 
-    private IEnumerator distanceCheck;
+    /// <summary>
+    /// UI
+    /// </summary>
+    private GameObject canvas;
+    private Slider progressSlider;
+    
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        canvas = transform.Find("Canvas").gameObject;
+        progressSlider = canvas.transform.Find("Slider").gameObject.GetComponent<Slider>();
     }
     
-    public void WorkerStateManagement(WorkerStates state, Vector3 movementPoint)
+    public void WorkerStateManagement(WorkerStates state, GameObject target)
     {
         switch (state)
         {
             case WorkerStates.Available:
                 break;
             case WorkerStates.Working:
-                agent.SetDestination(movementPoint);
-                StartCoroutine(DistanceCheck(movementPoint));
+                agent.SetDestination(target.transform.position);
+                StartCoroutine(DistanceCheck(target.transform.position,target));
                 break;
         }
     }
 
-    private IEnumerator DistanceCheck(Vector3 movementPoint)
+    private IEnumerator DistanceCheck(Vector3 movementPoint,GameObject target)
     {
         Debug.Log(Vector3.Distance(transform.position, movementPoint));
         while (Vector3.Distance(transform.position, movementPoint) > 3f)
@@ -70,5 +77,24 @@ public class Worker : MonoBehaviour
         }
         agent.isStopped = true;
         Debug.Log("Reached Destination");
+        StartCoroutine(BeginHarvest(target.GetComponent<HarvestableObjects>().timeToHarvest));
+    }
+
+    private IEnumerator BeginHarvest(float duration)
+    {
+        canvas.SetActive(true);
+        float timer = 0;
+        while (timer < duration)
+        {
+            Debug.Log(timer);
+            timer += Time.deltaTime;
+            progressSlider.value = timer / duration;
+            yield return null;
+        }
+        canvas.SetActive(false);
+        progressSlider.value = 0;
+        workerStates = WorkerStates.Available;
+        agent.ResetPath();
+        agent.isStopped = false;
     }
 }

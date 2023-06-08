@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class HarvestableObjects : MonoBehaviour
 {
+    [Tooltip("The Type Of Resource Being Harvested")]
+    public enum HarvestType
+    {
+        Tree,
+        Stone,
+        Berries,
+    }
+    
     [Tooltip("Time To Harvest In Seconds")]
     public float timeToHarvest;
     
