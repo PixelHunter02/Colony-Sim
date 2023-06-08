@@ -1,17 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Tasks : MonoBehaviour
 {
-    public enum WorkerStates
+    #region Actions
+
+    // public delegate void OnWorkerStateChange();
+    // public static event Action<WorkerStates,Vector3> onWorkerStateChange;
+
+    #endregion
+    
+    public enum Jobs
     {
-        Available,
-        Working,
-        Sleeping,
-        Eating,
+        None,
+        ChoppingTrees,
     }
 
-    public WorkerStates _workerStates;
-    
+    // private IEnumerator ChoppingTrees()
+    // {
+    //     
+    // }
+
+
+
+
+
+
+
 }

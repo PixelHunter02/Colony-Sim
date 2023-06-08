@@ -45,14 +45,15 @@ public class NewSelections : MonoBehaviour
                     hit.transform.gameObject.GetComponent<Outline>().OutlineColor = Color.cyan;
                     hit.transform.gameObject.GetComponent<Outline>().OutlineWidth = 10;
                 }
-                else if (hit.transform.tag.Equals("Harvestable"))
+                else if (hit.transform.tag.Equals("HarvestableLumberJack"))
                 {
                     for (int i = 0; i < selectedCharacters.Count; i++)
                     {
-                        if (selectedCharacters[i].GetComponent<Tasks>()._workerStates == Tasks.WorkerStates.Available)
+                        selectedCharacters[i].TryGetComponent<Worker>(out var worker);
+                        if (worker._workerStates == Worker.WorkerStates.Available && worker.roles.role == Roles.Role.Lumberjack)
                         {
-                            selectedCharacters[i].GetComponent<Tasks>()._workerStates = Tasks.WorkerStates.Working;
-                            selectedCharacters[i].GetComponent<NavMeshAgent>().SetDestination(hit.point);
+                            worker._workerStates = Worker.WorkerStates.Working;
+                            worker.WorkerStateManagement(worker._workerStates,hit.transform.position,Tasks.Jobs.ChoppingTrees);
                             break;
                         }
                     }
@@ -61,7 +62,10 @@ public class NewSelections : MonoBehaviour
                 {
                     foreach (GameObject select in selectedCharacters)
                     {
-                        select.GetComponent<NavMeshAgent>().SetDestination(hit.point);
+                        if (select.GetComponent<Worker>()._workerStates != Worker.WorkerStates.Working)
+                        {
+                            select.GetComponent<NavMeshAgent>().SetDestination(hit.point);    
+                        }
                     }  
                 }
 

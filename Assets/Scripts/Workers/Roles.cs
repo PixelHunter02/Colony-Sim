@@ -14,7 +14,7 @@ public class Roles : MonoBehaviour
         Fighter,
     }
 
-    [SerializeField] private Role role;
+    public Role role;
 
     private void Update()
     {

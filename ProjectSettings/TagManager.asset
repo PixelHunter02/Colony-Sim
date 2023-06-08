@@ -7,6 +7,7 @@ TagManager:
   - Villagers
   - Harvestable
   - Ground
+  - HarvestableLumberJack
   layers:
   - Default
   - TransparentFX
