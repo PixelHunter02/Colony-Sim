@@ -9,13 +9,15 @@ public class NewSelections : MonoBehaviour
 {
     private Camera cam;
     
-    public List<GameObject> characters;
     public List<GameObject> selectedCharacters;
     public string clickState;
 
     private static NewSelections _instance;
     public static NewSelections Instance {  get { return _instance; } }
 
+    /// <summary>
+    /// Button Hold
+    /// </summary>
     private bool shiftPressed;
     private bool leftClickHeld;
 
@@ -25,7 +27,10 @@ public class NewSelections : MonoBehaviour
     private Vector3Int dragSelectStartingPoint;
     [SerializeField] private Vector3[] verticePoints;
     private int[] triangles;
+    private List<Mesh> savedMeshes;
     private Mesh dragBoxMesh;
+    [SerializeField] private Material selectMaterial;
+    [SerializeField] private Material stockPileMaterial;
 
     private void Awake()
     {
@@ -39,6 +44,7 @@ public class NewSelections : MonoBehaviour
         }
 
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();                    
+        
         
         //Drag Box Building
         dragBoxMesh = new Mesh();
@@ -56,31 +62,13 @@ public class NewSelections : MonoBehaviour
             {
                 if (hit.transform.tag.Equals("Ground") && clickState == "Select" && !IsMouseOverUI())
                 {
-                    verticePoints[1] = new Vector3(Mathf.CeilToInt(hit.point.x),dragSelectStartingPoint.y +0.1f,dragSelectStartingPoint.z);
-                    verticePoints[2] = new Vector3(dragSelectStartingPoint.x,dragSelectStartingPoint.y+0.1f,Mathf.CeilToInt(hit.point.z));
-                    verticePoints[3] = new Vector3(Mathf.CeilToInt(hit.point.x),dragSelectStartingPoint.y+0.1f,Mathf.CeilToInt(hit.point.z));
-
-                    if (((verticePoints[1].x < verticePoints[0].x) && (verticePoints[2].z < verticePoints[0].z))||((verticePoints[1].x > verticePoints[0].x) && (verticePoints[2].z > verticePoints[0].z)))
-                    {
-                        triangles[0] = 2;
-                        triangles[1] = 1;
-                        triangles[2] = 0;
-                        triangles[3] = 3;
-                        triangles[4] = 1;
-                        triangles[5] = 2; 
-                    }
-                    else
-                    {
-                        triangles[0] = 0;
-                        triangles[1] = 1;
-                        triangles[2] = 2;
-                        triangles[3] = 2;
-                        triangles[4] = 1;
-                        triangles[5] = 3; 
-                    }
-                    
-                    dragBoxMesh.vertices = verticePoints;
-                    dragBoxMesh.triangles = triangles;
+                    GetComponent<MeshRenderer>().material = selectMaterial;
+                    DrawBox(hit);
+                }
+                else if (hit.transform.tag.Equals("Ground") && clickState == "Stockpile" && !IsMouseOverUI())
+                {
+                    GetComponent<MeshRenderer>().material = stockPileMaterial;
+                    DrawBox(hit);
                 }
             }
         }
@@ -148,11 +136,22 @@ public class NewSelections : MonoBehaviour
                 else if (hit.transform.tag.Equals("Ground") && clickState == "Select" && !IsMouseOverUI())
                 {
                     dragSelectStartingPoint = Vector3Int.CeilToInt(hit.point);
-                    verticePoints[0] = new Vector3(dragSelectStartingPoint.x, dragSelectStartingPoint.y+0.1f,dragSelectStartingPoint.z);
+                }
+                
+                else if (hit.transform.tag.Equals("Ground") && clickState == "Stockpile" && !IsMouseOverUI())
+                {
+                    dragSelectStartingPoint = Vector3Int.CeilToInt(hit.point);
+                    // verticePoints[0] = new Vector3(dragSelectStartingPoint.x, dragSelectStartingPoint.y + 0.03f,dragSelectStartingPoint.z);
                 }
             }
         }
-        else if (context.phase == InputActionPhase.Canceled)
+        else if (context.phase == InputActionPhase.Canceled && clickState == "Stockpile")
+        {
+            leftClickHeld = false;   
+            GenerateStockpile();
+            dragBoxMesh.Clear();
+        }
+        else if (context.phase == InputActionPhase.Canceled )
         {
             leftClickHeld = false;
             dragBoxMesh.Clear();
@@ -176,11 +175,17 @@ public class NewSelections : MonoBehaviour
             select.transform.gameObject.GetComponent<Outline>().enabled = false;
         }
         selectedCharacters.Clear();
+        
     }
     
     public void Move()
     {
         clickState = "Move";
+    }
+    
+    public void MakeStockpile()
+    {
+        clickState = "Stockpile";
     }
     
     private bool IsMouseOverUI()
@@ -200,5 +205,48 @@ public class NewSelections : MonoBehaviour
         }
     }
 
-    
+    private void DrawBox(RaycastHit hit)
+    {
+        verticePoints[0] = new Vector3(dragSelectStartingPoint.x, dragSelectStartingPoint.y + 0.03f,dragSelectStartingPoint.z);
+        verticePoints[1] = new Vector3(Mathf.CeilToInt(hit.point.x),dragSelectStartingPoint.y + 0.03f,dragSelectStartingPoint.z);
+        verticePoints[2] = new Vector3(dragSelectStartingPoint.x,dragSelectStartingPoint.y + 0.03f,Mathf.CeilToInt(hit.point.z));
+        verticePoints[3] = new Vector3(Mathf.CeilToInt(hit.point.x),dragSelectStartingPoint.y + 0.03f,Mathf.CeilToInt(hit.point.z));
+
+        if (((verticePoints[1].x < verticePoints[0].x) && (verticePoints[2].z < verticePoints[0].z))||((verticePoints[1].x > verticePoints[0].x) && (verticePoints[2].z > verticePoints[0].z)))
+        {
+            triangles[0] = 2;
+            triangles[1] = 1;
+            triangles[2] = 0;
+            triangles[3] = 3;
+            triangles[4] = 1;
+            triangles[5] = 2; 
+        }
+        else
+        {
+            triangles[0] = 0;
+            triangles[1] = 1;
+            triangles[2] = 2;
+            triangles[3] = 2;
+            triangles[4] = 1;
+            triangles[5] = 3; 
+        }
+        dragBoxMesh.vertices = verticePoints;
+        dragBoxMesh.triangles = triangles;
+        
+    }
+
+    /// <summary>
+    /// Save Information To A Generated Prefab
+    /// </summary>
+    public void GenerateStockpile()
+    {
+        GameObject meshGO = new GameObject("Mesh", typeof(MeshFilter), typeof(MeshRenderer),typeof(Stockpile));
+        var dataToAdd = meshGO.GetComponent<Stockpile>() ;
+        dataToAdd.vertices[0] = verticePoints[0];
+        dataToAdd.vertices[1] = verticePoints[1];
+        dataToAdd.vertices[2] = verticePoints[2];
+        dataToAdd.vertices[3] = verticePoints[3];
+        dataToAdd.stockPileMaterial = stockPileMaterial;
+        dataToAdd.DrawBox();
+    }
 }
