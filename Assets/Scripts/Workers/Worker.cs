@@ -36,6 +36,7 @@ public class Worker : MonoBehaviour
         Working,
         Sleeping,
         Eating,
+        Collecting
     }
     public WorkerStates workerStates;
     
@@ -65,6 +66,9 @@ public class Worker : MonoBehaviour
                 agent.SetDestination(target.transform.position);
                 StartCoroutine(DistanceCheck(target.transform.position,target));
                 break;
+            case WorkerStates.Collecting:
+                agent.SetDestination(target.transform.position);
+                break;
         }
     }
 
@@ -77,10 +81,10 @@ public class Worker : MonoBehaviour
         }
         agent.isStopped = true;
         Debug.Log("Reached Destination");
-        StartCoroutine(BeginHarvest(target.GetComponent<HarvestableObjects>().timeToHarvest));
+        StartCoroutine(BeginHarvest(target.GetComponent<HarvestableObjects>().timeToHarvest, target.gameObject));
     }
 
-    private IEnumerator BeginHarvest(float duration)
+    private IEnumerator BeginHarvest(float duration, GameObject objectToRemove)
     {
         canvas.SetActive(true);
         float timer = 0;
@@ -91,6 +95,7 @@ public class Worker : MonoBehaviour
             progressSlider.value = timer / duration;
             yield return null;
         }
+        Destroy(objectToRemove);
         canvas.SetActive(false);
         progressSlider.value = 0;
         workerStates = WorkerStates.Available;

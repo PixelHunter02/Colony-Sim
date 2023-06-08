@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -46,11 +47,13 @@ public class NewSelections : MonoBehaviour
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();                    
         
         
-        //Drag Box Building
+        //Drag Box Setup
         dragBoxMesh = new Mesh();
         dragBoxMesh = GetComponent<MeshFilter>().mesh;
         verticePoints = new Vector3[4];
         triangles = new int[6];
+        GetComponent<MeshCollider>().sharedMesh = dragBoxMesh; 
+
     }
 
     private void Update()
@@ -58,12 +61,15 @@ public class NewSelections : MonoBehaviour
         if (leftClickHeld)
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100))
+            if (Physics.Raycast(ray, out RaycastHit hit, 10000))
             {
                 if (hit.transform.tag.Equals("Ground") && clickState == "Select" && !IsMouseOverUI())
                 {
                     GetComponent<MeshRenderer>().material = selectMaterial;
                     DrawBox(hit);
+                    GetComponent<MeshCollider>().sharedMesh = null;
+                    GetComponent<MeshCollider>().sharedMesh = dragBoxMesh; 
+                    
                 }
                 else if (hit.transform.tag.Equals("Ground") && clickState == "Stockpile" && !IsMouseOverUI())
                 {
@@ -71,6 +77,17 @@ public class NewSelections : MonoBehaviour
                     DrawBox(hit);
                 }
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.Equals("Villagers") && !selectedCharacters.Contains(other.gameObject))
+        {
+            selectedCharacters.Add(other.transform.gameObject);
+            other.transform.gameObject.GetComponent<Outline>().enabled = true;
+            other.transform.gameObject.GetComponent<Outline>().OutlineColor = Color.cyan;
+            other.transform.gameObject.GetComponent<Outline>().OutlineWidth = 10;
         }
     }
 
@@ -112,12 +129,23 @@ public class NewSelections : MonoBehaviour
                     for (int i = 0; i < selectedCharacters.Count; i++)
                     {
                         selectedCharacters[i].TryGetComponent<Worker>(out var worker);
-                        if (worker.workerStates == Worker.WorkerStates.Available && harvestableObjects.canInteract.Contains(worker.role))
+                        if (worker.workerStates == Worker.WorkerStates.Available &&
+                            harvestableObjects.harvestType == HarvestableObjects.HarvestType.Pickup)
+                        {
+                            if (GameObject.Find("Mesh").GetComponent<Stockpile>().maxStorage >
+                                GameObject.Find("Mesh").GetComponent<Stockpile>().currentStorageTaken)
+                            {
+                                hit.transform.position =
+                                    GameObject.Find("Mesh").GetComponent<Stockpile>().vertices[0];
+                            }
+                        }
+                        else if (worker.workerStates == Worker.WorkerStates.Available && harvestableObjects.canInteract.Contains(worker.role) && harvestableObjects.harvestType != HarvestableObjects.HarvestType.Pickup)
                         {
                             worker.workerStates = Worker.WorkerStates.Working;
                             worker.WorkerStateManagement(worker.workerStates,hit.transform.gameObject);
                             break;
                         }
+                        
                     }
                 }
 
