@@ -21,7 +21,8 @@ public class CameraMovement : MonoBehaviour
     private Vector2 _lastRightClickPosition;
     [SerializeField] private float rotationSensitivity;
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
-    
+    private Vector3 velocity = Vector3.zero;
+
     //zoom
     private CinemachineCameraOffset _cinemachineCameraOffset;
     private Vector3 _offset;
@@ -36,12 +37,12 @@ public class CameraMovement : MonoBehaviour
     private void Update()
     {
         MoveCameraKeyboard();
-        CameraPanningMouse();
     }
 
     private void FixedUpdate()
     {
         RotateCamera();
+        CameraPanningMouse();
     }
 
     public void BeginMoveCameraKeyboard(InputAction.CallbackContext context)
@@ -73,9 +74,9 @@ public class CameraMovement : MonoBehaviour
     {
         if (_cameraPanning)
         {
-            Debug.Log(_mousePosition);
-            _mousePosition = followObject.transform.forward * (Mouse.current.position.y.ReadValue()-_lastMousePosition.y) + followObject.transform.right*(Mouse.current.position.x.ReadValue()-_lastMousePosition.x);
-            _moveDirection = new Vector3(_mousePosition.x, 0, _mousePosition.z) * (Time.deltaTime * 1.5f);
+            _mousePosition = (-followObject.transform.forward * (Mouse.current.position.y.ReadValue() -_lastMousePosition.y)) * (Time.deltaTime*2) + (-followObject.transform.right*(Mouse.current.position.x.ReadValue()-_lastMousePosition.x)) * (Time.deltaTime*2);
+            _lastMousePosition = Mouse.current.position.ReadValue();
+            _moveDirection = new Vector3(_mousePosition.x, 0, _mousePosition.z) ;
         }
     }
 
@@ -130,13 +131,21 @@ public class CameraMovement : MonoBehaviour
     {
         if(_rightClickPressed && Mouse.current.position.x.ReadValue() > 0)
         {
+            //Left and Right Rotation;
             var value = Mouse.current.position.ReadValue() - _lastRightClickPosition;
             Vector3 rotation = followObject.transform.rotation.eulerAngles;
-            rotation.y += value.x * rotationSensitivity * Time.deltaTime;
-            var vcamOffset = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
-            vcamOffset.y += value.y * rotationSensitivity * Time.deltaTime;
-            _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(vcamOffset.y, 0, 15);
+            rotation.y += value.x;
+            rotation = Vector3.SmoothDamp(followObject.transform.rotation.eulerAngles, rotation, ref velocity, 0.25f);
             followObject.transform.rotation = Quaternion.Euler(rotation);
+            
+            // Up And Down Rotation
+            var vcamOffset = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+            var original = vcamOffset;
+            vcamOffset.y += -value.y * rotationSensitivity;
+            var clamped = Mathf.Clamp(vcamOffset.y, 0, 15);
+            _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = clamped;
+            
+            _lastRightClickPosition = Mouse.current.position.ReadValue();
         }
     }
 }
