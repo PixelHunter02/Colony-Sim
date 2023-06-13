@@ -99,7 +99,7 @@ public class NewSelections : MonoBehaviour
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100)) 
             {
-                hit.transform.TryGetComponent(out ObjectManager harvestableObjects);
+                hit.transform.TryGetComponent(out ObjectManager objectManager);
                 if (hit.transform.tag.Equals("Villagers") && clickState == "Select" && !IsMouseOverUI() && !shiftPressed)
                 {
                     foreach (GameObject select in selectedCharacters)
@@ -130,7 +130,7 @@ public class NewSelections : MonoBehaviour
                     {
                         selectedCharacters[i].TryGetComponent<Worker>(out var worker);
                         if (worker.workerStates == Worker.WorkerStates.Available &&
-                            harvestableObjects._harvestableObject.harvestType == HarvestableObjectSO.HarvestType.Pickup)
+                            objectManager._harvestableObject.harvestType == HarvestableObjectSO.HarvestType.Pickup)
                         {
                             if (GameObject.Find("Mesh").GetComponent<Stockpile>().maxStorage >
                                 GameObject.Find("Mesh").GetComponent<Stockpile>().currentStorageTaken)
@@ -139,7 +139,7 @@ public class NewSelections : MonoBehaviour
                                     GameObject.Find("Mesh").GetComponent<Stockpile>().vertices[0];
                             }
                         }
-                        else if (worker.workerStates == Worker.WorkerStates.Available && harvestableObjects._harvestableObject.canInteract.Contains(worker.role) && harvestableObjects._harvestableObject.harvestType != HarvestableObjectSO.HarvestType.Pickup)
+                        else if (worker.workerStates == Worker.WorkerStates.Available && objectManager._harvestableObject.canInteract.Contains(worker.role) && objectManager._harvestableObject.harvestType != HarvestableObjectSO.HarvestType.Pickup)
                         {
                             worker.workerStates = Worker.WorkerStates.Working;
                             worker.WorkerStateManagement(worker.workerStates,hit.transform.gameObject);

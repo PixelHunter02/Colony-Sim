@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +5,7 @@ public class Interactions : MonoBehaviour
 {
     
     private PlayerInputActions _playerInputActions;
+    [SerializeField] private NewSelections selectionManager;
     [SerializeField] private Camera cam;
 
     private void Awake()
@@ -18,15 +16,31 @@ public class Interactions : MonoBehaviour
 
     private void Start()
     {
-        _playerInputActions.Player.Select.performed += PickUpSelected;
+        _playerInputActions.Player.Select.performed += InteractObject;
     }
 
-    private void PickUpSelected(InputAction.CallbackContext context)
+    private void InteractObject(InputAction.CallbackContext context)
     {
-        Ray ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (Physics.Raycast(ray, out RaycastHit hit, 100))
+        var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        if (Physics.Raycast(ray, out var hit, 100))
         {
-            Debug.Log(hit.transform.name);
+            hit.transform.TryGetComponent(out ObjectManager objectManager);
+            if (objectManager)
+            {
+                foreach (var worker in selectionManager.selectedCharacters)
+                {
+                    worker.TryGetComponent(out Worker workerBrain);
+                    if (objectManager._harvestableObject.canInteract.Contains(workerBrain.role))
+                    {
+                        BeginWorking(workerBrain, objectManager);
+                    }
+                }
+            }
         }
+    }
+
+    private void BeginWorking(Worker worker, ObjectManager objectManager)
+    {
+        objectManager.assignedWorker = worker;
     }
 }

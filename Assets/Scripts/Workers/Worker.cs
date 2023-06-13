@@ -51,7 +51,11 @@ public class Worker : MonoBehaviour
     /// </summary>
     private GameObject canvas;
     private Slider progressSlider;
-    
+
+    /// <summary>
+    /// Worker Information
+    /// </summary>
+    private string workerName;
 
     private void Awake()
     {
