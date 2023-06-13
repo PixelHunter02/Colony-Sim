@@ -1,12 +1,12 @@
 {
-    "name": "PC",
+    "name": "InputActions",
     "maps": [
         {
             "name": "Player",
             "id": "397b5563-b449-4c3a-ac11-01aeef5d333b",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "MoveCamera",
                     "type": "Value",
                     "id": "1a809f0c-cc20-4503-b92f-8ba9112d81e5",
                     "expectedControlType": "Vector2",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Middle Mouse Clicked",
+                    "name": "CameraPanning",
                     "type": "Button",
                     "id": "612ed090-023f-4c2f-8d10-fe5fc6ee5031",
                     "expectedControlType": "Button",
@@ -36,15 +36,6 @@
                     "name": "Select",
                     "type": "Button",
                     "id": "458745e6-5cb1-404b-ad54-6936222a6c55",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Deselect",
-                    "type": "Button",
-                    "id": "2d80e639-f12b-4e7a-8773-d0c3f59f4318",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -77,7 +68,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "MoveCamera",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -88,7 +79,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "MoveCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -99,7 +90,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "MoveCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -110,7 +101,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "MoveCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -121,7 +112,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Move",
+                    "action": "MoveCamera",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -132,7 +123,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Middle Mouse Clicked",
+                    "action": "CameraPanning",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -155,17 +146,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "aac9094e-b59c-4d4c-b811-c4284403a467",
-                    "path": "<Keyboard>/backspace",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Deselect",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

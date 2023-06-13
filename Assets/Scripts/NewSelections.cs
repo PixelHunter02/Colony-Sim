@@ -99,7 +99,7 @@ public class NewSelections : MonoBehaviour
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100)) 
             {
-                hit.transform.TryGetComponent(out HarvestableObjects harvestableObjects);
+                hit.transform.TryGetComponent(out ObjectManager harvestableObjects);
                 if (hit.transform.tag.Equals("Villagers") && clickState == "Select" && !IsMouseOverUI() && !shiftPressed)
                 {
                     foreach (GameObject select in selectedCharacters)
@@ -130,7 +130,7 @@ public class NewSelections : MonoBehaviour
                     {
                         selectedCharacters[i].TryGetComponent<Worker>(out var worker);
                         if (worker.workerStates == Worker.WorkerStates.Available &&
-                            harvestableObjects.harvestType == HarvestableObjects.HarvestType.Pickup)
+                            harvestableObjects._harvestableObject.harvestType == HarvestableObjectSO.HarvestType.Pickup)
                         {
                             if (GameObject.Find("Mesh").GetComponent<Stockpile>().maxStorage >
                                 GameObject.Find("Mesh").GetComponent<Stockpile>().currentStorageTaken)
@@ -139,7 +139,7 @@ public class NewSelections : MonoBehaviour
                                     GameObject.Find("Mesh").GetComponent<Stockpile>().vertices[0];
                             }
                         }
-                        else if (worker.workerStates == Worker.WorkerStates.Available && harvestableObjects.canInteract.Contains(worker.role) && harvestableObjects.harvestType != HarvestableObjects.HarvestType.Pickup)
+                        else if (worker.workerStates == Worker.WorkerStates.Available && harvestableObjects._harvestableObject.canInteract.Contains(worker.role) && harvestableObjects._harvestableObject.harvestType != HarvestableObjectSO.HarvestType.Pickup)
                         {
                             worker.workerStates = Worker.WorkerStates.Working;
                             worker.WorkerStateManagement(worker.workerStates,hit.transform.gameObject);
@@ -169,7 +169,6 @@ public class NewSelections : MonoBehaviour
                 else if (hit.transform.tag.Equals("Ground") && clickState == "Stockpile" && !IsMouseOverUI())
                 {
                     dragSelectStartingPoint = Vector3Int.CeilToInt(hit.point);
-                    // verticePoints[0] = new Vector3(dragSelectStartingPoint.x, dragSelectStartingPoint.y + 0.03f,dragSelectStartingPoint.z);
                 }
             }
         }

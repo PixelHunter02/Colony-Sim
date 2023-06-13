@@ -404,6 +404,8 @@ Transform:
   - {fileID: 1808602656}
   - {fileID: 1851112254}
   - {fileID: 429230520}
+  - {fileID: 1114297036}
+  - {fileID: 1730565755}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -493,8 +495,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.47185794, y: 0.000000021454223, z: -0.000000011481951, w: 0.88167465}
-  m_LocalPosition: {x: 0, y: 15, z: -10}
+  m_LocalRotation: {x: 0.12364866, y: 9.0975855e-10, z: -1.13359926e-10, w: 0.9923261}
+  m_LocalPosition: {x: 0, y: 2.531401, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -560,7 +562,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 0
+  m_UpdateMethod: 2
   m_BlendUpdateMethod: 0
   m_DefaultBlend:
     m_Style: 1
@@ -730,7 +732,6 @@ GameObject:
   - component: {fileID: 350258425}
   - component: {fileID: 350258424}
   - component: {fileID: 350258423}
-  - component: {fileID: 350258426}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -824,22 +825,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350258421}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &350258426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350258421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
 --- !u!1 &351266295
 GameObject:
   m_ObjectHideFlags: 0
@@ -957,7 +942,6 @@ GameObject:
   - component: {fileID: 353661298}
   - component: {fileID: 353661297}
   - component: {fileID: 353661296}
-  - component: {fileID: 353661299}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -1051,22 +1035,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 353661294}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &353661299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 353661294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
 --- !u!1 &410029544
 GameObject:
   m_ObjectHideFlags: 0
@@ -1349,7 +1317,6 @@ GameObject:
   - component: {fileID: 440998948}
   - component: {fileID: 440998947}
   - component: {fileID: 440998946}
-  - component: {fileID: 440998949}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -1443,22 +1410,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 440998944}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &440998949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 440998944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
 --- !u!1 &476132455
 GameObject:
   m_ObjectHideFlags: 0
@@ -1805,7 +1756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 15, z: -10}
+  m_FollowOffset: {x: 0, y: 2.531401, z: -10}
   m_XDamping: 0.05
   m_YDamping: 0.05
   m_ZDamping: 0.05
@@ -2170,7 +2121,6 @@ GameObject:
   - component: {fileID: 819537657}
   - component: {fileID: 819537656}
   - component: {fileID: 819537655}
-  - component: {fileID: 819537658}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -2264,22 +2214,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 819537653}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &819537658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 819537653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,6 +2443,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1114297035
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1114297036}
+  - component: {fileID: 1114297037}
+  m_Layer: 0
+  m_Name: InputManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1114297036
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114297035}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 286939381}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1114297037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114297035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 220dd8b1e83103a4db9388d247601641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1124862098
 GameObject:
   m_ObjectHideFlags: 0
@@ -2573,8 +2551,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124862098}
-  m_LocalRotation: {x: 0.47185794, y: 0.000000021454223, z: -0.000000011481951, w: 0.88167465}
-  m_LocalPosition: {x: 0, y: 15, z: -10}
+  m_LocalRotation: {x: 0.12364866, y: 9.0975855e-10, z: -1.13359926e-10, w: 0.9923261}
+  m_LocalPosition: {x: 0, y: 2.531401, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2743,7 +2721,6 @@ GameObject:
   - component: {fileID: 1156148950}
   - component: {fileID: 1156148949}
   - component: {fileID: 1156148948}
-  - component: {fileID: 1156148951}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -2837,22 +2814,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1156148946}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1156148951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156148946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
 --- !u!1 &1394119057
 GameObject:
   m_ObjectHideFlags: 0
@@ -2914,7 +2875,6 @@ GameObject:
   - component: {fileID: 1646501521}
   - component: {fileID: 1646501520}
   - component: {fileID: 1646501519}
-  - component: {fileID: 1646501522}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -3008,22 +2968,56 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1646501517}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1646501522
+--- !u!1 &1730565754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1730565755}
+  - component: {fileID: 1730565756}
+  m_Layer: 0
+  m_Name: SettingsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1730565755
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730565754}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 286939381}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1730565756
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1646501517}
+  m_GameObject: {fileID: 1730565754}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
+  m_Script: {fileID: 11500000, guid: 3e71108ad81a6254687c4b4005f70e8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
+  musicVolume: 0
+  villagerVolume: 0
+  interactionVolume: 0
+  invertY: 0
+  invertX: 0
+  rotationSpeed: 0.09
 --- !u!1 &1771275013
 GameObject:
   m_ObjectHideFlags: 0
@@ -3204,9 +3198,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53bc43bfb33c4a84e863ddbc37f4c207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputManager: {fileID: 1114297037}
+  settingsManager: {fileID: 1730565756}
   followObject: {fileID: 668225683}
-  speed: 5
-  rotationSensitivity: 0.09
+  speed: 15
 --- !u!114 &1808602658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3350,10 +3345,6 @@ MonoBehaviour:
     m_ActionId: 458745e6-5cb1-404b-ad54-6936222a6c55
     m_ActionName: Player/Select[/Mouse/leftButton]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 2d80e639-f12b-4e7a-8773-d0c3f59f4318
-    m_ActionName: Player/Deselect[/Keyboard/backspace]
-  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1851112255}
         m_TargetAssemblyTypeName: NewSelections, Assembly-CSharp
@@ -3403,6 +3394,7 @@ GameObject:
   - component: {fileID: 1851112258}
   - component: {fileID: 1851112257}
   - component: {fileID: 1851112259}
+  - component: {fileID: 1851112260}
   m_Layer: 2
   m_Name: SelectionManager
   m_TagString: Untagged
@@ -3432,7 +3424,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1851112253}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd142a960ce478b40bafcbaf6344b7d6, type: 3}
   m_Name: 
@@ -3514,6 +3506,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &1851112260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1851112253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1324232336d5bbc44998d825356de09b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 330585545}
 --- !u!224 &1900848824 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7557916933505232854, guid: b610ffadbc67e2d4693c681b82d2978d,
@@ -3532,7 +3537,6 @@ GameObject:
   - component: {fileID: 1928624910}
   - component: {fileID: 1928624909}
   - component: {fileID: 1928624908}
-  - component: {fileID: 1928624911}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -3626,22 +3630,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1928624906}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1928624911
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1928624906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
 --- !u!1001 &1997162027
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3964,7 +3952,6 @@ GameObject:
   - component: {fileID: 2098281146}
   - component: {fileID: 2098281145}
   - component: {fileID: 2098281144}
-  - component: {fileID: 2098281147}
   m_Layer: 6
   m_Name: Tree
   m_TagString: Harvestable
@@ -4058,22 +4045,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098281142}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2098281147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2098281142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ee59fc5b5f4b084fb605ca28c151b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  harvestType: 0
-  timeToHarvest: 5
-  canInteract: 01000000
-  wood: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930, type: 3}
 --- !u!1 &2141234648
 GameObject:
   m_ObjectHideFlags: 0

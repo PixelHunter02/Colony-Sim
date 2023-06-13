@@ -1,75 +1,82 @@
-using System.Collections;
-using Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
 
 public class CameraMovement : MonoBehaviour
 {
+    //Managers
+    [SerializeField] private InputManager inputManager;
+    [SerializeField] private SettingsManager settingsManager;
 
+    //Focus Object
     public GameObject followObject;
     
     //Movement
-    private Vector3 _moveDirection;
-    private bool _cameraPanning;
-    private Vector3 _mousePosition;
     private Vector2 _lastMousePosition;
-    [SerializeField] private float speed = 8f;
+    [SerializeField] private float speed;
     
     //Rotate
-    private bool _rightClickPressed;
     private Vector2 _lastRightClickPosition;
+<<<<<<< Updated upstream
     [SerializeField] private float rotationSensitivity;
     private CinemachineVirtualCamera _cinemachineVirtualCamera;
     private Vector3 velocity = Vector3.zero;
 
+=======
+    
+>>>>>>> Stashed changes
     //zoom
     private CinemachineCameraOffset _cinemachineCameraOffset;
-    private Vector3 _offset;
+
 
     private void Awake()
     {
         _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
-        _cinemachineVirtualCamera = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
-        _offset = _cinemachineCameraOffset.m_Offset;
     }
 
     private void Update()
     {
+<<<<<<< Updated upstream
         MoveCameraKeyboard();
     }
 
     private void FixedUpdate()
     {
+=======
+        CameraZoom();
+        MoveCamera();
+        CameraPanning();
+>>>>>>> Stashed changes
         RotateCamera();
         CameraPanningMouse();
     }
 
-    public void BeginMoveCameraKeyboard(InputAction.CallbackContext context)
+    private void MoveCamera()
     {
-        var inputDirection = new Vector3(context.ReadValue<Vector2>().x, 0, context.ReadValue<Vector2>().y);
-        _moveDirection = followObject.transform.forward * inputDirection.z + followObject.transform.right * inputDirection.x;
+        var movementDirection = new Vector3(inputManager.GetNormalizedMovement().x, 0, inputManager.GetNormalizedMovement().y);
+
+        movementDirection = followObject.transform.forward * movementDirection.z + followObject.transform.right * movementDirection.x;
+        followObject.transform.position += movementDirection * (speed * Time.deltaTime);
     }
 
-    private void MoveCameraKeyboard()
+    private void CameraPanning()
     {
-        followObject.transform.position += _moveDirection * (Time.deltaTime * speed); 
+        if(!inputManager.IsPanning())
+        {
+            _lastMousePosition = inputManager.GetScaledCursorPositionThisFrame();
+        }
+
+        if(inputManager.IsPanning())
+        {
+            var mousePosition = followObject.transform.forward * (inputManager.GetScaledCursorPositionThisFrame().y - _lastMousePosition.y) + followObject.transform.right*(inputManager.GetScaledCursorPositionThisFrame().x-_lastMousePosition.x);
+            var movementDirection = new Vector3(mousePosition.x, 0, mousePosition.z);
+            followObject.transform.position += movementDirection * (Time.deltaTime);
+        }
     }
     
-    public void BeginPan(InputAction.CallbackContext context)
+    private void CameraZoom()
     {
-        if (context.phase == InputActionPhase.Started)
-        {
-            _cameraPanning = true;
-            _lastMousePosition = Mouse.current.position.ReadValue();
-        }
-        else if (context.phase == InputActionPhase.Canceled)
-        {
-            _cameraPanning = false;
-            _moveDirection = Vector3.zero;
-        }
-    }
+        var zoomValue = inputManager.ZoomValueAsInt();
 
+<<<<<<< Updated upstream
     public void CameraPanningMouse()
     {
         if (_cameraPanning)
@@ -125,12 +132,19 @@ public class CameraMovement : MonoBehaviour
         {
             _rightClickPressed = false;
         }
+=======
+        const int minimumZoomValue = -25;
+        const int maximumZoomValue = 0;
+        _cinemachineCameraOffset.m_Offset.z += zoomValue * 5;
+        _cinemachineCameraOffset.m_Offset.z = Mathf.Clamp(_cinemachineCameraOffset.m_Offset.z, minimumZoomValue, maximumZoomValue);
+>>>>>>> Stashed changes
     }
 
     private void RotateCamera()
     {
-        if(_rightClickPressed && Mouse.current.position.x.ReadValue() > 0)
+        if(!inputManager.IsRotating())
         {
+<<<<<<< Updated upstream
             //Left and Right Rotation;
             var value = Mouse.current.position.ReadValue() - _lastRightClickPosition;
             Vector3 rotation = followObject.transform.rotation.eulerAngles;
@@ -146,6 +160,15 @@ public class CameraMovement : MonoBehaviour
             _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = clamped;
             
             _lastRightClickPosition = Mouse.current.position.ReadValue();
+=======
+            _lastRightClickPosition = inputManager.GetScaledCursorPositionThisFrame();
+            return;
+>>>>>>> Stashed changes
         }
+        
+        var value = inputManager.GetScaledCursorPositionThisFrame() - _lastRightClickPosition;
+        var rotation = followObject.transform.rotation.eulerAngles;
+        rotation.y += value.x * settingsManager.rotationSpeed * settingsManager.CameraXModifier() * Time.deltaTime;
+        followObject.transform.rotation = Quaternion.Euler(rotation);
     }
 }

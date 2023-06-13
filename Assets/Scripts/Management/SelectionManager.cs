@@ -10,11 +10,7 @@ public class SelectionManager : MonoBehaviour
     private RaycastHit raycastHit;
     public List<GameObject> selected;
 
-    // Update is called once per frame
-    private void Start()
-    {
-    }
-    void Update()
+    private void Update()
     {
         // Highlight
         if (highlight != null)
