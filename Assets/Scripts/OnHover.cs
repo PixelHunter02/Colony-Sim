@@ -13,8 +13,17 @@ public class OnHover : MonoBehaviour
 
     private void Awake()
     {
-        selection = GameObject.Find("SelectionManager").gameObject.GetComponent<NewSelections>();
+        //selection = GameObject.Find("SelectionManager").gameObject.GetComponent<NewSelections>();
         outline = gameObject.GetComponent<Outline>();
+    }
+
+    private void OnMouseEnter()
+    {
+        gameObject.GetComponent<Outline>().enabled = true;
+    }
+    private void OnMouseExit()
+    {
+        gameObject.GetComponent<Outline>().enabled = false;
     }
 
     // private void OnMouseEnter()
