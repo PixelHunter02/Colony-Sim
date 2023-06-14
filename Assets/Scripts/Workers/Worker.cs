@@ -115,20 +115,20 @@ public class Worker : MonoBehaviour
     //     agent.isStopped = false;
     // }
 
-    public IEnumerator MoveToJob(Worker worker,HarvestObjectManager harvestObjectManager)
-    {
-        if (Vector3.Distance(worker.transform.position, harvestObjectManager.transform.position) > 3f)
-        {
-            agent.SetDestination(harvestObjectManager.transform.position);
-            yield return new WaitForSeconds(0.3f);
-            StartCoroutine(MoveToJob(worker, harvestObjectManager));
-        }
-        else
-        {
-            agent.isStopped = true;
-            defaultWorkerJobs.ChopTrees(harvestObjectManager);
-            yield return null;
-        }
-    }
+    // public IEnumerator MoveToJob(Worker worker,HarvestObjectManager harvestObjectManager)
+    // {
+    //     if (Vector3.Distance(worker.transform.position, harvestObjectManager.transform.position) > 3f)
+    //     {
+    //         agent.SetDestination(harvestObjectManager.transform.position);
+    //         yield return new WaitForSeconds(0.3f);
+    //         StartCoroutine(MoveToJob(worker, harvestObjectManager));
+    //     }
+    //     else
+    //     {
+    //         agent.isStopped = true;
+    //         defaultWorkerJobs.ChopTrees(harvestObjectManager);
+    //         yield return null;
+    //     }
+    // }
     
 }
