@@ -19,20 +19,7 @@ public class Worker : MonoBehaviour
         Miner,
     }
     public Roles role;
-    
-    /// <summary>
-    /// The Workers State, I.e working or sleeping
-    /// </summary>
-    public enum WorkerStates
-    {
-        Available,
-        Working,
-        Sleeping,
-        Eating,
-        Collecting
-    }
-    public WorkerStates workerStates;
-    
+
     private NavMeshAgent agent;
 
     /// <summary>
@@ -56,65 +43,7 @@ public class Worker : MonoBehaviour
         canvas = transform.Find("Canvas").gameObject;
         progressSlider = canvas.transform.Find("Slider").GetComponent<Slider>();
     }
-
-    public void WorkerRole()
-    {
-        switch (role)
-        {
-            case Roles.Default:
-                
-                break;
-            case Roles.Farmer:
-                break;
-            case Roles.Fighter:
-                break;
-            case Roles.Miner:
-                break;
-            case Roles.Lumberjack:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
     
-    public void WorkerStateManagement(WorkerStates state, GameObject target)
-    {
-        switch (state)
-        {
-            case WorkerStates.Available:
-                break;
-            case WorkerStates.Working:
-                break;
-            case WorkerStates.Collecting:
-                break;
-            case WorkerStates.Sleeping:
-                break;
-            case WorkerStates.Eating:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(state), state, null);
-        }
-    }
-
-    // private IEnumerator BeginHarvest(float duration, GameObject objectToRemove)
-    // {
-    //     canvas.SetActive(true);
-    //     float timer = 0;
-    //     while (timer < duration)
-    //     {
-    //         Debug.Log(timer);
-    //         timer += Time.deltaTime;
-    //         progressSlider.value = timer / duration;
-    //         yield return null;
-    //     }
-    //     Destroy(objectToRemove);
-    //     canvas.SetActive(false);
-    //     progressSlider.value = 0;
-    //     workerStates = WorkerStates.Available;
-    //     agent.ResetPath();
-    //     agent.isStopped = false;
-    // }
-
     public IEnumerator MoveToJob(Worker worker, HarvestObjectManager harvestObjectManager)
     {
         if (Vector3.Distance(worker.transform.position, harvestObjectManager.transform.position) > 3f)
@@ -126,7 +55,7 @@ public class Worker : MonoBehaviour
         else
         {
             agent.isStopped = true;
-            defaultWorkerJobs.ChopTrees(harvestObjectManager);
+            defaultWorkerJobs.BeginHarvest(harvestObjectManager);
             yield return null;
         }
     }

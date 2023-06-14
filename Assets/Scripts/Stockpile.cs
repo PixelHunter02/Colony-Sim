@@ -50,6 +50,8 @@ public class Stockpile : MonoBehaviour
         dimensions = new Vector2(Mathf.Max(vertices[1].x, vertices[0].x) - Mathf.Min(vertices[1].x, vertices[0].x),
             Mathf.Max(vertices[2].z, vertices[0].z) - Mathf.Min(vertices[2].z, vertices[0].z));
         maxStorage = Mathf.CeilToInt(dimensions.x * dimensions.y);
-        Debug.Log(maxStorage);
+
+        GetComponent<MeshFilter>().mesh.RecalculateBounds();
+        GetComponent<MeshFilter>().mesh.RecalculateNormals();
     }
 }
