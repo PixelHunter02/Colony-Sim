@@ -11,21 +11,12 @@ public class DefaultWorkerJobs : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private Animator _animator;
 
-    public void ChopTrees(HarvestObjectManager harvestObjectManager)
+    public void BeginHarvest(HarvestObjectManager harvestObjectManager)
     {
         StartCoroutine(TaskTimer(harvestObjectManager));
         taskImage.sprite = harvestObjectManager.harvestableObject.taskSprite;
     }
 
-    public void Forage()
-    {
-        
-    }
-
-    public void PickUpObject()
-    {
-        
-    }
 
     private IEnumerator TaskTimer(HarvestObjectManager harvestObjectManager)
     {

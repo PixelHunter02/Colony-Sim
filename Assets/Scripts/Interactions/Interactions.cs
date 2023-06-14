@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +26,11 @@ namespace Interactions
         /// <summary>
         /// Stockpile
         /// </summary>
-        [SerializeField] private Vector3[] vertices;
-        private int[] triangles;
-        private bool drawingStockpile;
-        private Mesh stockpileMesh;
+        [SerializeField]private Vector3[] vertices;
+        private int[] _triangles;
+        private Vector2[] _uvs; 
+        private bool _drawingStockpile;
+        private Mesh _stockpileMesh;
 
         private void Awake()
         {
@@ -42,17 +42,18 @@ namespace Interactions
                 workers.Add(worker);
             }
 
-            stockpileMesh = new Mesh();
-            stockpileMesh = GetComponent<MeshFilter>().mesh;
+            _stockpileMesh = new Mesh();
+            _stockpileMesh = GetComponent<MeshFilter>().mesh;
             vertices = new Vector3[4];
-            triangles = new int[6];
+            _uvs = new Vector2[4];
+            _triangles = new int[6];
         }
 
         private void Start()
         {
             _playerInputActions.Player.Select.performed += InteractObject;
             _playerInputActions.Player.Select.performed += DrawStockpile;
-            _playerInputActions.Player.Select.canceled += DrawStockpile;
+            _playerInputActions.Player.Select.canceled += PlaceStockpile;
         }
 
         
@@ -89,8 +90,8 @@ namespace Interactions
             if (!hit.transform.tag.Equals("Ground"))
                 return;
 
-            drawingStockpile = !drawingStockpile;
-            var point = new Vector3(Mathf.CeilToInt(hit.point.x), hit.point.y + 0.3f, Mathf.CeilToInt(hit.point.z));
+            _drawingStockpile = true;
+            var point = new Vector3(Mathf.CeilToInt(hit.point.x), hit.point.y + 0.1f, Mathf.CeilToInt(hit.point.z));
             vertices[0] = point;
             StartCoroutine(DrawStockpileEnumerator());
         }
@@ -101,41 +102,62 @@ namespace Interactions
             if (!Physics.Raycast(ray, out var hit, 1000000)) 
                 yield break;
             
-            Debug.Log("running");
-            
             var startingPoint = vertices[0];
             var mousePosition = hit.point;
             
-            if (!drawingStockpile) 
+            if (!_drawingStockpile) 
                 yield break;
-            vertices[1] = new Vector3(Mathf.CeilToInt(mousePosition.x),startingPoint.y + 0.03f,startingPoint.z);
-            vertices[2] = new Vector3(startingPoint.x,startingPoint.y + 0.03f,Mathf.CeilToInt(mousePosition.z));
-            vertices[3] = new Vector3(Mathf.CeilToInt(mousePosition.x),startingPoint.y + 0.03f,Mathf.CeilToInt(mousePosition.z));
+            vertices[1] = new Vector3(Mathf.CeilToInt(mousePosition.x),startingPoint.y,startingPoint.z);
+            vertices[2] = new Vector3(startingPoint.x,startingPoint.y,Mathf.CeilToInt(mousePosition.z));
+            vertices[3] = new Vector3(Mathf.CeilToInt(mousePosition.x),startingPoint.y,Mathf.CeilToInt(mousePosition.z));
+
+            _uvs[0] = new Vector2(0, 1);
+            _uvs[1] = new Vector2(1, 1);
+            _uvs[2] = new Vector2(0, 0);
+            _uvs[3] = new Vector2(1, 0);
+            // if (Mathf.CeilToInt(vertices[0].x) == Mathf.CeilToInt(vertices[1].x))
+            // {
+            //     vertices[1].x -= 1;
+            //     vertices[3].x -= 1;
+            // }
+            // if (Mathf.CeilToInt(vertices[0].z) == Mathf.CeilToInt(vertices[2].z))
+            // {
+            //     vertices[0].z -= 1;
+            //     vertices[1].z -= 1;
+            // }
             if ((vertices[1].x < vertices[0].x && vertices[2].z < vertices[0].z)||(vertices[1].x > vertices[0].x && vertices[2].z > vertices[0].z))
             {
-                triangles[0] = 2;
-                triangles[1] = 1;
-                triangles[2] = 0;
-                triangles[3] = 3;
-                triangles[4] = 1;
-                triangles[5] = 2; 
+                _triangles[0] = 2;
+                _triangles[1] = 1;
+                _triangles[2] = 0;
+                _triangles[3] = 3;
+                _triangles[4] = 1;
+                _triangles[5] = 2; 
             }
             else
             {
-                triangles[0] = 0;
-                triangles[1] = 1;
-                triangles[2] = 2;
-                triangles[3] = 2;
-                triangles[4] = 1;
-                triangles[5] = 3; 
+                _triangles[0] = 0;
+                _triangles[1] = 1;
+                _triangles[2] = 2;
+                _triangles[3] = 2;
+                _triangles[4] = 1;
+                _triangles[5] = 3; 
             }
         
-            stockpileMesh.vertices = vertices;
-            stockpileMesh.triangles = triangles;
+            _stockpileMesh.vertices = vertices;
+            _stockpileMesh.uv = _uvs;
+            _stockpileMesh.triangles = _triangles;
             yield return new WaitForEndOfFrame();
             StartCoroutine(DrawStockpileEnumerator());
         }
 
+        private void PlaceStockpile(InputAction.CallbackContext context)
+        {
+            _drawingStockpile = false;
+            GenerateStockpile();
+            _stockpileMesh.Clear();
+        }
+        
         private static void BeginWorking(Worker worker, HarvestObjectManager harvestObjectManager)
         {
             harvestObjectManager.assignedWorker = worker;
@@ -152,6 +174,20 @@ namespace Interactions
             {
 
             }
+        }
+        
+        /// <summary>
+        /// Save Information To A Generated Prefab
+        /// </summary>
+        private void GenerateStockpile()
+        {
+            var meshGo = new GameObject("Stockpile", typeof(MeshFilter), typeof(MeshRenderer),typeof(Stockpile));
+            var dataToAdd = meshGo.GetComponent<Stockpile>() ;
+            dataToAdd.vertices[0] = vertices[0];
+            dataToAdd.vertices[1] = vertices[1];
+            dataToAdd.vertices[2] = vertices[2];
+            dataToAdd.vertices[3] = vertices[3];
+            dataToAdd.DrawBox();
         }
     }
 }
