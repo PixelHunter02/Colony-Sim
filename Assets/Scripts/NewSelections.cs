@@ -28,7 +28,6 @@ public class NewSelections : MonoBehaviour
     private Vector3Int dragSelectStartingPoint;
     [SerializeField] private Vector3[] verticePoints;
     private int[] triangles;
-    private List<Mesh> savedMeshes;
     private Mesh dragBoxMesh;
     [SerializeField] private Material selectMaterial;
     [SerializeField] private Material stockPileMaterial;

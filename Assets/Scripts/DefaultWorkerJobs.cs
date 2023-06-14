@@ -13,7 +13,7 @@ public class DefaultWorkerJobs : MonoBehaviour
 
     public void ChopTrees(HarvestObjectManager harvestObjectManager)
     {
-        StartCoroutine(TaskTimer(5,harvestObjectManager));
+        StartCoroutine(TaskTimer(harvestObjectManager));
         taskImage.sprite = harvestObjectManager.harvestableObject.taskSprite;
     }
 
@@ -27,11 +27,12 @@ public class DefaultWorkerJobs : MonoBehaviour
         
     }
 
-    private IEnumerator TaskTimer(float timeToCount, HarvestObjectManager harvestObjectManager)
+    private IEnumerator TaskTimer(HarvestObjectManager harvestObjectManager)
     {
         canvas.SetActive(true);
         
         var timer = 0f;
+        var timeToCount = harvestObjectManager.harvestableObject.timeToHarvest;
         while (timer < timeToCount)
         {
             timer += Time.deltaTime;
