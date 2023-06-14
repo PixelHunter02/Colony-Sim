@@ -141,5 +141,17 @@ namespace Interactions
             harvestObjectManager.assignedWorker = worker;
             worker.interactingWith = harvestObjectManager;
         }
+        private void ShowVillagerInformation(InputAction.CallbackContext context)
+        {
+            var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+            if (!Physics.Raycast(ray, out var hit, 100))
+                return;
+
+            TryGetComponent(out Worker worker);
+            if (worker)
+            {
+
+            }
+        }
     }
 }
