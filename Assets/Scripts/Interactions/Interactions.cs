@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -53,6 +54,7 @@ namespace Interactions
             _playerInputActions.Player.Select.performed += InteractObject;
             _playerInputActions.Player.Select.performed += DrawStockpile;
             _playerInputActions.Player.Select.canceled += DrawStockpile;
+            _playerInputActions.Player.Select.performed += ShowVillagerInformation;
         }
 
         
@@ -143,14 +145,22 @@ namespace Interactions
         }
         private void ShowVillagerInformation(InputAction.CallbackContext context)
         {
+            print("ShowVillagerInformation");
             var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
             if (!Physics.Raycast(ray, out var hit, 100))
                 return;
 
-            TryGetComponent(out Worker worker);
+            hit.transform.TryGetComponent(out Worker worker);
+            print(worker);
             if (worker)
             {
-
+                //setting values for info ui of villagers
+                var infoUI = worker.gameObject.transform.GetChild(0).GetChild(1).gameObject;
+                infoUI.SetActive(true);
+                infoUI.transform.Find("Name").TryGetComponent(out TMP_Text name);
+                infoUI.transform.Find("Job").TryGetComponent(out TMP_Text job);
+                name.text = worker.name;
+                job.text = worker.role.ToString();
             }
         }
     }

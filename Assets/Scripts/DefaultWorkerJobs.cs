@@ -8,7 +8,7 @@ public class DefaultWorkerJobs : MonoBehaviour
 {
     [SerializeField] private Slider slider;
     [SerializeField] private Image taskImage;
-    [SerializeField] private GameObject canvas;
+    [SerializeField] private GameObject status;
     private Animator _animator;
 
     public void ChopTrees(HarvestObjectManager harvestObjectManager)
@@ -29,7 +29,7 @@ public class DefaultWorkerJobs : MonoBehaviour
 
     private IEnumerator TaskTimer(HarvestObjectManager harvestObjectManager)
     {
-        canvas.SetActive(true);
+        status.SetActive(true);
         
         var timer = 0f;
         var timeToCount = harvestObjectManager.harvestableObject.timeToHarvest;
@@ -43,6 +43,6 @@ public class DefaultWorkerJobs : MonoBehaviour
         taskImage.sprite = harvestObjectManager.harvestableObject.taskCompleteSprite;
         StartCoroutine(harvestObjectManager.SpawnHarvestDrops());
         yield return new WaitForSeconds(3f);
-        canvas.SetActive(false);
+        status.SetActive(false);
     }
 }

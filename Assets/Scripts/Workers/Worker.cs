@@ -44,7 +44,7 @@ public class Worker : MonoBehaviour
     /// <summary>
     /// Worker Information
     /// </summary>
-    private string workerName;
+    [SerializeField] private string workerName;
 
     public HarvestObjectManager interactingWith;
 
