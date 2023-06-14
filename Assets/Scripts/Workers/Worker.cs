@@ -21,17 +21,6 @@ public class Worker : MonoBehaviour
     public Roles role;
     
     /// <summary>
-    /// The workers Tasks represent the task that the worker is currently doing.
-    /// </summary>
-    public enum Tasks
-    {
-        None,
-        ChoppingTrees,
-        MovingResources,
-    }
-    public Tasks task;
-    
-    /// <summary>
     /// The Workers State, I.e working or sleeping
     /// </summary>
     public enum WorkerStates
@@ -56,6 +45,10 @@ public class Worker : MonoBehaviour
     /// Worker Information
     /// </summary>
     private string workerName;
+
+    public HarvestObjectManager interactingWith;
+
+    [SerializeField] private DefaultWorkerJobs defaultWorkerJobs;
 
     private void Awake()
     {
@@ -91,44 +84,51 @@ public class Worker : MonoBehaviour
             case WorkerStates.Available:
                 break;
             case WorkerStates.Working:
-                var position = target.transform.position;
-                agent.SetDestination(position);
-                StartCoroutine(DistanceCheck(position,target));
                 break;
             case WorkerStates.Collecting:
-                agent.SetDestination(target.transform.position);
                 break;
+            case WorkerStates.Sleeping:
+                break;
+            case WorkerStates.Eating:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
     }
+    
+    // private IEnumerator BeginHarvest(float duration, GameObject objectToRemove)
+    // {
+    //     canvas.SetActive(true);
+    //     float timer = 0;
+    //     while (timer < duration)
+    //     {
+    //         Debug.Log(timer);
+    //         timer += Time.deltaTime;
+    //         progressSlider.value = timer / duration;
+    //         yield return null;
+    //     }
+    //     Destroy(objectToRemove);
+    //     canvas.SetActive(false);
+    //     progressSlider.value = 0;
+    //     workerStates = WorkerStates.Available;
+    //     agent.ResetPath();
+    //     agent.isStopped = false;
+    // }
 
-    private IEnumerator DistanceCheck(Vector3 movementPoint,GameObject target)
+    public IEnumerator MoveToJob(Worker worker,HarvestObjectManager harvestObjectManager)
     {
-        Debug.Log(Vector3.Distance(transform.position, movementPoint));
-        while (Vector3.Distance(transform.position, movementPoint) > 3f)
+        if (Vector3.Distance(worker.transform.position, harvestObjectManager.transform.position) > 3f)
         {
+            agent.SetDestination(harvestObjectManager.transform.position);
+            yield return new WaitForSeconds(0.3f);
+            StartCoroutine(MoveToJob(worker, harvestObjectManager));
+        }
+        else
+        {
+            agent.isStopped = true;
+            defaultWorkerJobs.ChopTrees(harvestObjectManager);
             yield return null;
         }
-        agent.isStopped = true;
-        Debug.Log("Reached Destination");
-        StartCoroutine(BeginHarvest(target.GetComponent<ObjectManager>()._harvestableObject.timeToHarvest, target.gameObject));
     }
-
-    private IEnumerator BeginHarvest(float duration, GameObject objectToRemove)
-    {
-        canvas.SetActive(true);
-        float timer = 0;
-        while (timer < duration)
-        {
-            Debug.Log(timer);
-            timer += Time.deltaTime;
-            progressSlider.value = timer / duration;
-            yield return null;
-        }
-        Destroy(objectToRemove);
-        canvas.SetActive(false);
-        progressSlider.value = 0;
-        workerStates = WorkerStates.Available;
-        agent.ResetPath();
-        agent.isStopped = false;
-    }
+    
 }

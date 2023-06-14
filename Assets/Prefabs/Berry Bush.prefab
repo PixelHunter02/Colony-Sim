@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3112031513788819702}
   - component: {fileID: 24205578779265069}
   m_Layer: 6
-  m_Name: Tree
+  m_Name: Berry Bush
   m_TagString: Harvestable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,12 +28,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1233319081681735965}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.6, y: 2.7568, z: -4.58}
-  m_LocalScale: {x: 1, y: 5.1264677, z: 1}
+  m_LocalPosition: {x: -12.6, y: 0.6451, z: -4.58}
+  m_LocalScale: {x: 1, y: 0.90296715, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1046628939107352298
 MeshFilter:
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b5665a3a65e352a419559f41dab7f1f1, type: 2}
+  - {fileID: 2100000, guid: 93a061285dcbec4439798af6b124731d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

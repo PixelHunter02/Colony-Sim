@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3620efd5675d94649bed43800e9136d2, type: 3}
-  m_Name: Tree
+  m_Name: Stone
   m_EditorClassIdentifier: 
-  timeToHarvest: 5
-  canInteract: 01000000
-  prefabToSpawn: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930,
+  timeToHarvest: 10
+  canInteract: 04000000
+  prefabToSpawn: {fileID: 9133517775435464950, guid: 7d3c86aa9d96e9142801c9d5ce0101e4,
     type: 3}
   maxDropAmount: 3
   minDropAmount: 1

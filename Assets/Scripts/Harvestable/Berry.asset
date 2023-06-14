@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3620efd5675d94649bed43800e9136d2, type: 3}
-  m_Name: Tree
+  m_Name: Berry
   m_EditorClassIdentifier: 
   timeToHarvest: 5
-  canInteract: 01000000
-  prefabToSpawn: {fileID: 9133517775435464950, guid: 5ed82f0c2513b6b4b924ddec940e7930,
+  canInteract: 02000000
+  prefabToSpawn: {fileID: 9133517775435464950, guid: 46c46d421ef4b594bbcf5fd4e9fbd0db,
     type: 3}
-  maxDropAmount: 3
-  minDropAmount: 1
-  taskSprite: {fileID: 21300000, guid: b762b9a638c67d343b8fca6d70eeac9f, type: 3}
+  maxDropAmount: 5
+  minDropAmount: 2
+  taskSprite: {fileID: 21300000, guid: b6c49e41a57e648e9a16f44ce4b8d9b9, type: 3}
   taskCompleteSprite: {fileID: 21300000, guid: 5fcf65549b5d75746a64d62cee7eacc8, type: 3}
   harvestType: 0
