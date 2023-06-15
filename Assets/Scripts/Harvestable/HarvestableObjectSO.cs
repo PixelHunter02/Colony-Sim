@@ -8,7 +8,7 @@ public class HarvestableObjectSO : ScriptableObject
     public float timeToHarvest;
     
     [Tooltip("List Of Roles That Can Interact With The Harvestable")]
-    public List<Worker.Roles> canInteract;
+    public List<Roles> canInteract;
 
     [Tooltip("The prefab of the resource gained on harvest")]
     public GameObject prefabToSpawn;

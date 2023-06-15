@@ -34,6 +34,7 @@ public class Interactions : MonoBehaviour
     private Mesh _stockpileMesh;
 
     [SerializeField] private StorageManager storageManager;
+    private Outline characterOutline;
     private Outline lastHitOutline;
 
     private TaskHandler _taskHandler;
@@ -66,17 +67,17 @@ public class Interactions : MonoBehaviour
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit)) 
             return;
+        
         if (lastHitOutline)
         {
             lastHitOutline.enabled = false;
             lastHitOutline = null;
         }
-        
-        if (hit.transform.TryGetComponent(out Outline outline))
-        {
-            lastHitOutline = outline;
-            outline.enabled = true;
-        }
+
+        if (!hit.transform.TryGetComponent(out Outline outline)) 
+            return;
+        lastHitOutline = outline;
+        outline.enabled = true;
     }
 
     private void Interact(InputAction.CallbackContext context)
@@ -114,9 +115,9 @@ public class Interactions : MonoBehaviour
                                worker.interactingWith == null && 
                                objectManager.assignedWorker == null))
         {
-            if (worker.TryGetComponent(out TaskHandler taskHandler) && Worker.GetWorkerState(worker) == Worker.WorkerStates.Idle)
+            if (worker.TryGetComponent(out TaskHandler taskHandler) && Worker.GetWorkerState(worker) == WorkerStates.Idle)
             {
-                taskHandler.StartCoroutine(taskHandler.CRMoveToJob(worker,objectManager));
+                taskHandler.StartCoroutine(taskHandler.CRWalkToJob(worker,objectManager));
             }
             break;
         }
@@ -136,7 +137,7 @@ public class Interactions : MonoBehaviour
      
         // Run through each worker for an available worker who is of the correct role.
         foreach (var worker in workers.Where(
-                     worker => Worker.GetWorkerState(worker) == Worker.WorkerStates.Idle))
+                     worker => Worker.GetWorkerState(worker) == WorkerStates.Idle))
         {
             if (worker.TryGetComponent(out TaskHandler taskHandler) && !pickupObject.heldBy)
             {

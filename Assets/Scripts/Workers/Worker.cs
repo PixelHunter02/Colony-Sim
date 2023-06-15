@@ -1,55 +1,80 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class Worker : MonoBehaviour
 {
     /// <summary>
-    /// The Workers Role will give the worker boosted stats in a specifc craft as well as more abilities linked to that craft.
+    /// The Workers Role will give the worker boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
-    public enum Roles 
-    {
-        Default,
-        Lumberjack,
-        Farmer,
-        Fighter,
-        Miner,
-    }
     [SerializeField] private Roles role;
-
-    public enum WorkerStates
-    {
-        Idle,
-        Working,
-        Sleeping,
-    }
+    
+    /// <summary>
+    /// The Workers Current State
+    /// </summary>
     [SerializeField] private WorkerStates _currentState;
 
+    /// <summary>
+    /// The NavMeshAgent
+    /// </summary>
     private NavMeshAgent agent;
 
     /// <summary>
     /// Worker Information
     /// </summary>
     [SerializeField] private string workerName;
-
+    
+    /// <summary>
+    /// The object that the Worker is interacting with
+    /// </summary>
     public HarvestObjectManager interactingWith;
 
+    /// <summary>
+    /// Reference To The Task Handler Script
+    /// </summary>
     [SerializeField] private TaskHandler taskHandler;
+    
+    /// <summary>
+    /// Reference To The Animator Component of the Worker
+    /// </summary>
+    [SerializeField]private Animator _animator;
+
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
 
+    WorkerStates CurrentState
+    {
+        set
+        {
+            _currentState = value;
+            
+            switch (_currentState)
+            {
+                case WorkerStates.Idle:
+                    _animator.Play("Idle");
+                    break;
+                case WorkerStates.Working:
+                    _animator.Play("Idle");
+                    break;
+                case WorkerStates.Sleeping:
+                    break;
+                case WorkerStates.Walking:
+                    _animator.Play("Walking");
+                    break;
+            }
+        }
+    }
+    
+    private void Update()
+    {
+        
+    }
+
     public static void ChangeWorkerState(Worker worker, WorkerStates newState)
     {
-        worker._currentState = newState;
+        worker.CurrentState = newState;
     }
 
     public static WorkerStates GetWorkerState(Worker worker)
@@ -76,8 +101,21 @@ public class Worker : MonoBehaviour
     {
         worker.agent.isStopped = value;
     }
-    
-    
+}
 
-    
+public enum Roles 
+{
+    Default,
+    Lumberjack,
+    Farmer,
+    Fighter,
+    Miner,
+}
+
+public enum WorkerStates
+{
+    Idle,
+    Working,
+    Sleeping,
+    Walking,
 }
