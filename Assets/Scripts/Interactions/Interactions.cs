@@ -114,7 +114,7 @@ public class Interactions : MonoBehaviour
                                worker.interactingWith == null && 
                                objectManager.assignedWorker == null))
         {
-            if (worker.TryGetComponent(out TaskHandler taskHandler))
+            if (worker.TryGetComponent(out TaskHandler taskHandler) && Worker.GetWorkerState(worker) == Worker.WorkerStates.Idle)
             {
                 taskHandler.StartCoroutine(taskHandler.CRMoveToJob(worker,objectManager));
             }

@@ -98,6 +98,8 @@ public class TaskHandler : MonoBehaviour
         {
             objectToStore.transform.position = objectToStore.storedAt;
             objectToStore.gameObject.SetActive(true);
+            objectToStore.transform.rotation = Quaternion.Euler(0,0,0);
+
             Worker.ChangeWorkerState(worker, Worker.WorkerStates.Idle);
         }
     }

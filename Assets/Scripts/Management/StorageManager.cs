@@ -30,7 +30,6 @@ public class StorageManager : MonoBehaviour
         itemToStore.TryGetComponent(out PickupObject pickupObject);
         pickupObject.storedAt = location;
         storageLocations.Remove(location);
-        itemToStore.transform.rotation = Quaternion.Euler(0,0,0);
         usedSpaces.Add(location);
         UpdateStorage();
     }
