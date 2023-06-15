@@ -54,7 +54,6 @@ public class TaskHandler : MonoBehaviour
     
     public IEnumerator CRWalkToJob(Worker worker, HarvestObjectManager harvestObjectManager)
     {
-        BeginWorking(worker,harvestObjectManager);
         if (Vector3.Distance(transform.position, harvestObjectManager.transform.position) > 3f)
         {
             if (Worker.GetWorkerState(worker) != WorkerStates.Walking)
