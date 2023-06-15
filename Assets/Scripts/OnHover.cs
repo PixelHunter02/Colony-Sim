@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class OnHover : MonoBehaviour
 {
     private Outline outline;
-    private NewSelections selection;
 
     private void Awake()
     {

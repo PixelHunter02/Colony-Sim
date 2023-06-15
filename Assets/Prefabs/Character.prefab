@@ -92,8 +92,8 @@ GameObject:
   - component: {fileID: 6265913509800541749}
   - component: {fileID: 2511303835714797144}
   - component: {fileID: 8834477723631921225}
-  - component: {fileID: 4419842829242877391}
   - component: {fileID: 7538813952286011265}
+  - component: {fileID: 4419842829242877391}
   - component: {fileID: 9202439985416617905}
   m_Layer: 6
   m_Name: Character
@@ -234,10 +234,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   role: 1
-  workerStates: 0
+  currentState: 0
   workerName: Jimmy
   interactingWith: {fileID: 0}
-  defaultWorkerJobs: {fileID: 7538813952286011265}
+  taskHandler: {fileID: 7538813952286011265}
+--- !u!114 &7538813952286011265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771544343734651997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4023008604cf134cbe83284ddf61d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slider: {fileID: 7662351566881593460}
+  taskImage: {fileID: 1245022091735322643}
+  status: {fileID: 3039041674415109918}
+  _worker: {fileID: 8834477723631921225}
 --- !u!195 &4419842829242877391
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -260,21 +276,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7538813952286011265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1771544343734651997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4023008604cf134cbe83284ddf61d9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slider: {fileID: 7662351566881593460}
-  taskImage: {fileID: 1245022091735322643}
-  status: {fileID: 3039041674415109918}
 --- !u!54 &9202439985416617905
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -20,7 +20,6 @@ public class HarvestObjectManager : MonoBehaviour
         {
             var drop = Instantiate(harvestableObject.prefabToSpawn, transform.position, Quaternion.identity);
             var x = Random.Range(-180, 180);
-            // var y = Random.Range(0, 180);
             var z = Random.Range(-180, 180);
             var pushDirection = new Vector3(x, 50, z);
             drop.TryGetComponent(out Rigidbody rb);

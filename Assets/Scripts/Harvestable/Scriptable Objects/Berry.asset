@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Berry
   m_EditorClassIdentifier: 
   timeToHarvest: 5
-  canInteract: 02000000
+  canInteract: 0200000000000000
   prefabToSpawn: {fileID: 9133517775435464950, guid: 46c46d421ef4b594bbcf5fd4e9fbd0db,
     type: 3}
   maxDropAmount: 5

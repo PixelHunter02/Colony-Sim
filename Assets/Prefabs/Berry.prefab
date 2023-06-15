@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8881046705970738356}
   - component: {fileID: 7718052605575208192}
   - component: {fileID: 3287951786554709672}
+  - component: {fileID: -2810790224413846539}
   m_Layer: 7
   m_Name: Berry
   m_TagString: Harvestable
@@ -133,3 +134,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-2810790224413846539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9133517775435464950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77b65a79d22372c45bd742247d3a3c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

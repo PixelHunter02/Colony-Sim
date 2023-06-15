@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Worker : MonoBehaviour
@@ -18,15 +21,17 @@ public class Worker : MonoBehaviour
         Fighter,
         Miner,
     }
-    public Roles role;
+    [SerializeField] private Roles role;
+
+    public enum WorkerStates
+    {
+        Idle,
+        Working,
+        Sleeping,
+    }
+    [SerializeField] private WorkerStates _currentState;
 
     private NavMeshAgent agent;
-
-    /// <summary>
-    /// UI
-    /// </summary>
-    private GameObject canvas;
-    private Slider progressSlider;
 
     /// <summary>
     /// Worker Information
@@ -35,29 +40,44 @@ public class Worker : MonoBehaviour
 
     public HarvestObjectManager interactingWith;
 
-    [SerializeField] private DefaultWorkerJobs defaultWorkerJobs;
+    [SerializeField] private TaskHandler taskHandler;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        canvas = transform.Find("Canvas").gameObject;
-        progressSlider = canvas.transform.Find("Slider").GetComponent<Slider>();
+    }
+
+    public static void ChangeWorkerState(Worker worker, WorkerStates newState)
+    {
+        worker._currentState = newState;
+    }
+
+    public static WorkerStates GetWorkerState(Worker worker)
+    {
+        return worker._currentState;
+    }
+
+    public static void ChangeWorkerRole(Worker worker, Roles newRole )
+    {
+        worker.role = newRole;
+    }
+
+    public static Roles GetWorkerRole(Worker worker)
+    {
+        return worker.role;
+    }
+
+    public static void SetWorkerDestination(Worker worker, Vector3 position)
+    {
+        worker.agent.SetDestination(position);
+    }
+
+    public static void StopWorker(Worker worker, bool value)
+    {
+        worker.agent.isStopped = value;
     }
     
-    public IEnumerator MoveToJob(Worker worker, HarvestObjectManager harvestObjectManager)
-    {
-        if (Vector3.Distance(worker.transform.position, harvestObjectManager.transform.position) > 3f)
-        {
-            agent.SetDestination(harvestObjectManager.transform.position);
-            yield return new WaitForSeconds(0.3f);
-            StartCoroutine(MoveToJob(worker, harvestObjectManager));
-        }
-        else
-        {
-            agent.isStopped = true;
-            defaultWorkerJobs.BeginHarvest(harvestObjectManager);
-            yield return null;
-        }
-    }
+    
+
     
 }
