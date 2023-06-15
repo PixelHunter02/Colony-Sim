@@ -8,7 +8,7 @@ public class HarvestObjectManager : MonoBehaviour
     public HarvestableObjectSO harvestableObject;
     public Worker assignedWorker;
 
-    public IEnumerator SpawnHarvestDrops()
+    public IEnumerator CRSpawnHarvestDrops()
     {
         const float pushIntensity = 0.5f;
         const float timeBetweenSpawns = 0.3f;

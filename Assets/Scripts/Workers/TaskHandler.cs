@@ -33,14 +33,14 @@ public class TaskHandler : MonoBehaviour
         StartCoroutine(CRWalkToPickup(worker, pickupObject));
     }
     
-    public IEnumerator MoveToJob(Worker worker, HarvestObjectManager harvestObjectManager)
+    public IEnumerator CRMoveToJob(Worker worker, HarvestObjectManager harvestObjectManager)
     {
         BeginWorking(worker,harvestObjectManager);
         if (Vector3.Distance(transform.position, harvestObjectManager.transform.position) > 3f)
         {
             Worker.SetWorkerDestination(worker,harvestObjectManager.transform.position);
             yield return new WaitForSeconds(0.3f);
-            StartCoroutine(MoveToJob(worker, harvestObjectManager));
+            StartCoroutine(CRMoveToJob(worker, harvestObjectManager));
         }
         else
         {
@@ -64,7 +64,7 @@ public class TaskHandler : MonoBehaviour
         }
         
         taskImage.sprite = harvestObjectManager.harvestableObject.taskCompleteSprite;
-        StartCoroutine(harvestObjectManager.SpawnHarvestDrops());
+        StartCoroutine(harvestObjectManager.CRSpawnHarvestDrops());
         EndCurrentTask(_worker,harvestObjectManager);
         yield return new WaitForSeconds(3f);
         status.SetActive(false);

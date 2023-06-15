@@ -116,7 +116,7 @@ public class Interactions : MonoBehaviour
         {
             if (worker.TryGetComponent(out TaskHandler taskHandler))
             {
-                taskHandler.StartCoroutine(taskHandler.MoveToJob(worker,objectManager));
+                taskHandler.StartCoroutine(taskHandler.CRMoveToJob(worker,objectManager));
             }
             break;
         }
@@ -185,10 +185,10 @@ public class Interactions : MonoBehaviour
         _drawingStockpile = true;
         var point = new Vector3(Mathf.CeilToInt(hit.point.x), hit.point.y + 0.1f, Mathf.CeilToInt(hit.point.z));
         vertices[0] = point;
-        StartCoroutine(DrawStockpileEnumerator());
+        StartCoroutine(CRDrawStockpile());
     }
     
-    private IEnumerator DrawStockpileEnumerator()
+    private IEnumerator CRDrawStockpile()
     {
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 1000000)) 
@@ -231,7 +231,7 @@ public class Interactions : MonoBehaviour
         _stockpileMesh.uv = _uvs;
         _stockpileMesh.triangles = _triangles;
         yield return new WaitForEndOfFrame();
-        StartCoroutine(DrawStockpileEnumerator());
+        StartCoroutine(CRDrawStockpile());
     }
 
     private void PlaceStockpile()
