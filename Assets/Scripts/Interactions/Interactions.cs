@@ -38,6 +38,11 @@ public class Interactions : MonoBehaviour
     private Outline lastHitOutline;
 
     private TaskHandler _taskHandler;
+
+    /// <summary>
+    /// Material References
+    /// </summary>
+    [SerializeField] Material stockpileMaterial;
     
     private void Awake()
     {
@@ -110,16 +115,17 @@ public class Interactions : MonoBehaviour
     
         
         // Run through each worker for an available worker who is of the correct role.
-        foreach (var worker in workers.Where(
-                     worker => objectManager.harvestableObject.canInteract.Contains(Worker.GetWorkerRole(worker)) &&
-                               worker.interactingWith == null && 
-                               objectManager.assignedWorker == null))
+        foreach (var worker in workers)
         {
-            if (worker.TryGetComponent(out TaskHandler taskHandler) && Worker.GetWorkerState(worker) == WorkerStates.Idle)
+            if(objectManager.harvestableObject.canInteract.Contains(Worker.GetWorkerRole(worker)) && worker.interactingWith == null && objectManager.assignedWorker == null)
             {
-                taskHandler.StartCoroutine(taskHandler.CRWalkToJob(worker,objectManager));
+                if (worker.TryGetComponent(out TaskHandler taskHandler) && Worker.GetWorkerState(worker) == WorkerStates.Idle)
+                {
+                    Worker.SetInteractingWith(worker, objectManager);
+                    taskHandler.StartCoroutine(taskHandler.CRWalkToTask(worker, objectManager));
+                }
+                break;
             }
-            break;
         }
     }
 
@@ -143,7 +149,7 @@ public class Interactions : MonoBehaviour
             {
                 pickupObject.Pickup(worker);
                 storageManager.StoreItem(pickupObject);
-                taskHandler.BeginWalkingToObject(worker,pickupObject);
+                StartCoroutine(taskHandler.CRWalkToPickup(worker,pickupObject));
             }
             break;
         }
@@ -159,13 +165,14 @@ public class Interactions : MonoBehaviour
         hit.transform.TryGetComponent(out Worker worker);
         if (!worker) 
             return;
-        
+
         //setting values for info ui of villagers
+        Debug.Log("Hit Villager");
         var infoUI = worker.gameObject.transform.GetChild(0).GetChild(1).gameObject;
-        infoUI.SetActive(true);
+        infoUI.SetActive(!infoUI.activeSelf);
         infoUI.transform.Find("Name").TryGetComponent(out TMP_Text workerName);
         infoUI.transform.Find("Job").TryGetComponent(out TMP_Text workerJob);
-        workerName.text = worker.name;
+        workerName.text = Worker.GetWorkerName(worker);
         workerJob.text = Worker.GetWorkerRole(worker).ToString();
     }
 
@@ -237,7 +244,6 @@ public class Interactions : MonoBehaviour
 
     private void PlaceStockpile()
     {
-        Debug.Log(_drawingStockpile);
         if (!_drawingStockpile) 
             return;
         if (Mathf.CeilToInt(vertices[0].x) == Mathf.CeilToInt(vertices[1].x) || Mathf.CeilToInt(vertices[0].z) == Mathf.CeilToInt(vertices[2].z))
@@ -262,6 +268,7 @@ public class Interactions : MonoBehaviour
         dataToAdd.vertices[1] = vertices[1];
         dataToAdd.vertices[2] = vertices[2];
         dataToAdd.vertices[3] = vertices[3];
+        dataToAdd.stockPileMaterial = stockpileMaterial;
         dataToAdd.DrawStockpile();
     }
 

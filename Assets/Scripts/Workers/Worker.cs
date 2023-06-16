@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -44,19 +45,24 @@ public class Worker : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
+    private void Start()
+    {
+        TryGetComponent(out Outline outline);
+        outline.UpdateMaterialProperties();
+    }
     WorkerStates CurrentState
     {
         set
         {
             _currentState = value;
-            
+
             switch (_currentState)
             {
                 case WorkerStates.Idle:
                     _animator.Play("Idle");
                     break;
                 case WorkerStates.Working:
-                    _animator.Play("Idle");
+                    GetAnimationForRole();
                     break;
                 case WorkerStates.Sleeping:
                     break;
@@ -66,13 +72,21 @@ public class Worker : MonoBehaviour
             }
         }
     }
-    
-    private void Update()
+
+    private void GetAnimationForRole()
     {
-        
+        switch (role)
+        {
+            case Roles.Lumberjack:
+                _animator.Play("Axe");
+                break;
+            case Roles.Miner:
+                _animator.Play("Pick");
+                break;
+        }
     }
 
-    public static void ChangeWorkerState(Worker worker, WorkerStates newState)
+    public static void SetWorkerState(Worker worker, WorkerStates newState)
     {
         worker.CurrentState = newState;
     }
@@ -82,7 +96,7 @@ public class Worker : MonoBehaviour
         return worker._currentState;
     }
 
-    public static void ChangeWorkerRole(Worker worker, Roles newRole )
+    public static void SetWorkerRole(Worker worker, Roles newRole )
     {
         worker.role = newRole;
     }
@@ -99,7 +113,23 @@ public class Worker : MonoBehaviour
 
     public static void StopWorker(Worker worker, bool value)
     {
+        worker.agent.ResetPath();
         worker.agent.isStopped = value;
+    }
+
+    public static void SetWorkerName(Worker worker, string name)
+    {
+        worker.workerName = name;
+    }
+
+    public static string GetWorkerName(Worker worker)
+    {
+        return worker.workerName;
+    }
+
+    public static void SetInteractingWith(Worker worker,HarvestObjectManager harvestObjectManager)
+    {
+        worker.interactingWith = harvestObjectManager;
     }
 }
 

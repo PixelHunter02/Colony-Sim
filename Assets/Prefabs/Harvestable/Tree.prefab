@@ -33,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 5838166895672546557}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &24205578779265069
 MonoBehaviour:
@@ -86,7 +86,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8
+  m_Radius: 0.29
   m_Height: 8
   m_Direction: 1
   m_Center: {x: 0, y: 3.49, z: 0}

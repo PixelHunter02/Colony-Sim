@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,35 +8,14 @@ public class TaskHandler : MonoBehaviour
     [SerializeField] private Image taskImage;
     [SerializeField] private GameObject status;
     [SerializeField] private Worker _worker;
-
-    public static void BeginWorking(Worker worker, HarvestObjectManager harvestObjectManager)
-    {
-        harvestObjectManager.assignedWorker = worker;
-        worker.interactingWith = harvestObjectManager;
-        Worker.StopWorker(worker,false);
-        Worker.ChangeWorkerState(worker, WorkerStates.Working);
-    }
+ 
     
-    public void BeginHarvest(HarvestObjectManager harvestObjectManager)
-    {
-        StartCoroutine(CRTaskTimer(harvestObjectManager));
-        taskImage.sprite = harvestObjectManager.harvestableObject.taskSprite;
-    }
-    
-    public void BeginWalkingToObject(Worker worker, PickupObject pickupObject)
-    {
-        Worker.ChangeWorkerState(worker,WorkerStates.Working);
-        Worker.StopWorker(worker,false);
-        Worker.SetWorkerDestination(worker, pickupObject.transform.position);
-        StartCoroutine(CRWalkToPickup(worker, pickupObject));
-    }
-    
-    private IEnumerator CRTaskTimer(HarvestObjectManager harvestObjectManager)
+    public IEnumerator CRRunTask(HarvestObjectManager harvestObjectManager)
     {
         status.SetActive(true);
-        
         var timer = 0f;
         var timeToCount = harvestObjectManager.harvestableObject.timeToHarvest;
+        taskImage.sprite = harvestObjectManager.harvestableObject.taskSprite;
         while (timer < timeToCount)
         {
             timer += Time.deltaTime;
@@ -47,49 +25,60 @@ public class TaskHandler : MonoBehaviour
         
         taskImage.sprite = harvestObjectManager.harvestableObject.taskCompleteSprite;
         StartCoroutine(harvestObjectManager.CRSpawnHarvestDrops());
-        EndCurrentTask(_worker,harvestObjectManager);
+        Worker.StopWorker(_worker, false);
+        Worker.SetWorkerState(_worker, WorkerStates.Idle);
         yield return new WaitForSeconds(3f);
         status.SetActive(false);
+        Worker.SetInteractingWith(_worker, null);
+        harvestObjectManager.assignedWorker = null;
+        
     }
-    
-    public IEnumerator CRWalkToJob(Worker worker, HarvestObjectManager harvestObjectManager)
+
+    public IEnumerator CRWalkToTask(Worker worker, HarvestObjectManager harvestObjectManager)
     {
         if (Vector3.Distance(transform.position, harvestObjectManager.transform.position) > 3f)
         {
             if (Worker.GetWorkerState(worker) != WorkerStates.Walking)
             {
                 // Set the Workers State To Walking
-                Worker.ChangeWorkerState(worker,WorkerStates.Walking);
+                Worker.SetWorkerState(worker,WorkerStates.Walking);
             }
-            
+            Worker.StopWorker(worker, false);
             Worker.SetWorkerDestination(worker,harvestObjectManager.transform.position);
+
             yield return new WaitForSeconds(0.3f);
-            StartCoroutine(CRWalkToJob(worker, harvestObjectManager));
+            StartCoroutine(CRWalkToTask(worker, harvestObjectManager));
         }
         else
         {
             Worker.StopWorker(worker,true);
-            Worker.ChangeWorkerState(worker, WorkerStates.Working);
-            BeginHarvest(harvestObjectManager);
+            Worker.SetWorkerState(worker, WorkerStates.Working);
+            StartCoroutine(CRRunTask(harvestObjectManager));
             yield return null;
         }
     }
     
-    private IEnumerator CRWalkToPickup(Worker worker, PickupObject objectToPickUp)
+    public IEnumerator CRWalkToPickup(Worker worker, PickupObject objectToPickUp)
     {
         var pickupPosition = objectToPickUp.transform.position;
         if (Vector3.Distance(worker.transform.position, pickupPosition) > 3f)
         {
-            // Set the Workers State To Walking
-            Worker.ChangeWorkerState(worker,WorkerStates.Walking);
-            
+            Worker.SetWorkerState(worker,WorkerStates.Walking);
+            Worker.StopWorker(worker, false);
+            Worker.SetWorkerDestination(worker, pickupPosition);
+
+            // Repeat
             yield return new WaitForSeconds(0.5f);
             StartCoroutine(CRWalkToPickup(worker, objectToPickUp));
         }
         else
         {
+            // Hide The Pickup Object
             objectToPickUp.gameObject.SetActive(false);
-            Worker.SetWorkerDestination(worker,objectToPickUp.storedAt);
+            
+            Worker.SetWorkerDestination(worker, objectToPickUp.storedAt);
+
+
             StartCoroutine(CRWalkToStockpile(worker, objectToPickUp));
         }
         yield return null;
@@ -101,23 +90,22 @@ public class TaskHandler : MonoBehaviour
         if (Vector3.Distance(worker.transform.position, objectToStore.storedAt) > 1)
         {
             // Set the Workers State To Walking
-            Worker.ChangeWorkerState(worker,WorkerStates.Walking);
+            Worker.SetWorkerState(worker,WorkerStates.Walking);
+
+            // Repeat
             yield return new WaitForSeconds(0.5f);
             StartCoroutine(CRWalkToStockpile(worker, objectToStore));
         }
         else
         {
+
+            // Move Object To Storage
             objectToStore.transform.position = objectToStore.storedAt;
             objectToStore.gameObject.SetActive(true);
             objectToStore.transform.rotation = Quaternion.Euler(0,0,0);
 
-            Worker.ChangeWorkerState(worker, WorkerStates.Idle);
+            // Set The Worker State To Idle
+            Worker.SetWorkerState(worker, WorkerStates.Idle);
         }
-    }
-    private static void EndCurrentTask(Worker worker, HarvestObjectManager harvestObjectManager)
-    {
-        harvestObjectManager.assignedWorker = null;
-        worker.interactingWith = null;
-        Worker.ChangeWorkerState( worker,WorkerStates.Idle);
     }
 }
