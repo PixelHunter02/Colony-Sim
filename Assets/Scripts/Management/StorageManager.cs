@@ -22,7 +22,7 @@ public class StorageManager : MonoBehaviour
         Stockpile.OnCreateStorageCellEvent += UpdateStorage;
     }
     
-    public void StoreItem(PickupObject itemToStore)
+    public static void StoreItem(PickupObject itemToStore)
     {
         if(!HasStorageSpace())
             return;
@@ -33,7 +33,7 @@ public class StorageManager : MonoBehaviour
         usedSpaces.Add(location);
         UpdateStorage();
     }
-    private void UpdateStorage() => spaceLeft = storageLocations.Count;
+    private static void UpdateStorage() => spaceLeft = storageLocations.Count;
 
     public static bool HasStorageSpace() => spaceLeft > 0;
 }

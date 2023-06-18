@@ -1,13 +1,15 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
-public class Worker : MonoBehaviour
+public class Worker : MonoBehaviour, IInteractable
 {
     /// <summary>
     /// The Workers Role will give the worker boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
-    [SerializeField] private Roles role;
+    [FormerlySerializedAs("role")] [SerializeField] private Roles workerRole;
     
     /// <summary>
     /// The Workers Current State
@@ -75,7 +77,7 @@ public class Worker : MonoBehaviour
 
     private void GetAnimationForRole()
     {
-        switch (role)
+        switch (workerRole)
         {
             case Roles.Lumberjack:
                 _animator.Play("Axe");
@@ -98,12 +100,12 @@ public class Worker : MonoBehaviour
 
     public static void SetWorkerRole(Worker worker, Roles newRole )
     {
-        worker.role = newRole;
+        worker.workerRole = newRole;
     }
 
     public static Roles GetWorkerRole(Worker worker)
     {
-        return worker.role;
+        return worker.workerRole;
     }
 
     public static void SetWorkerDestination(Worker worker, Vector3 position)
@@ -130,6 +132,16 @@ public class Worker : MonoBehaviour
     public static void SetInteractingWith(Worker worker,HarvestObjectManager harvestObjectManager)
     {
         worker.interactingWith = harvestObjectManager;
+    }
+
+    public void Interact()
+    {
+        var infoUI = gameObject.transform.GetChild(0).GetChild(1).gameObject;
+        infoUI.SetActive(!infoUI.activeSelf);
+        infoUI.transform.Find("Name").TryGetComponent(out TMP_Text workerNameTMP);
+        infoUI.transform.Find("Job").TryGetComponent(out TMP_Text workerRoleTMP);
+        workerNameTMP.text = workerName;
+        workerRoleTMP.text = workerRole.ToString();
     }
 }
 

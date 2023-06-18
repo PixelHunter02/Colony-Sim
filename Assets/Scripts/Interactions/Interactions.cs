@@ -1,8 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,11 +16,6 @@ public class Interactions : MonoBehaviour
     [SerializeField] private Camera cam;
 
     /// <summary>
-    /// Workers
-    /// </summary>
-    [SerializeField] private List<Worker> workers;
-
-    /// <summary>
     /// Stockpile
     /// </summary>
     [SerializeField]private Vector3[] vertices;
@@ -33,8 +24,6 @@ public class Interactions : MonoBehaviour
     private bool _drawingStockpile;
     private Mesh _stockpileMesh;
 
-    [SerializeField] private StorageManager storageManager;
-    private Outline characterOutline;
     private Outline lastHitOutline;
 
     private TaskHandler _taskHandler;
@@ -46,14 +35,12 @@ public class Interactions : MonoBehaviour
     
     private void Awake()
     {
+        
+        // Enable Input Actions
         _playerInputActions = new PlayerInputActions();
         _playerInputActions.Enable();
-        foreach (var villager in GameObject.FindGameObjectsWithTag("Villagers"))
-        {
-            villager.TryGetComponent(out Worker worker);
-            workers.Add(worker);
-        }
 
+        // Assign references for Stockpile information
         _stockpileMesh = new Mesh();
         _stockpileMesh = GetComponent<MeshFilter>().mesh;
         vertices = new Vector3[4];
@@ -73,12 +60,14 @@ public class Interactions : MonoBehaviour
         if (!Physics.Raycast(ray, out var hit)) 
             return;
         
+        // Clear the reference to the previous outline if not highlighting.
         if (lastHitOutline)
         {
             lastHitOutline.enabled = false;
             lastHitOutline = null;
         }
 
+        // Detect if there is an outline component on the gameobject, If there is enable it
         if (!hit.transform.TryGetComponent(out Outline outline)) 
             return;
         lastHitOutline = outline;
@@ -90,10 +79,8 @@ public class Interactions : MonoBehaviour
         switch (context.phase)
         {
             case InputActionPhase.Performed:
-                InteractWithTask();
+                Interactable();
                 DrawStockpile();
-                ShowVillagerInformation();
-                InteractWithPickup();
                 break;
             case InputActionPhase.Canceled:
                 PlaceStockpile();
@@ -101,82 +88,19 @@ public class Interactions : MonoBehaviour
         }
     }
 
-    private void InteractWithTask()
+    private void Interactable()
     {
         // Get the information of the object being clicked
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 100)) 
             return;
-    
-        // Check if the clicked object has the component ObjectManager
-        hit.transform.TryGetComponent(out HarvestObjectManager objectManager);
-        if (!objectManager) 
-            return;
-    
-        
-        // Run through each worker for an available worker who is of the correct role.
-        foreach (var worker in workers)
+
+        if (hit.transform.TryGetComponent(out IInteractable interactable))
         {
-            if(objectManager.harvestableObject.canInteract.Contains(Worker.GetWorkerRole(worker)) && worker.interactingWith == null && objectManager.assignedWorker == null)
-            {
-                if (worker.TryGetComponent(out TaskHandler taskHandler) && Worker.GetWorkerState(worker) == WorkerStates.Idle)
-                {
-                    Worker.SetInteractingWith(worker, objectManager);
-                    taskHandler.StartCoroutine(taskHandler.CRWalkToTask(worker, objectManager));
-                }
-                break;
-            }
+            interactable.Interact();
         }
     }
-
-    private void InteractWithPickup()
-    {
-        if(!StorageManager.HasStorageSpace())
-            return;
-        
-        var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if(!Physics.Raycast(ray, out var hit, 100))
-            return;
-        
-        if(!hit.transform.TryGetComponent(out PickupObject pickupObject))
-            return;
-     
-        // Run through each worker for an available worker who is of the correct role.
-        foreach (var worker in workers.Where(
-                     worker => Worker.GetWorkerState(worker) == WorkerStates.Idle))
-        {
-            if (worker.TryGetComponent(out TaskHandler taskHandler) && !pickupObject.heldBy)
-            {
-                pickupObject.Pickup(worker);
-                storageManager.StoreItem(pickupObject);
-                StartCoroutine(taskHandler.CRWalkToPickup(worker,pickupObject));
-            }
-            break;
-        }
-        
-    }
     
-    private void ShowVillagerInformation()
-    {
-        var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 100))
-            return;
-
-        hit.transform.TryGetComponent(out Worker worker);
-        if (!worker) 
-            return;
-
-        //setting values for info ui of villagers
-        Debug.Log("Hit Villager");
-        var infoUI = worker.gameObject.transform.GetChild(0).GetChild(1).gameObject;
-        infoUI.SetActive(!infoUI.activeSelf);
-        infoUI.transform.Find("Name").TryGetComponent(out TMP_Text workerName);
-        infoUI.transform.Find("Job").TryGetComponent(out TMP_Text workerJob);
-        workerName.text = Worker.GetWorkerName(worker);
-        workerJob.text = Worker.GetWorkerRole(worker).ToString();
-    }
-
-
     #region Stockpiles
 
     private void DrawStockpile()
