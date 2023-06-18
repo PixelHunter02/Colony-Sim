@@ -17,6 +17,11 @@ public class Worker : MonoBehaviour, IInteractable
     [SerializeField] private WorkerStates _currentState;
 
     /// <summary>
+    /// The Workers Current model
+    /// </summary>
+    [SerializeField] private Model gender;
+
+    /// <summary>
     /// The NavMeshAgent
     /// </summary>
     private NavMeshAgent agent;
@@ -160,4 +165,9 @@ public enum WorkerStates
     Working,
     Sleeping,
     Walking,
+}
+public enum Model
+{
+    Man,
+    Woman,
 }
