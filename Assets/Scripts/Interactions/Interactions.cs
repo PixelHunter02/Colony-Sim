@@ -44,7 +44,7 @@ public class Interactions : MonoBehaviour
         _stockpileMesh = new Mesh();
         _stockpileMesh = GetComponent<MeshFilter>().mesh;
         vertices = new Vector3[4];
-        _uvs = new Vector2[4];
+        AssignUVs();
         _triangles = new int[6];
     }
 
@@ -107,7 +107,7 @@ public class Interactions : MonoBehaviour
     {
         // Get the information of the object being clicked
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000000)) 
+        if (!Physics.Raycast(ray, out var hit, 1000)) 
             return;
     
         // Check if the clicked object is tagged with Ground
@@ -115,7 +115,7 @@ public class Interactions : MonoBehaviour
             return;
 
         _drawingStockpile = true;
-        var point = new Vector3(Mathf.CeilToInt(hit.point.x), hit.point.y + 0.1f, Mathf.CeilToInt(hit.point.z));
+        var point = new Vector3(Mathf.FloorToInt(hit.point.x), hit.point.y + 0.1f, Mathf.FloorToInt(hit.point.z));
         vertices[0] = point;
         StartCoroutine(CRDrawStockpile());
     }
@@ -123,7 +123,7 @@ public class Interactions : MonoBehaviour
     private IEnumerator CRDrawStockpile()
     {
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000000)) 
+        if (!Physics.Raycast(ray, out var hit, 1000)) 
             yield break;
         
         var startingPoint = vertices[0];
@@ -131,15 +131,60 @@ public class Interactions : MonoBehaviour
         
         if (!_drawingStockpile) 
             yield break;
-        vertices[1] = new Vector3(Mathf.CeilToInt(mousePosition.x),startingPoint.y,startingPoint.z);
-        vertices[2] = new Vector3(startingPoint.x,startingPoint.y,Mathf.CeilToInt(mousePosition.z));
-        vertices[3] = new Vector3(Mathf.CeilToInt(mousePosition.x),startingPoint.y,Mathf.CeilToInt(mousePosition.z));
+        
+        var xDistance = startingPoint.x - mousePosition.x;
+        if (xDistance > 5)
+        {
+            mousePosition.x = startingPoint.x - 5;
+        }
+        else if (xDistance < -5)
+        {
+            mousePosition.x = startingPoint.x + 5;
+        }
+        
+        var zDistance = startingPoint.z - mousePosition.z;
+        if (zDistance > 5)
+        {
+            mousePosition.z = startingPoint.z - 5;
+        }
+        else if (zDistance < -5)
+        {
+            mousePosition.z = startingPoint.z + 5;
+        }
+        
+        vertices[1] = new Vector3(Mathf.FloorToInt(mousePosition.x),startingPoint.y,startingPoint.z);
+        vertices[2] = new Vector3(startingPoint.x,startingPoint.y,Mathf.FloorToInt(mousePosition.z));
+        vertices[3] = new Vector3(Mathf.FloorToInt(mousePosition.x),startingPoint.y,Mathf.FloorToInt(mousePosition.z));
 
+        
+        
+        DrawTriangles();
+        
+        GetComponent<MeshFilter>().mesh.RecalculateBounds();
+        GetComponent<MeshFilter>().mesh.RecalculateNormals();
+        
+        //Assign Mesh Information
+        _stockpileMesh.vertices = vertices;
+        _stockpileMesh.uv = _uvs;
+        _stockpileMesh.triangles = _triangles;
+        
+        yield return new WaitForEndOfFrame();
+        
+        //Update Drawing
+        StartCoroutine(CRDrawStockpile());
+    }
+
+    private void AssignUVs()
+    {
+        _uvs = new Vector2[4];
         _uvs[0] = new Vector2(0, 1);
         _uvs[1] = new Vector2(1, 1);
         _uvs[2] = new Vector2(0, 0);
         _uvs[3] = new Vector2(1, 0);
-
+    }
+    
+    private void DrawTriangles()
+    {
         if ((vertices[1].x < vertices[0].x && vertices[2].z < vertices[0].z)||(vertices[1].x > vertices[0].x && vertices[2].z > vertices[0].z))
         {
             _triangles[0] = 2;
@@ -158,14 +203,8 @@ public class Interactions : MonoBehaviour
             _triangles[4] = 1;
             _triangles[5] = 3; 
         }
-    
-        _stockpileMesh.vertices = vertices;
-        _stockpileMesh.uv = _uvs;
-        _stockpileMesh.triangles = _triangles;
-        yield return new WaitForEndOfFrame();
-        StartCoroutine(CRDrawStockpile());
     }
-
+    
     private void PlaceStockpile()
     {
         if (!_drawingStockpile) 
@@ -186,7 +225,7 @@ public class Interactions : MonoBehaviour
     /// </summary>
     private void GenerateStockpile()
     {
-        var meshGo = new GameObject("Stockpile", typeof(MeshFilter), typeof(MeshRenderer),typeof(Stockpile));
+        var meshGo = new GameObject("Stockpile", typeof(MeshFilter), typeof(MeshRenderer), typeof(Rigidbody), typeof(BoxCollider),typeof(Stockpile));
         var dataToAdd = meshGo.GetComponent<Stockpile>() ;
         dataToAdd.vertices[0] = vertices[0];
         dataToAdd.vertices[1] = vertices[1];

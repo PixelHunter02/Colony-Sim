@@ -42,12 +42,19 @@ public class Stockpile : MonoBehaviour
         
         stockPile.vertices = vertices;
         stockPile.triangles = _triangles;
-        
+
         gameObject.GetComponent<MeshFilter>().mesh = stockPile;
-        
+        GetComponent<Rigidbody>().isKinematic = true;
+
+        gameObject.layer = 8;
         GetComponent<MeshRenderer>().material = stockPileMaterial;
-        GetComponent<MeshFilter>().mesh.RecalculateBounds();
-        GetComponent<MeshFilter>().mesh.RecalculateNormals();
+        var meshFilter = GetComponent<MeshFilter>().mesh;
+        meshFilter.RecalculateBounds();
+        meshFilter.RecalculateNormals();
+
+        var midPoint = (vertices[0].x + vertices[1].x) / 2;
+        
+        // GetComponent<BoxCollider>().center =    
         
         CreateNewStorageCells();
     }
@@ -64,6 +71,7 @@ public class Stockpile : MonoBehaviour
                 StorageManager.storageLocations.Add(storagePosition);
             }
         }
+
         OnCreateStorageCellEvent?.Invoke();
     }
 }
