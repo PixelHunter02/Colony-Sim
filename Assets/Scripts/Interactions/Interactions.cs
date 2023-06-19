@@ -5,47 +5,33 @@ using UnityEngine.InputSystem;
 
 public class Interactions : MonoBehaviour
 {
-    /// <summary>
-    /// Input Actions
-    /// </summary>
     private PlayerInputActions _playerInputActions;
 
-    /// <summary>
-    /// Camera
-    /// </summary>
     [SerializeField] private Camera cam;
 
-    /// <summary>
-    /// Stockpile
-    /// </summary>
-    [SerializeField]private Vector3[] vertices;
+    #region Stockpile Variables
+
+    [SerializeField] private Vector3[] vertices;
     private int[] _triangles;
-    private Vector2[] _uvs; 
+    private Vector2[] _uvs;
     private bool _drawingStockpile;
     private Mesh _stockpileMesh;
+    [SerializeField] Material stockpileMaterial;
 
-    private Outline lastHitOutline;
+    #endregion
+
+    private Outline _lastHitOutline;
 
     private TaskHandler _taskHandler;
 
-    /// <summary>
-    /// Material References
-    /// </summary>
-    [SerializeField] Material stockpileMaterial;
-    
     private void Awake()
     {
-        
+
         // Enable Input Actions
         _playerInputActions = new PlayerInputActions();
         _playerInputActions.Enable();
 
-        // Assign references for Stockpile information
-        _stockpileMesh = new Mesh();
-        _stockpileMesh = GetComponent<MeshFilter>().mesh;
-        vertices = new Vector3[4];
-        AssignUVs();
-        _triangles = new int[6];
+        InitializeStockpiles();
     }
 
     private void Start()
@@ -56,21 +42,26 @@ public class Interactions : MonoBehaviour
 
     private void Update()
     {
+        OutlineInteractable();
+    }
+
+    private void OutlineInteractable()
+    {
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit)) 
+        if (!Physics.Raycast(ray, out var hit))
             return;
-        
+
         // Clear the reference to the previous outline if not highlighting.
-        if (lastHitOutline)
+        if (_lastHitOutline)
         {
-            lastHitOutline.enabled = false;
-            lastHitOutline = null;
+            _lastHitOutline.enabled = false;
+            _lastHitOutline = null;
         }
 
         // Detect if there is an outline component on the gameobject, If there is enable it
-        if (!hit.transform.TryGetComponent(out Outline outline)) 
+        if (!hit.transform.TryGetComponent(out Outline outline))
             return;
-        lastHitOutline = outline;
+        _lastHitOutline = outline;
         outline.enabled = true;
     }
 
@@ -92,16 +83,25 @@ public class Interactions : MonoBehaviour
     {
         // Get the information of the object being clicked
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 100)) 
+        if (!Physics.Raycast(ray, out var hit, 100))
             return;
 
         if (hit.transform.TryGetComponent(out IInteractable interactable))
         {
-            interactable.Interact();
+            interactable.OnInteraction();
         }
     }
-    
+
     #region Stockpiles
+
+    private void InitializeStockpiles()
+    {
+        _stockpileMesh = new Mesh();
+        _stockpileMesh = GetComponent<MeshFilter>().mesh;
+        vertices = new Vector3[4];
+        AssignUVs();
+        _triangles = new int[6];
+    }
 
     private void DrawStockpile()
     {

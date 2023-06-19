@@ -8,17 +8,17 @@ public class HarvestObjectManager : MonoBehaviour, IInteractable
     
     public Worker assignedWorker;
     
-    public void Interact()
+    public void OnInteraction()
     {
         // Run through each worker for an available worker who is of the correct role.
         foreach (var worker in WorkerManager.GetWorkers())
         {
-            if (!harvestableObject.canInteract.Contains(Worker.GetWorkerRole(worker)) || worker.interactingWith != null || assignedWorker != null) 
+            if (!harvestableObject.canInteract.Contains(worker.CurrentRole) || worker.interactingWith != null || assignedWorker != null) 
                 continue;
             
-            if (worker.TryGetComponent(out TaskHandler taskHandler) && Worker.GetWorkerState(worker) == WorkerStates.Idle)
+            if (worker.TryGetComponent(out TaskHandler taskHandler) && worker.CurrentState == WorkerStates.Idle)
             {
-                Worker.SetInteractingWith(worker, this);
+                worker.interactingWith = this;
                 taskHandler.StartCoroutine(taskHandler.CRWalkToTask(worker, this));
             }
             break;

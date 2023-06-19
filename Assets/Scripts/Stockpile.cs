@@ -51,10 +51,6 @@ public class Stockpile : MonoBehaviour
         var meshFilter = GetComponent<MeshFilter>().mesh;
         meshFilter.RecalculateBounds();
         meshFilter.RecalculateNormals();
-
-        var midPoint = (vertices[0].x + vertices[1].x) / 2;
-        
-        // GetComponent<BoxCollider>().center =    
         
         CreateNewStorageCells();
     }

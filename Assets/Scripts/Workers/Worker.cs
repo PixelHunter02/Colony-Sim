@@ -1,64 +1,49 @@
+using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Worker : MonoBehaviour, IInteractable
 {
     /// <summary>
     /// The Workers Role will give the worker boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
-    [FormerlySerializedAs("role")] [SerializeField] private Roles workerRole;
-    
+    [SerializeField] private Roles workerRole;
+    public Roles CurrentRole
+    {
+        get => workerRole;
+        set
+        {
+            workerRole = value;
+
+            switch (workerRole)
+            {
+                case Roles.Default:
+                    break;
+                case Roles.Farmer:
+                    break;
+                case Roles.Fighter:
+                    break;
+                case Roles.Lumberjack:
+                    workerImage.sprite = lumberjackImage;
+                    break;
+                case Roles.Miner:
+                    workerImage.sprite = minerImage;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
     /// <summary>
     /// The Workers Current State
     /// </summary>
-    [SerializeField] private WorkerStates _currentState;
-
-    /// <summary>
-    /// The Workers Current model
-    /// </summary>
-    [SerializeField] private Model gender;
-
-    /// <summary>
-    /// The NavMeshAgent
-    /// </summary>
-    private NavMeshAgent agent;
-
-    /// <summary>
-    /// Worker Information
-    /// </summary>
-    [SerializeField] private string workerName;
-    
-    /// <summary>
-    /// The object that the Worker is interacting with
-    /// </summary>
-    public HarvestObjectManager interactingWith;
-
-    /// <summary>
-    /// Reference To The Task Handler Script
-    /// </summary>
-    [SerializeField] private TaskHandler taskHandler;
-    
-    /// <summary>
-    /// Reference To The Animator Component of the Worker
-    /// </summary>
-    [SerializeField]private Animator _animator;
-
-
-    private void Awake()
+    private WorkerStates _currentState;
+    public WorkerStates CurrentState
     {
-        agent = GetComponent<NavMeshAgent>();
-    }
-
-    private void Start()
-    {
-        TryGetComponent(out Outline outline);
-        outline.UpdateMaterialProperties();
-    }
-    WorkerStates CurrentState
-    {
+        get => _currentState;
         set
         {
             _currentState = value;
@@ -80,6 +65,54 @@ public class Worker : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// The Workers Current model
+    /// </summary>
+    [SerializeField] private Model gender;
+
+    /// <summary>
+    /// The NavMeshAgent
+    /// </summary>
+    private NavMeshAgent _agent;
+
+    /// <summary>
+    /// Worker Information
+    /// </summary>
+    [SerializeField] private string workerName;
+
+    /// <summary>
+    /// Worker Image
+    /// </summary>
+    [SerializeField] private Image workerImage;
+    
+    /// <summary>
+    /// The object that the Worker is interacting with
+    /// </summary>
+    public HarvestObjectManager interactingWith;
+
+    /// <summary>
+    /// Reference To The Animator Component of the Worker
+    /// </summary>
+    [SerializeField]private Animator _animator;
+
+    /// <summary>
+    /// Images
+    /// </summary>
+    [SerializeField] private Sprite minerImage;
+    [SerializeField] private Sprite lumberjackImage;
+
+    private void Awake()
+    {
+        _agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Start()
+    {
+        TryGetComponent(out Outline outline);
+        outline.UpdateMaterialProperties();
+    }
+
+
     private void GetAnimationForRole()
     {
         switch (workerRole)
@@ -92,54 +125,19 @@ public class Worker : MonoBehaviour, IInteractable
                 break;
         }
     }
-
-    public static void SetWorkerState(Worker worker, WorkerStates newState)
-    {
-        worker.CurrentState = newState;
-    }
-
-    public static WorkerStates GetWorkerState(Worker worker)
-    {
-        return worker._currentState;
-    }
-
-    public static void SetWorkerRole(Worker worker, Roles newRole )
-    {
-        worker.workerRole = newRole;
-    }
-
-    public static Roles GetWorkerRole(Worker worker)
-    {
-        return worker.workerRole;
-    }
-
+    
     public static void SetWorkerDestination(Worker worker, Vector3 position)
     {
-        worker.agent.SetDestination(position);
+        worker._agent.SetDestination(position);
     }
 
     public static void StopWorker(Worker worker, bool value)
     {
-        worker.agent.ResetPath();
-        worker.agent.isStopped = value;
+        worker._agent.ResetPath();
+        worker._agent.isStopped = value;
     }
 
-    public static void SetWorkerName(Worker worker, string name)
-    {
-        worker.workerName = name;
-    }
-
-    public static string GetWorkerName(Worker worker)
-    {
-        return worker.workerName;
-    }
-
-    public static void SetInteractingWith(Worker worker,HarvestObjectManager harvestObjectManager)
-    {
-        worker.interactingWith = harvestObjectManager;
-    }
-
-    public void Interact()
+    public void OnInteraction()
     {
         var infoUI = gameObject.transform.GetChild(0).GetChild(1).gameObject;
         infoUI.SetActive(!infoUI.activeSelf);

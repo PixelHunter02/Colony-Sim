@@ -77,9 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b65a79d22372c45bd742247d3a3c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  storedAt: {x: 0, y: 0, z: 0}
-  isBeingHeld: 0
-  heldBy: {fileID: 0}
+  _itemSO: {fileID: 11400000, guid: 950d01fadf8da244692cceeaffa3fcda, type: 2}
+  storageLocation: {x: 0, y: 0, z: 0}
 --- !u!114 &5745779075882291329
 MonoBehaviour:
   m_ObjectHideFlags: 0

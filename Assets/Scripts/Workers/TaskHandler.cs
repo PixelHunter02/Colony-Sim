@@ -26,10 +26,10 @@ public class TaskHandler : MonoBehaviour
         taskImage.sprite = harvestObjectManager.harvestableObject.taskCompleteSprite;
         StartCoroutine(harvestObjectManager.CRSpawnHarvestDrops());
         Worker.StopWorker(_worker, false);
-        Worker.SetWorkerState(_worker, WorkerStates.Idle);
+        _worker.CurrentState = WorkerStates.Idle;
         yield return new WaitForSeconds(3f);
         status.SetActive(false);
-        Worker.SetInteractingWith(_worker, null);
+        _worker.interactingWith = null;
         harvestObjectManager.assignedWorker = null;
         
     }
@@ -38,10 +38,10 @@ public class TaskHandler : MonoBehaviour
     {
         if (Vector3.Distance(transform.position, harvestObjectManager.transform.position) > 3f)
         {
-            if (Worker.GetWorkerState(worker) != WorkerStates.Walking)
+            if (worker.CurrentState != WorkerStates.Walking)
             {
                 // Set the Workers State To Walking
-                Worker.SetWorkerState(worker,WorkerStates.Walking);
+                _worker.CurrentState = WorkerStates.Walking;
             }
             Worker.StopWorker(worker, false);
             Worker.SetWorkerDestination(worker,harvestObjectManager.transform.position);
@@ -52,60 +52,57 @@ public class TaskHandler : MonoBehaviour
         else
         {
             Worker.StopWorker(worker,true);
-            Worker.SetWorkerState(worker, WorkerStates.Working);
+            worker.CurrentState = WorkerStates.Working;
             StartCoroutine(CRRunTask(harvestObjectManager));
             yield return null;
         }
     }
-    
-    public IEnumerator CRWalkToPickup(Worker worker, PickupObject objectToPickUp)
+
+    public void PickupObject(ObjectInformation objectToPickup)
     {
-        var pickupPosition = objectToPickUp.transform.position;
-        if (Vector3.Distance(worker.transform.position, pickupPosition) > 3f)
-        {
-            Worker.SetWorkerState(worker,WorkerStates.Walking);
-            Worker.StopWorker(worker, false);
-            Worker.SetWorkerDestination(worker, pickupPosition);
+        StartCoroutine(CRWalkToPickup(_worker, objectToPickup));
+    }
+    
+    private IEnumerator CRWalkToPickup(Worker worker, ObjectInformation objectInformation)
+    {
+        var pickupPosition = objectInformation.transform.position;
 
-            // Repeat
+        worker.CurrentState = WorkerStates.Walking;
+        Worker.StopWorker(worker, false);
+        Worker.SetWorkerDestination(worker, pickupPosition);
+        
+        while (Vector3.Distance(worker.transform.position,pickupPosition) > 3f)
+        {
             yield return new WaitForSeconds(0.5f);
-            StartCoroutine(CRWalkToPickup(worker, objectToPickUp));
         }
-        else
-        {
-            // Hide The Pickup Object
-            objectToPickUp.gameObject.SetActive(false);
-            
-            Worker.SetWorkerDestination(worker, objectToPickUp.storedAt);
-
-
-            StartCoroutine(CRWalkToStockpile(worker, objectToPickUp));
-        }
-        yield return null;
+        
+        objectInformation.gameObject.SetActive(false);
+        
+        StartCoroutine(CRWalkToStockpile(worker, objectInformation));
     }
 
-    private IEnumerator CRWalkToStockpile(Worker worker, PickupObject objectToStore)
+    private static IEnumerator CRWalkToStockpile(Worker worker, ObjectInformation objectInformation)
     {
-        // Check the Distance From The Stockpile Position
-        if (Vector3.Distance(worker.transform.position, objectToStore.storedAt) > 1)
+        Worker.SetWorkerDestination(worker, objectInformation.storageLocation);
+        worker.CurrentState = WorkerStates.Walking;
+        
+        // To Check The Distance Between The Worker And The Object Storage Location
+        while (Vector3.Distance(worker.transform.position, objectInformation.storageLocation) > 1)
         {
-            // Set the Workers State To Walking
-            Worker.SetWorkerState(worker,WorkerStates.Walking);
-
-            // Repeat
+            Debug.Log("In While Loop");
             yield return new WaitForSeconds(0.5f);
-            StartCoroutine(CRWalkToStockpile(worker, objectToStore));
         }
-        else
-        {
+        
+        worker.CurrentState = WorkerStates.Idle;
+     
+        MoveObjectToStorage(objectInformation);
+    }
 
-            // Move Object To Storage
-            objectToStore.transform.position = objectToStore.storedAt;
-            objectToStore.gameObject.SetActive(true);
-            objectToStore.transform.rotation = Quaternion.Euler(0,0,0);
-
-            // Set The Worker State To Idle
-            Worker.SetWorkerState(worker, WorkerStates.Idle);
-        }
+    private static void MoveObjectToStorage(ObjectInformation objectInformation)
+    {
+        objectInformation.transform.position = objectInformation.storageLocation;
+        objectInformation.gameObject.SetActive(true);
+        objectInformation.transform.rotation = Quaternion.Euler(0,0,0);
+        StorageManager.AddToStorage(new Resource{itemSO = objectInformation.Item, amount = 1});
     }
 }
