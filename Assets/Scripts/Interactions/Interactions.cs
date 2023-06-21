@@ -22,7 +22,9 @@ public class Interactions : MonoBehaviour
 
     private Outline _lastHitOutline;
 
-    private TaskHandler _taskHandler;
+    private static Worker previouslySelected;
+
+    public static bool isOverUI;
 
     private void Awake()
     {
@@ -36,13 +38,14 @@ public class Interactions : MonoBehaviour
 
     private void Start()
     {
-        _playerInputActions.Player.Select.performed += Interact;
-        _playerInputActions.Player.Select.canceled += Interact;
+        _playerInputActions.Player.Select.performed += ClickContext;
+        _playerInputActions.Player.Select.canceled += ClickContext;
     }
 
     private void Update()
     {
         OutlineInteractable();
+        isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 
     private void OutlineInteractable()
@@ -65,13 +68,13 @@ public class Interactions : MonoBehaviour
         outline.enabled = true;
     }
 
-    private void Interact(InputAction.CallbackContext context)
+    private void ClickContext(InputAction.CallbackContext context)
     {
         switch (context.phase)
         {
             case InputActionPhase.Performed:
                 Interactable();
-                DrawStockpile();
+                BeginDrawStockpile();
                 break;
             case InputActionPhase.Canceled:
                 PlaceStockpile();
@@ -86,9 +89,40 @@ public class Interactions : MonoBehaviour
         if (!Physics.Raycast(ray, out var hit, 100))
             return;
 
-        if (hit.transform.TryGetComponent(out IInteractable interactable))
+        if (hit.transform.TryGetComponent(out IInteractable interactable) && !isOverUI)
         {
             interactable.OnInteraction();
+        }
+    }
+
+    public static void SetNewSelectedWorker(Worker worker)
+    {
+        //Check if Previously Selected = null
+        if (!previouslySelected)
+        {
+            //Assign Previously Selected If previously Selected is null
+            previouslySelected = worker;
+            SetAllChildLayers(worker.gameObject, 6);
+            worker.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(true);
+        }
+        // If Previously Selected Is not null
+        else
+        {
+            // set the layer of previously selected to be 0
+            SetAllChildLayers(previouslySelected.gameObject, 0);
+            previouslySelected.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(false);
+            previouslySelected = worker;
+            SetAllChildLayers(previouslySelected.gameObject, 6);
+            previouslySelected.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(true);
+        }
+    }
+
+    private static void SetAllChildLayers(GameObject root, int layer)
+    {
+        var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
+        foreach (var child in children)
+        {
+            child.gameObject.layer = layer;
         }
     }
 
@@ -103,7 +137,7 @@ public class Interactions : MonoBehaviour
         _triangles = new int[6];
     }
 
-    private void DrawStockpile()
+    private void BeginDrawStockpile()
     {
         // Get the information of the object being clicked
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());

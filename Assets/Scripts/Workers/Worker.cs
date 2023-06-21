@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Worker : MonoBehaviour, IInteractable
@@ -26,10 +27,10 @@ public class Worker : MonoBehaviour, IInteractable
                 case Roles.Fighter:
                     break;
                 case Roles.Lumberjack:
-                    workerImage.sprite = lumberjackImage;
+                    _roleImage.sprite = lumberjackImage;
                     break;
                 case Roles.Miner:
-                    workerImage.sprite = minerImage;
+                    _roleImage.sprite = minerImage;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -79,11 +80,15 @@ public class Worker : MonoBehaviour, IInteractable
     /// Worker Information
     /// </summary>
     [SerializeField] private string workerName;
+    public string WorkerName
+    {
+        get => workerName;
+    }
 
     /// <summary>
     /// Worker Image
     /// </summary>
-    [SerializeField] private Image workerImage;
+    private Image _roleImage;
     
     /// <summary>
     /// The object that the Worker is interacting with
@@ -101,8 +106,13 @@ public class Worker : MonoBehaviour, IInteractable
     [SerializeField] private Sprite minerImage;
     [SerializeField] private Sprite lumberjackImage;
 
+    private UIManager _uiManager;
+    private Interactions _interactions;
+    
     private void Awake()
     {
+        _uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        _interactions = GameObject.Find("InteractionManager").GetComponent<Interactions>();
         _agent = GetComponent<NavMeshAgent>();
     }
 
@@ -139,12 +149,8 @@ public class Worker : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        var infoUI = gameObject.transform.GetChild(0).GetChild(1).gameObject;
-        infoUI.SetActive(!infoUI.activeSelf);
-        infoUI.transform.Find("Name").TryGetComponent(out TMP_Text workerNameTMP);
-        infoUI.transform.Find("Job").TryGetComponent(out TMP_Text workerRoleTMP);
-        workerNameTMP.text = workerName;
-        workerRoleTMP.text = workerRole.ToString();
+        _uiManager.ShowWorkerInformation(workerName);
+        Interactions.SetNewSelectedWorker(this);
     }
 }
 

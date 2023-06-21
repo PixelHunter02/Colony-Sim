@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,8 +9,14 @@ public class TaskHandler : MonoBehaviour
     [SerializeField] private Image taskImage;
     [SerializeField] private GameObject status;
     [SerializeField] private Worker _worker;
- 
-    
+    private GameManager _gameManager;
+
+    private void Awake()
+    {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
+
     public IEnumerator CRRunTask(HarvestObjectManager harvestObjectManager)
     {
         status.SetActive(true);
@@ -36,26 +43,23 @@ public class TaskHandler : MonoBehaviour
 
     public IEnumerator CRWalkToTask(Worker worker, HarvestObjectManager harvestObjectManager)
     {
-        if (Vector3.Distance(transform.position, harvestObjectManager.transform.position) > 3f)
+        // Set the Workers State To Walking
+        if (worker.CurrentState != WorkerStates.Walking)
         {
-            if (worker.CurrentState != WorkerStates.Walking)
-            {
-                // Set the Workers State To Walking
-                _worker.CurrentState = WorkerStates.Walking;
-            }
-            Worker.StopWorker(worker, false);
-            Worker.SetWorkerDestination(worker,harvestObjectManager.transform.position);
+            _worker.CurrentState = WorkerStates.Walking;
+        }
+        
+        Worker.StopWorker(worker, false);
+        Worker.SetWorkerDestination(worker,harvestObjectManager.transform.position);
 
-            yield return new WaitForSeconds(0.3f);
-            StartCoroutine(CRWalkToTask(worker, harvestObjectManager));
-        }
-        else
+        while (Vector3.Distance(transform.position, harvestObjectManager.transform.position) > 3f)
         {
-            Worker.StopWorker(worker,true);
-            worker.CurrentState = WorkerStates.Working;
-            StartCoroutine(CRRunTask(harvestObjectManager));
-            yield return null;
+            yield return new WaitForSeconds(0.3f);
         }
+        
+        Worker.StopWorker(worker,true);
+        worker.CurrentState = WorkerStates.Working;
+        StartCoroutine(CRRunTask(harvestObjectManager));
     }
 
     public void PickupObject(ObjectInformation objectToPickup)
@@ -81,7 +85,7 @@ public class TaskHandler : MonoBehaviour
         StartCoroutine(CRWalkToStockpile(worker, objectInformation));
     }
 
-    private static IEnumerator CRWalkToStockpile(Worker worker, ObjectInformation objectInformation)
+    private IEnumerator CRWalkToStockpile(Worker worker, ObjectInformation objectInformation)
     {
         Worker.SetWorkerDestination(worker, objectInformation.storageLocation);
         worker.CurrentState = WorkerStates.Walking;
@@ -98,11 +102,11 @@ public class TaskHandler : MonoBehaviour
         MoveObjectToStorage(objectInformation);
     }
 
-    private static void MoveObjectToStorage(ObjectInformation objectInformation)
+    private void MoveObjectToStorage(ObjectInformation objectInformation)
     {
         objectInformation.transform.position = objectInformation.storageLocation;
         objectInformation.gameObject.SetActive(true);
         objectInformation.transform.rotation = Quaternion.Euler(0,0,0);
-        StorageManager.AddToStorage(new Resource{itemSO = objectInformation.Item, amount = 1});
+        _gameManager.storageManager.AddToStorage(new Resource{itemSO = objectInformation.Item, amount = 1});
     }
 }

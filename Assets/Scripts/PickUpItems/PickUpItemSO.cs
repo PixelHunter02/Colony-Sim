@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Scriptable Objects/Pickup")]
 public class PickUpItemSO : ScriptableObject
 {
-    [SerializeField] private GameObject prefab;
-    [SerializeField] private string objectName;
-    [SerializeField] private int maxSize;
-    [SerializeField] private Sprite uiSprite;
-    [SerializeField] private AudioClip pickupSound;
-    [SerializeField] private AudioClip useSound;
+    public GameObject prefab;
+    public string objectName;
+    public int maxSize;
+    public Sprite uiSprite;
+    public AudioClip pickupSound;
+    public AudioClip useSound;
 }
