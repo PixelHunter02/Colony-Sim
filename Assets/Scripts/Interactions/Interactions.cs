@@ -22,7 +22,7 @@ public class Interactions : MonoBehaviour
 
     private Outline _lastHitOutline;
 
-    private static Worker previouslySelected;
+    private static Villager previouslySelected;
 
     public static bool isOverUI;
 
@@ -95,15 +95,15 @@ public class Interactions : MonoBehaviour
         }
     }
 
-    public static void SetNewSelectedWorker(Worker worker)
+    public static void SetNewSelectedVillager(Villager villager)
     {
         //Check if Previously Selected = null
         if (!previouslySelected)
         {
             //Assign Previously Selected If previously Selected is null
-            previouslySelected = worker;
-            SetAllChildLayers(worker.gameObject, 6);
-            worker.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(true);
+            previouslySelected = villager;
+            SetAllChildLayers(villager.gameObject, 6);
+            villager.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(true);
         }
         // If Previously Selected Is not null
         else
@@ -111,7 +111,7 @@ public class Interactions : MonoBehaviour
             // set the layer of previously selected to be 0
             SetAllChildLayers(previouslySelected.gameObject, 0);
             previouslySelected.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(false);
-            previouslySelected = worker;
+            previouslySelected = villager;
             SetAllChildLayers(previouslySelected.gameObject, 6);
             previouslySelected.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(true);
         }

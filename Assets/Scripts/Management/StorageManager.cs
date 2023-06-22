@@ -12,7 +12,7 @@ public class StorageManager : MonoBehaviour
     public static HashSet<Vector3> storageLocations;
     private static int _spaceLeft;
 
-    private static List<Resource> resourceList;
+    public static List<Resource> resourceList;
     public Transform[] inventorySlots;
     
 

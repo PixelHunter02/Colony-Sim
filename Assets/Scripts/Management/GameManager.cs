@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     public Interactions interactionManager;
     public SettingsManager settingsManager;
     public StorageManager storageManager;
-    public WorkerManager workerManager;
+    [FormerlySerializedAs("workerManager")] public VillagerManager villagerManager;
     private void Awake()
     {
         #region Singleton

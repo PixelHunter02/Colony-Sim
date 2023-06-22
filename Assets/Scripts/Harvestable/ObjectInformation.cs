@@ -10,16 +10,16 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         get => _itemSO;
     }
     private bool _isStored;
-    private bool _isHeld;
+    public bool _isHeld;
     public Vector3 storageLocation;
     
     public void OnInteraction()
     {
         if(!CanBeStored())
-            return;    
-        
-        AssignStorage();
-        FindAvailableWorker();
+            return;
+
+        FindAvailableVillager();
+        // AssignStorage();
     }
     
     public void AssignStorage()
@@ -31,14 +31,15 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         StorageManager.UpdateStorage();
         _isStored = true;
     }
-    private void FindAvailableWorker()
+    private void FindAvailableVillager()
     {
-        foreach (var worker in WorkerManager.GetWorkers())
+        foreach (var villager in VillagerManager.GetVillagers())
         {
-            if (worker.CurrentState == WorkerStates.Idle &&
-                worker.TryGetComponent(out TaskHandler taskHandler) && !_isHeld)
+            if (villager.CurrentState == VillagerStates.Idle &&
+                villager.TryGetComponent(out TaskHandler taskHandler) && !_isHeld && !villager.currentlyHolding)
             {
-                taskHandler.PickupObject(this);
+                AssignStorage();
+                taskHandler.PickUpResource(villager, this);
                 break;
             }
         }

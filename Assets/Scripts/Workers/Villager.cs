@@ -1,24 +1,23 @@
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Worker : MonoBehaviour, IInteractable
+public class Villager : MonoBehaviour, IInteractable
 {
     /// <summary>
-    /// The Workers Role will give the worker boosted stats in a specific craft as well as more abilities linked to that craft.
+    /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
-    [SerializeField] private Roles workerRole;
+    [FormerlySerializedAs("VillagerRole")] [SerializeField] private Roles villagerRole;
     public Roles CurrentRole
     {
-        get => workerRole;
+        get => villagerRole;
         set
         {
-            workerRole = value;
+            villagerRole = value;
 
-            switch (workerRole)
+            switch (villagerRole)
             {
                 case Roles.Default:
                     break;
@@ -27,10 +26,10 @@ public class Worker : MonoBehaviour, IInteractable
                 case Roles.Fighter:
                     break;
                 case Roles.Lumberjack:
-                    _roleImage.sprite = lumberjackImage;
+                    // _roleImage.sprite = lumberjackImage;
                     break;
                 case Roles.Miner:
-                    _roleImage.sprite = minerImage;
+                    // _roleImage.sprite = minerImage;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -39,10 +38,10 @@ public class Worker : MonoBehaviour, IInteractable
     }
 
     /// <summary>
-    /// The Workers Current State
+    /// The Villagers Current State
     /// </summary>
-    private WorkerStates _currentState;
-    public WorkerStates CurrentState
+    private VillagerStates _currentState;
+    public VillagerStates CurrentState
     {
         get => _currentState;
         set
@@ -51,15 +50,15 @@ public class Worker : MonoBehaviour, IInteractable
 
             switch (_currentState)
             {
-                case WorkerStates.Idle:
+                case VillagerStates.Idle:
                     _animator.Play("Idle");
                     break;
-                case WorkerStates.Working:
+                case VillagerStates.Working:
                     GetAnimationForRole();
                     break;
-                case WorkerStates.Sleeping:
+                case VillagerStates.Sleeping:
                     break;
-                case WorkerStates.Walking:
+                case VillagerStates.Walking:
                     _animator.Play("Walking");
                     break;
             }
@@ -67,52 +66,46 @@ public class Worker : MonoBehaviour, IInteractable
     }
 
     /// <summary>
-    /// The Workers Current model
+    /// The Villagers Current model
     /// </summary>
     [SerializeField] private Model gender;
 
     /// <summary>
     /// The NavMeshAgent
     /// </summary>
-    private NavMeshAgent _agent;
+    public NavMeshAgent _agent;
 
     /// <summary>
-    /// Worker Information
+    /// Villager Information
     /// </summary>
-    [SerializeField] private string workerName;
-    public string WorkerName
+    [SerializeField] private string villagerName;
+    public string VillagerName
     {
-        get => workerName;
+        get => villagerName;
     }
 
     /// <summary>
-    /// Worker Image
+    /// Villager Image
     /// </summary>
     private Image _roleImage;
     
     /// <summary>
-    /// The object that the Worker is interacting with
+    /// The object that the Villager is interacting with
     /// </summary>
     public HarvestObjectManager interactingWith;
 
     /// <summary>
-    /// Reference To The Animator Component of the Worker
+    /// Reference To The Animator Component of the Villager
     /// </summary>
     [SerializeField]private Animator _animator;
 
-    /// <summary>
-    /// Images
-    /// </summary>
-    [SerializeField] private Sprite minerImage;
-    [SerializeField] private Sprite lumberjackImage;
+    private GameManager _gameManager;
 
-    private UIManager _uiManager;
-    private Interactions _interactions;
-    
+    public PickUpItemSO currentlyHolding;
+
     private void Awake()
     {
-        _uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
-        _interactions = GameObject.Find("InteractionManager").GetComponent<Interactions>();
+        _gameManager = FindObjectOfType<GameManager>();
         _agent = GetComponent<NavMeshAgent>();
     }
 
@@ -125,7 +118,7 @@ public class Worker : MonoBehaviour, IInteractable
 
     private void GetAnimationForRole()
     {
-        switch (workerRole)
+        switch (villagerRole)
         {
             case Roles.Lumberjack:
                 _animator.Play("Axe");
@@ -136,21 +129,21 @@ public class Worker : MonoBehaviour, IInteractable
         }
     }
     
-    public static void SetWorkerDestination(Worker worker, Vector3 position)
+    public static void SetVillagerDestination(Villager villager, Vector3 position)
     {
-        worker._agent.SetDestination(position);
+        villager._agent.SetDestination(position);
     }
 
-    public static void StopWorker(Worker worker, bool value)
+    public static void StopVillager(Villager villager, bool value)
     {
-        worker._agent.ResetPath();
-        worker._agent.isStopped = value;
+        villager._agent.ResetPath();
+        villager._agent.isStopped = value;
     }
 
     public void OnInteraction()
     {
-        _uiManager.ShowWorkerInformation(workerName);
-        Interactions.SetNewSelectedWorker(this);
+        _gameManager.uiManager.ShowVillagerInformation(this);
+        Interactions.SetNewSelectedVillager(this);
     }
 }
 
@@ -163,7 +156,7 @@ public enum Roles
     Miner,
 }
 
-public enum WorkerStates
+public enum VillagerStates
 {
     Idle,
     Working,

@@ -47305,7 +47305,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 128993096}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowWorkerManagementUI
+        m_MethodName: ShowVillagerManagementUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

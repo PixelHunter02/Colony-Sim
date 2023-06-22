@@ -27,7 +27,11 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        CameraZoom();
+        if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        {
+            CameraZoom();
+        }
+        
         MoveCamera();
         CameraPanning();
         RotateCamera();
