@@ -21,7 +21,7 @@ public class DayCycle : MonoBehaviour
         transform.Rotate(new Vector3(1, 0, 0) * speed * Time.deltaTime);
         //transform.r = new Vector3(transform.rotation.x + Time.deltaTime * speed, 0, 0);
 
-        print(transform.localEulerAngles);
+        // print(transform.localEulerAngles);
         if (gameObject.transform.localEulerAngles.x > 180 || gameObject.transform.localEulerAngles.x < 0)
         {
             print("goodbye light");

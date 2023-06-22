@@ -45,14 +45,50 @@ public class StorageManager : MonoBehaviour
             resourceList.Add(resourceToAdd);
         }
 
+        //Display Image and Count in INventory
+        DrawInventory();
+    }
+
+    public void DrawInventory()
+    {
+        // Add To Inventory Display
         for (int i = 0; i < resourceList.Count; i++)
         {
-            var image = inventorySlots[i].GetChild(0);
-            var count = image.GetChild(0);
-            image.gameObject.SetActive(true);
-            count.gameObject.SetActive(true);
-            image.GetComponent<Image>().sprite = resourceList[i].itemSO.uiSprite;
-            count.GetComponent<TMP_Text>().text = resourceList[i].amount.ToString();
+            if (resourceList[i].amount > 0)
+            {
+                var image = inventorySlots[i].GetChild(0);
+                var count = image.GetChild(0);
+                image.gameObject.SetActive(true);
+                count.gameObject.SetActive(true);
+                image.GetComponent<Image>().sprite = resourceList[i].itemSO.uiSprite;
+                count.GetComponent<TMP_Text>().text = resourceList[i].amount.ToString();
+            }
+            else
+            {
+                var image = inventorySlots[i].GetChild(0);
+                var count = image.GetChild(0);
+                image.gameObject.SetActive(false);
+                count.gameObject.SetActive(false);
+                resourceList.RemoveAt(i);
+            }
+        }
+    }
+
+    public static void EmptyStockpileSpaces(int spacesToClear, Resource resourceType)
+    {
+        var storedItemsInformation = FindObjectsOfType<ObjectInformation>();
+        int clearedSpaces = 0;
+        for (int i = 0; i < storedItemsInformation.Length; i++)
+        {
+            if (storedItemsInformation[i].Item == resourceType.itemSO && clearedSpaces < spacesToClear)
+            {
+                clearedSpaces++;
+                storageLocations.Add(storedItemsInformation[i].storageLocation);
+                usedSpaces.Remove(storedItemsInformation[i].storageLocation);
+                storedItemsInformation[i].storageLocation = Vector3.zero;
+                storedItemsInformation[i]._isStored = false;
+                storedItemsInformation[i].gameObject.SetActive(false);
+            }
         }
     }
     

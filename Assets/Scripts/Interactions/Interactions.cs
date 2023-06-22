@@ -141,7 +141,7 @@ public class Interactions : MonoBehaviour
     {
         // Get the information of the object being clicked
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000)) 
+        if (!Physics.Raycast(ray, out var hit, 1000) || isOverUI) 
             return;
     
         // Check if the clicked object is tagged with Ground

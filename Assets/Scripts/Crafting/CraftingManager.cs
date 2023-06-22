@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CraftingManager : MonoBehaviour
@@ -14,16 +15,34 @@ public class CraftingManager : MonoBehaviour
 
     public void Crafting(CraftableSO craftableSo)
     {
-        foreach (var requiredResource in craftableSo.requiredResource)
+        int matchingItems = 0;
+        List<Resource> resourcesToRemove = new List<Resource>();
+        List<int> removalAmount = new List<int>();
+        foreach (var ownedResource in StorageManager.resourceList)
         {
-            if (!StorageManager.resourceList.Contains(requiredResource)) 
-                continue;
-            Debug.Log(StorageManager.resourceList.IndexOf(requiredResource));
-            var index = StorageManager.resourceList.IndexOf(requiredResource);
-            if (StorageManager.resourceList[index].amount >= requiredResource.amount)
+            foreach (var required in craftableSo.requiredResource)
             {
-                Debug.Log("Has Items");
+                if (ownedResource.itemSO.objectName != required.itemSO.objectName || ownedResource.amount < required.amount)
+                    continue;
+                matchingItems++;
+                resourcesToRemove.Add(ownedResource);
+                removalAmount.Add(required.amount);
             }
         }
+        
+        if (matchingItems != craftableSo.requiredResource.Length)
+        {
+            Debug.Log("You Dont Have The resources.");
+            return;
+        }
+
+        Debug.Log("Crafted!");
+        for(int i = 0; i < resourcesToRemove.Count; i++)
+        {
+            StorageManager.EmptyStockpileSpaces(removalAmount[i],resourcesToRemove[i]);
+            resourcesToRemove[i].amount -= removalAmount[i];
+        }
+        StorageManager.UpdateStorage();
+        _gameManager.storageManager.DrawInventory();
     }
 }

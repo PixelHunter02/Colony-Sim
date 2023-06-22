@@ -9,7 +9,7 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
     {
         get => _itemSO;
     }
-    private bool _isStored;
+    public bool _isStored;
     public bool _isHeld;
     public Vector3 storageLocation;
     
