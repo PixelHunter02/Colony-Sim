@@ -18,9 +18,19 @@ public class DayCycle : MonoBehaviour
     void Update()
     {
         currentTime += 1 * Time.deltaTime;
+        transform.Rotate(new Vector3(1, 0, 0) * speed * Time.deltaTime);
+        //transform.r = new Vector3(transform.rotation.x + Time.deltaTime * speed, 0, 0);
 
-        transform.Rotate(new Vector3(1,0,0) * speed * Time.deltaTime);
-        //if tranform.Rotate
+        print(transform.localEulerAngles);
+        if (gameObject.transform.localEulerAngles.x > 180 || gameObject.transform.localEulerAngles.x < 0)
+        {
+            print("goodbye light");
+            gameObject.transform.GetComponent<Light>().enabled = false; 
+        }
+        else
+        {
+            gameObject.transform.GetComponent<Light>().enabled = true;
+        }
         //https://www.youtube.com/watch?v=VZqqrNShOg0&ab_channel=JTAGames
     }
 }
