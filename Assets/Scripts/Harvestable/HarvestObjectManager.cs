@@ -1,25 +1,27 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class HarvestObjectManager : MonoBehaviour, IInteractable
 {
     public HarvestableObjectSO harvestableObject;
     
-    public Worker assignedWorker;
+    [FormerlySerializedAs("assignedWorker")] public Villager assignedVillager;
     
     public void OnInteraction()
     {
         // Run through each worker for an available worker who is of the correct role.
-        foreach (var worker in WorkerManager.GetWorkers())
+        foreach (var worker in VillagerManager.GetVillagers())
         {
-            if (!harvestableObject.canInteract.Contains(worker.CurrentRole) || worker.interactingWith != null || assignedWorker != null) 
+            if (!harvestableObject.canInteract.Contains(worker.CurrentRole) || worker.interactingWith != null || assignedVillager != null) 
                 continue;
             
-            if (worker.TryGetComponent(out TaskHandler taskHandler) && worker.CurrentState == WorkerStates.Idle)
+            if (worker.TryGetComponent(out TaskHandler taskHandler) && worker.CurrentState == VillagerStates.Idle)
             {
                 worker.interactingWith = this;
-                taskHandler.StartCoroutine(taskHandler.CRWalkToTask(worker, this));
+                StartCoroutine(taskHandler.VillagerWalksToTask(worker,this));
+                // taskHandler.StartCoroutine(taskHandler.CRWalkToTask(worker, this));
             }
             break;
         }

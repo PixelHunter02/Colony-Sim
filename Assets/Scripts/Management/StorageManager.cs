@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StorageManager : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class StorageManager : MonoBehaviour
     private static int _spaceLeft;
 
     public static List<Resource> resourceList;
+    public Transform[] inventorySlots;
+    
 
     private void Awake()
     {
@@ -24,7 +28,7 @@ public class StorageManager : MonoBehaviour
         Stockpile.OnCreateStorageCellEvent += UpdateStorage;
     }
     
-    public static void AddToStorage(Resource resourceToAdd)
+    public void AddToStorage(Resource resourceToAdd)
     {
         bool isItemInInventory = false;
         foreach (Resource resource in resourceList)
@@ -40,7 +44,16 @@ public class StorageManager : MonoBehaviour
         {
             resourceList.Add(resourceToAdd);
         }
-        Debug.Log(resourceList[0].itemSO.name + " : " + resourceList[0].amount);
+
+        for (int i = 0; i < resourceList.Count; i++)
+        {
+            var image = inventorySlots[i].GetChild(0);
+            var count = image.GetChild(0);
+            image.gameObject.SetActive(true);
+            count.gameObject.SetActive(true);
+            image.GetComponent<Image>().sprite = resourceList[i].itemSO.uiSprite;
+            count.GetComponent<TMP_Text>().text = resourceList[i].amount.ToString();
+        }
     }
     
     public static void UpdateStorage() => _spaceLeft = storageLocations.Count;
