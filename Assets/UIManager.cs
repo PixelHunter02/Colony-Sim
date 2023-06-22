@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     private TMP_Text _villagerName;
     [SerializeField] private GameObject inventoryUI;
     [SerializeField] private GameObject villagerManagementUI;
+    [SerializeField] private GameObject villagerSelectUI;
 
     [SerializeField] private GameObject villagerManagementCell;
     [SerializeField] private Transform villagerManagementContainer;
@@ -21,14 +22,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button[] roleButtons;
     [SerializeField] private GameObject roleAssignmentUI;
 
-    public static Dictionary<Villager, string> villagerLog;
+    private static Dictionary<Villager, string> villagerLog;
+
+    private TMP_Text roleSelectionTMPText;
+
+    public bool stockpileMode;
 
     private void Awake()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
+        roleSelectionTMPText = GameObject.Find("RoleText").GetComponent<TMP_Text>();
         villagerLog = new Dictionary<Villager, string>();
         _infoUI.SetActive(false);
+        CloseAllUI();
     }
 
     private void Start()
@@ -45,9 +52,9 @@ public class UIManager : MonoBehaviour
     }
 
     // Button Set In Inspector
-    public void ShowVillagerManagementUI()
+    public void ShowVillagerSelectUI()
     {
-        villagerManagementUI.SetActive(!villagerManagementUI.activeSelf);
+        villagerSelectUI.SetActive(!villagerSelectUI.activeSelf);
     }
     
     public void UpdateVillagerManagementUI()
@@ -58,40 +65,47 @@ public class UIManager : MonoBehaviour
             var cell = Instantiate(villagerManagementCell, villagerManagementContainer);
             cell.transform.Find("Label").Find("Name").GetComponent<TMP_Text>().text = villager.VillagerName;
             var button = cell.transform.Find("Button").GetComponent<Button>();
+            button.GetComponent<ButtonReference>().workerReference = villager;
             // Add A event to the button at runtime, which takes in a value
-            if (button.onClick.GetPersistentEventCount() >= 1)
-            {
-                UnityEditor.Events.UnityEventTools.RemovePersistentListener(button.onClick,0);
-            }
-            UnityEditor.Events.UnityEventTools.AddIntPersistentListener(button.onClick, OpenRoleManagementUI,i);
+            // if (button.onClick.GetPersistentEventCount() >= 1)
+            // {
+            //     UnityEditor.Events.UnityEventTools.RemovePersistentListener(button.onClick,0);
+            // }
+            //
+            // UnityEditor.Events.UnityEventTools.AddIntPersistentListener(button.onClick, OpenRoleManagementUI,i);
+            button.onClick.AddListener(() => OpenRoleManagementUI(button.GetComponent<ButtonReference>().workerReference));
+            Debug.Log(button.GetComponent<ButtonReference>().workerReference);
             cell.SetActive(true);
         }
     }
 
-    void OpenRoleManagementUI(int villagerID)
+    void OpenRoleManagementUI(Villager villager)
     {
         foreach (var button in roleButtons)
         {
-            if (button.onClick.GetPersistentEventCount() >= 1)
-            {
-                UnityEditor.Events.UnityEventTools.RemovePersistentListener(button.onClick,0);
-            }
-            UnityEditor.Events.UnityEventTools.AddIntPersistentListener(button.onClick, SetVillagerRole,villagerID);
+            // if (button.onClick.GetPersistentEventCount() >= 1)
+            // {
+            //     UnityEditor.Events.UnityEventTools.RemovePersistentListener(button.onClick,0);
+            // }
+            // UnityEditor.Events.UnityEventTools.AddIntPersistentListener(button.onClick, SetVillagerRole,villagerID);
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => SetVillagerRole(villager));
         }
         CloseAllUI();
+        roleSelectionTMPText.text = "Select Role For: \n" + villager.VillagerName;
         villagerManagementUI.SetActive(true);
         roleAssignmentUI.SetActive(true);
     }
 
-    void SetVillagerRole(int villagerID)
+    void SetVillagerRole(Villager villager)
     {
-        var villager = VillagerManager.GetVillagers()[villagerID];
+        // var villager = VillagerManager.GetVillagers()[villagerID];
 
         string originalRole = villager.CurrentRole.ToString();
         Roles.TryParse(EventSystem.current.currentSelectedGameObject.name, out Roles role);
         villager.CurrentRole = role;
         AddToVillagerLog(villager,villager.VillagerName + " has changed from " + originalRole + " to " + role);
-
+        CloseAllUI();
     }
     
     public static void AddToVillagerLog(Villager villager, string newLog)
@@ -114,8 +128,14 @@ public class UIManager : MonoBehaviour
     {
         _infoUI.SetActive(false);
         inventoryUI.SetActive(false);
-        villagerManagementUI.SetActive(false);
         roleAssignmentUI.SetActive(false);
+        villagerSelectUI.SetActive(false);
     }
+
+    public void StockpileModeEnabled()
+    {
+        stockpileMode = !stockpileMode;
+    }
+    
 }
 

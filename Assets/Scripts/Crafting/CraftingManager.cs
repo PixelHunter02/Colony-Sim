@@ -36,7 +36,6 @@ public class CraftingManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Crafted!");
         for(int i = 0; i < resourcesToRemove.Count; i++)
         {
             StorageManager.EmptyStockpileSpaces(removalAmount[i],resourcesToRemove[i]);
@@ -44,5 +43,12 @@ public class CraftingManager : MonoBehaviour
         }
         StorageManager.UpdateStorage();
         _gameManager.storageManager.DrawInventory();
+
+        if (!craftableSo.instantlyEnterBuildMode)
+        {
+            return;
+        }
+
+        Instantiate(craftableSo.prefab);
     }
 }

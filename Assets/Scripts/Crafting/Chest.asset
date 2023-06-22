@@ -15,3 +15,5 @@ MonoBehaviour:
   requiredResource:
   - itemSO: {fileID: 11400000, guid: 950d01fadf8da244692cceeaffa3fcda, type: 2}
     amount: 2
+  instantlyEnterBuildMode: 1
+  prefab: {fileID: 1087713860155376, guid: 9449f30b8830bf34395a4e029ca9e65d, type: 3}

@@ -6,4 +6,6 @@ using UnityEngine;
 public class CraftableSO : ScriptableObject
 {
     public Resource[] requiredResource;
+    public bool instantlyEnterBuildMode;
+    public GameObject prefab;
 }

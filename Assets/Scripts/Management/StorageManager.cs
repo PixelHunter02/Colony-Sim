@@ -80,8 +80,9 @@ public class StorageManager : MonoBehaviour
         int clearedSpaces = 0;
         for (int i = 0; i < storedItemsInformation.Length; i++)
         {
-            if (storedItemsInformation[i].Item == resourceType.itemSO && clearedSpaces < spacesToClear)
+            if (storedItemsInformation[i].Item.objectName == resourceType.itemSO.objectName && clearedSpaces < spacesToClear)
             {
+                Debug.Log("ClearingSpaces");
                 clearedSpaces++;
                 storageLocations.Add(storedItemsInformation[i].storageLocation);
                 usedSpaces.Remove(storedItemsInformation[i].storageLocation);

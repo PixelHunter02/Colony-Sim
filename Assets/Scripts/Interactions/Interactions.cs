@@ -26,14 +26,17 @@ public class Interactions : MonoBehaviour
 
     public static bool isOverUI;
 
+    private GameManager gameManager;
+
     private void Awake()
     {
-
         // Enable Input Actions
         _playerInputActions = new PlayerInputActions();
         _playerInputActions.Enable();
 
         InitializeStockpiles();
+
+        gameManager = FindObjectOfType<GameManager>(true);
     }
 
     private void Start()
@@ -141,7 +144,7 @@ public class Interactions : MonoBehaviour
     {
         // Get the information of the object being clicked
         var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000) || isOverUI) 
+        if (!Physics.Raycast(ray, out var hit, 1000) || isOverUI ||!gameManager.uiManager.stockpileMode) 
             return;
     
         // Check if the clicked object is tagged with Ground
