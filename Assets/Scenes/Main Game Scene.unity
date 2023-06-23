@@ -1149,6 +1149,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Villager
       objectReference: {fileID: 0}
+    - target: {fileID: 5463669791591739348, guid: a6bdb8c414f1db743a34481c113b6995,
+        type: 3}
+      propertyPath: m_VolumeLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5463669791591739348, guid: a6bdb8c414f1db743a34481c113b6995,
+        type: 3}
+      propertyPath: m_VolumeFrameworkUpdateModeOption
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7540412494523879976, guid: a6bdb8c414f1db743a34481c113b6995,
         type: 3}
       propertyPath: m_RootOrder
@@ -1204,6 +1214,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8934336798763194755, guid: a6bdb8c414f1db743a34481c113b6995,
+        type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934336798763194755, guid: a6bdb8c414f1db743a34481c113b6995,
+        type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 8400000, guid: cda3c9d6ab9a6e44a9d46f8d28d9afe7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

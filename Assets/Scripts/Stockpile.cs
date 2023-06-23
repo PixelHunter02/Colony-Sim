@@ -44,7 +44,6 @@ public class Stockpile : MonoBehaviour
         stockPile.triangles = _triangles;
 
         gameObject.GetComponent<MeshFilter>().mesh = stockPile;
-        GetComponent<Rigidbody>().isKinematic = true;
 
         gameObject.layer = 8;
         GetComponent<MeshRenderer>().material = stockPileMaterial;

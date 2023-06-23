@@ -262,7 +262,7 @@ public class Interactions : MonoBehaviour
     /// </summary>
     private void GenerateStockpile()
     {
-        var meshGo = new GameObject("Stockpile", typeof(MeshFilter), typeof(MeshRenderer), typeof(Rigidbody), typeof(BoxCollider),typeof(Stockpile));
+        var meshGo = new GameObject("Stockpile", typeof(MeshFilter), typeof(MeshRenderer), typeof(Stockpile));
         var dataToAdd = meshGo.GetComponent<Stockpile>() ;
         dataToAdd.vertices[0] = vertices[0];
         dataToAdd.vertices[1] = vertices[1];
