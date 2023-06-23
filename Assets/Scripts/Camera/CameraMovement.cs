@@ -1,3 +1,5 @@
+using System.Collections;
+using Cinemachine;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -11,18 +13,21 @@ public class CameraMovement : MonoBehaviour
     //Movement
     private Vector2 _lastMousePosition;
     [SerializeField] private float speed;
+    [SerializeField] private float panningSpeed;
     
     //Rotate
     private Vector2 _lastRightClickPosition;
 
     //zoom
     private CinemachineCameraOffset _cinemachineCameraOffset;
+    private CinemachineVirtualCamera _cinemachineVCam;
 
 
     private void Awake()
     {
         _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _cinemachineVCam = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
     }
 
     private void Update()
@@ -56,7 +61,7 @@ public class CameraMovement : MonoBehaviour
         {
             var mousePosition = followObject.transform.forward * (_gameManager.inputManager.GetScaledCursorPositionThisFrame().y - _lastMousePosition.y) + followObject.transform.right*(_gameManager.inputManager.GetScaledCursorPositionThisFrame().x-_lastMousePosition.x);
             var movementDirection = new Vector3(mousePosition.x, 0, mousePosition.z);
-            followObject.transform.position += movementDirection * (Time.deltaTime);
+            followObject.transform.position += movementDirection * (Time.deltaTime * panningSpeed);
             _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
         }
     }
@@ -64,10 +69,13 @@ public class CameraMovement : MonoBehaviour
     private void CameraZoom()
     {
         var zoomValue = _gameManager.inputManager.ZoomValueAsInt();
-        const int minimumZoomValue = -25;
+        const int minimumZoomValue = -5;
         const int maximumZoomValue = 0;
-        _cinemachineCameraOffset.m_Offset.z += zoomValue * 5;
+        _cinemachineCameraOffset.m_Offset.z += zoomValue;
         _cinemachineCameraOffset.m_Offset.z = Mathf.Clamp(_cinemachineCameraOffset.m_Offset.z, minimumZoomValue, maximumZoomValue);
+        var transposerOffset = _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
+        transposerOffset += zoomValue * -2;
+        _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(transposerOffset, 3, 15);
     }
 
     private void RotateCamera()
@@ -82,5 +90,6 @@ public class CameraMovement : MonoBehaviour
         var rotation = followObject.transform.rotation.eulerAngles;
         rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;
         followObject.transform.rotation = Quaternion.Euler(rotation);
+        _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
     }
 }

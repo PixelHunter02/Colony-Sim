@@ -16,7 +16,7 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public bool invertY;
     public bool invertX;
-    public float rotationSpeed;
+    public float rotationSpeed = 10;
 
     public int CameraXModifier()
     {

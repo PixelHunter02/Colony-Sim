@@ -19,9 +19,9 @@ public class HarvestObjectManager : MonoBehaviour, IInteractable
             
             if (worker.TryGetComponent(out TaskHandler taskHandler) && worker.CurrentState == VillagerStates.Idle)
             {
+                assignedVillager = worker;
                 worker.interactingWith = this;
                 StartCoroutine(taskHandler.VillagerWalksToTask(worker,this));
-                // taskHandler.StartCoroutine(taskHandler.CRWalkToTask(worker, this));
             }
             break;
         }

@@ -33,6 +33,8 @@ public class InputManager : MonoBehaviour
             < 0 => -1,
             _ => 0,
         };
+        
+        Debug.Log(scrollValue);
        
         return scrollValue;
     }
