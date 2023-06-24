@@ -24,7 +24,7 @@ public class Interactions : MonoBehaviour
 
     private static Villager previouslySelected;
 
-    public static bool isOverUI;
+    private static bool isOverUI;
 
     private GameManager gameManager;
 

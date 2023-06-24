@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject roleAssignmentUI;
 
     private static Dictionary<Villager, string> villagerLog;
+    [SerializeField] private TMP_Text villagerLogTMP;
 
     private TMP_Text roleSelectionTMPText;
 
@@ -47,6 +48,7 @@ public class UIManager : MonoBehaviour
     public void ShowVillagerInformation(Villager villager)
     {
         var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
+        villagerLogTMP.text = storedLog;
         _infoUI.SetActive(true);
         _villagerName.text = villager.VillagerName;
     }
@@ -66,13 +68,6 @@ public class UIManager : MonoBehaviour
             cell.transform.Find("Label").Find("Name").GetComponent<TMP_Text>().text = villager.VillagerName;
             var button = cell.transform.Find("Button").GetComponent<Button>();
             button.GetComponent<ButtonReference>().workerReference = villager;
-            // Add A event to the button at runtime, which takes in a value
-            // if (button.onClick.GetPersistentEventCount() >= 1)
-            // {
-            //     UnityEditor.Events.UnityEventTools.RemovePersistentListener(button.onClick,0);
-            // }
-            //
-            // UnityEditor.Events.UnityEventTools.AddIntPersistentListener(button.onClick, OpenRoleManagementUI,i);
             button.onClick.AddListener(() => OpenRoleManagementUI(button.GetComponent<ButtonReference>().workerReference));
             Debug.Log(button.GetComponent<ButtonReference>().workerReference);
             cell.SetActive(true);
@@ -83,11 +78,6 @@ public class UIManager : MonoBehaviour
     {
         foreach (var button in roleButtons)
         {
-            // if (button.onClick.GetPersistentEventCount() >= 1)
-            // {
-            //     UnityEditor.Events.UnityEventTools.RemovePersistentListener(button.onClick,0);
-            // }
-            // UnityEditor.Events.UnityEventTools.AddIntPersistentListener(button.onClick, SetVillagerRole,villagerID);
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => SetVillagerRole(villager));
         }

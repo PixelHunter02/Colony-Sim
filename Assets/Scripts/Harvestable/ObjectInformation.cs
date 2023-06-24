@@ -29,7 +29,6 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         StorageManager.storageLocations.Remove(location);
         StorageManager.usedSpaces.Add(location);
         StorageManager.UpdateStorage();
-        _isStored = true;
     }
     private void FindAvailableVillager()
     {

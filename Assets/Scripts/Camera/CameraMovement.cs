@@ -72,8 +72,10 @@ public class CameraMovement : MonoBehaviour
         const int minimumZoomValue = -5;
         const int maximumZoomValue = 0;
         _cinemachineCameraOffset.m_Offset.z += zoomValue;
-        _cinemachineCameraOffset.m_Offset.z = Mathf.Clamp(_cinemachineCameraOffset.m_Offset.z, minimumZoomValue, maximumZoomValue);
+        _cinemachineCameraOffset.m_Offset.z =
+            Mathf.Clamp(_cinemachineCameraOffset.m_Offset.z, minimumZoomValue, maximumZoomValue);
         var transposerOffset = _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
+        // transposerOffset = Mathf.Lerp(transposerOffset,transposerOffset+zoomValue * -2,Time.deltaTime*100);
         transposerOffset += zoomValue * -2;
         _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(transposerOffset, 3, 15);
     }

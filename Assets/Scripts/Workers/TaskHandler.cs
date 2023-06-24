@@ -118,16 +118,11 @@ public class TaskHandler : MonoBehaviour
         Villager.StopVillager(assignedVillager,false);
         Villager.SetVillagerDestination(assignedVillager, resourceToPickUp.storageLocation);   
         
-        // Debug.Log(Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.storageLocation) > 3f);
         while (Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.storageLocation) >= 3f)
         {
-            // Debug.Log(Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.storageLocation));
-            // Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.storageLocation)
-            Debug.Log(assignedVillager._agent.destination);
             yield return null;
         }
         
-        Debug.Log("Stopping Villager - Stockpile");
         // Stop The Villager
         Villager.StopVillager(assignedVillager,true);
         assignedVillager.CurrentState = VillagerStates.Idle;
@@ -139,12 +134,12 @@ public class TaskHandler : MonoBehaviour
     //Worker puts down Item
     private void MoveObjectToStorage(Villager assignedVillager, ObjectInformation objectInformation)
     {
-        Debug.Log("Moving To Storage");
         objectInformation.transform.position = objectInformation.storageLocation;
         objectInformation.gameObject.SetActive(true);
         objectInformation.transform.rotation = Quaternion.Euler(0,0,0);
         objectInformation._isHeld = false;
         assignedVillager.currentlyHolding = null;
+        objectInformation._isStored = true;
         _gameManager.storageManager.AddToStorage(new Resource{itemSO = objectInformation.Item, amount = 1});
     }
 

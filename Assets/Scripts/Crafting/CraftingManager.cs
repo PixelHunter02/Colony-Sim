@@ -46,9 +46,9 @@ public class CraftingManager : MonoBehaviour
 
         if (!craftableSo.instantlyEnterBuildMode)
         {
+            Instantiate(craftableSo.prefab);
             return;
         }
-
         Instantiate(craftableSo.prefab);
     }
 }
