@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "PlayerInputActions",
     "maps": [
         {
             "name": "Player",
@@ -54,6 +54,15 @@
                     "name": "RotateCamera",
                     "type": "Button",
                     "id": "f32b19fc-be79-4aaa-8a01-b76913e8961e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "ea37945a-0c46-4279-8f39-831c7eba62ad",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -168,6 +177,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "RotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c07cc4d2-1c36-416c-bb60-a584d10435cc",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Escape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -61,4 +61,16 @@ public class InputManager : MonoBehaviour
 
         return isRotating;
     }
+
+    public bool EscapePressed()
+    {
+        if (playerInputActions.Player.Escape.ReadValue<float>() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

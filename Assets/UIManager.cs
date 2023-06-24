@@ -4,6 +4,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -28,7 +29,7 @@ public class UIManager : MonoBehaviour
     private TMP_Text roleSelectionTMPText;
 
     public bool stockpileMode;
-
+    
     private void Awake()
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -42,6 +43,14 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         UpdateVillagerManagementUI();
+    }
+
+    private void Update()
+    {
+        if (_gameManager.inputManager.EscapePressed())
+        {
+            CloseAllUI();
+        }
     }
 
     // On Villager Click
