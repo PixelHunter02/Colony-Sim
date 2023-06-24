@@ -14,10 +14,15 @@ public class TaskHandler : MonoBehaviour
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
-    // Villager Walks To Task
-    public IEnumerator VillagerWalksToTask(Villager assignedVillager, HarvestObjectManager task)
+    public IEnumerator RunTaskCR(Villager assignedVillager, HarvestObjectManager task)
     {
-        Debug.Log("walking to task");
+        yield return StartCoroutine(VillagerWalksToTask(assignedVillager, task));
+        yield return StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
+    }
+    
+    // Villager Walks To Task
+    private static IEnumerator VillagerWalksToTask(Villager assignedVillager, HarvestObjectManager task)
+    {
         BeginWalking(assignedVillager,task);
         
         // Check the distance between the Villager and the task
@@ -28,14 +33,11 @@ public class TaskHandler : MonoBehaviour
         
         // Stop The Villager
         Villager.StopVillager(assignedVillager,true);
-        
-        StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
     }
 
     // Villager Does Task
     private IEnumerator VillagerDoesTaskCR(Villager assignedVillager, HarvestObjectManager task)
     {
-        Debug.Log("Doing Task");
         // Set Slider To be Visible
         status.SetActive(true);
         taskImage.sprite = task.harvestableObject.taskSprite;
@@ -69,9 +71,11 @@ public class TaskHandler : MonoBehaviour
         status.SetActive(false);
     }
 
-    public void PickUpResource(Villager assignedVillager, ObjectInformation resourceToPickUp)
+    public IEnumerator PickUpResource(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
-        StartCoroutine(VillagerWalksToResourceCR(assignedVillager, resourceToPickUp));
+        yield return StartCoroutine(VillagerWalksToResourceCR(assignedVillager, resourceToPickUp));
+        yield return StartCoroutine(VillagerPicksUpItemCR(assignedVillager, resourceToPickUp));
+        yield return StartCoroutine(VillagerWalksToStockpilePointCR(assignedVillager, resourceToPickUp));
     }
     
     // Worker Walks To Item
@@ -88,25 +92,20 @@ public class TaskHandler : MonoBehaviour
         // Stop The Villager
         Villager.StopVillager(assignedVillager,true);
         assignedVillager.CurrentState = VillagerStates.Idle;
-
-        StartCoroutine(VillagerPicksUpItemCR(assignedVillager, resourceToPickUp));
     }
     
     //Worker Picks Up Item
     private IEnumerator VillagerPicksUpItemCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
-        Debug.Log("Picking Up Resource");
         assignedVillager.currentlyHolding = resourceToPickUp.Item;
         resourceToPickUp._isHeld = true;
-
-        StartCoroutine(VillagerWalksToStockpilePointCR(assignedVillager, resourceToPickUp));
+        // resourceToPickUp.gameObject.SetActive(false);
         yield return null;
     }
     
     //Worker walks to Stockpile Point
     private IEnumerator VillagerWalksToStockpilePointCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
-        Debug.Log("Walking To Stockpile");
         // Set the villagers state to walking if not already.
         if (assignedVillager.CurrentState != VillagerStates.Walking && Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.storageLocation) > 3f)
         {
@@ -126,7 +125,6 @@ public class TaskHandler : MonoBehaviour
         // Stop The Villager
         Villager.StopVillager(assignedVillager,true);
         assignedVillager.CurrentState = VillagerStates.Idle;
-        
         MoveObjectToStorage(assignedVillager, resourceToPickUp);
     }
 

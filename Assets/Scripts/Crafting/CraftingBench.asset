@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e33071a9f3a009343bc64aa9961df71f, type: 3}
   m_Name: CraftingBench
   m_EditorClassIdentifier: 
-  requiredResource:
-  - itemSO: {fileID: 11400000, guid: 950d01fadf8da244692cceeaffa3fcda, type: 2}
-    amount: 4
+  requiredResource: []
+  instantlyEnterBuildMode: 1
+  prefab: {fileID: 1385524857775532, guid: 74dd79ffd92ff194d85f9c443415d31e, type: 3}

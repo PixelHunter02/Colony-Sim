@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using Cinemachine;
 using UnityEngine;
 
@@ -21,8 +21,37 @@ public class CameraMovement : MonoBehaviour
     //zoom
     private CinemachineCameraOffset _cinemachineCameraOffset;
     private CinemachineVirtualCamera _cinemachineVCam;
+    
+    //Cameras
+    [SerializeField] private CinemachineVirtualCamera mainCamera;
+    [SerializeField] private CinemachineVirtualCamera buildCamera;
 
-
+    //Camera State
+    private CameraState _cameraState;
+    // Setter Allows The State Change To Run Whatever Is Under it (similar To An Event)
+    public CameraState CameraState
+    {
+        get => _cameraState;
+        set
+        {
+            _cameraState = value;
+            switch (_cameraState)
+            {
+                case CameraState.BuildMode:
+                    mainCamera.gameObject.SetActive(false);
+                    buildCamera.gameObject.SetActive(true);
+                    break;
+                case CameraState.MainCamera:
+                    mainCamera.gameObject.SetActive(true);
+                    buildCamera.gameObject.SetActive(false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+    
+    
     private void Awake()
     {
         _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
@@ -75,7 +104,6 @@ public class CameraMovement : MonoBehaviour
         _cinemachineCameraOffset.m_Offset.z =
             Mathf.Clamp(_cinemachineCameraOffset.m_Offset.z, minimumZoomValue, maximumZoomValue);
         var transposerOffset = _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
-        // transposerOffset = Mathf.Lerp(transposerOffset,transposerOffset+zoomValue * -2,Time.deltaTime*100);
         transposerOffset += zoomValue * -2;
         _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(transposerOffset, 3, 15);
     }
@@ -94,4 +122,10 @@ public class CameraMovement : MonoBehaviour
         followObject.transform.rotation = Quaternion.Euler(rotation);
         _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
     }
+}
+
+public enum CameraState
+{
+    MainCamera,
+    BuildMode,
 }

@@ -31,6 +31,8 @@ public class Villager : MonoBehaviour, IInteractable
                 case Roles.Miner:
                     // _roleImage.sprite = minerImage;
                     break;
+                case Roles.Crafter:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -154,6 +156,7 @@ public enum Roles
     Farmer,
     Fighter,
     Miner,
+    Crafter,
 }
 
 public enum VillagerStates

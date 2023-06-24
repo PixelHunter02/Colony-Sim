@@ -1,5 +1,4 @@
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
@@ -12,6 +11,7 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
     public bool _isStored;
     public bool _isHeld;
     public Vector3 storageLocation;
+    public Villager assignedVillager;
     
     public void OnInteraction()
     {
@@ -35,10 +35,11 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         foreach (var villager in VillagerManager.GetVillagers())
         {
             if (villager.CurrentState == VillagerStates.Idle &&
-                villager.TryGetComponent(out TaskHandler taskHandler) && !_isHeld && !villager.currentlyHolding)
+                villager.TryGetComponent(out TaskHandler taskHandler) && !_isHeld && !villager.currentlyHolding && assignedVillager == null)
             {
                 AssignStorage();
-                taskHandler.PickUpResource(villager, this);
+                assignedVillager = villager;
+                StartCoroutine(taskHandler.PickUpResource(villager, this));
                 break;
             }
         }

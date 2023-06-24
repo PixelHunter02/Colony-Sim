@@ -21,7 +21,7 @@ public class HarvestObjectManager : MonoBehaviour, IInteractable
             {
                 assignedVillager = worker;
                 worker.interactingWith = this;
-                StartCoroutine(taskHandler.VillagerWalksToTask(worker,this));
+                StartCoroutine(taskHandler.RunTaskCR(worker,this));
             }
             break;
         }

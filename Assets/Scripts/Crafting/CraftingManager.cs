@@ -44,9 +44,9 @@ public class CraftingManager : MonoBehaviour
         StorageManager.UpdateStorage();
         _gameManager.storageManager.DrawInventory();
 
-        if (!craftableSo.instantlyEnterBuildMode)
+        if (craftableSo.instantlyEnterBuildMode)
         {
-            Instantiate(craftableSo.prefab);
+            _gameManager.cameraMovement.CameraState = CameraState.BuildMode;
             return;
         }
         Instantiate(craftableSo.prefab);

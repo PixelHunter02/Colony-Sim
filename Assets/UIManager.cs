@@ -135,6 +135,10 @@ public class UIManager : MonoBehaviour
     {
         stockpileMode = !stockpileMode;
     }
-    
+
+    public void BuildMode()
+    {
+        _gameManager.cameraMovement.CameraState = CameraState.BuildMode;
+    }
 }
 
