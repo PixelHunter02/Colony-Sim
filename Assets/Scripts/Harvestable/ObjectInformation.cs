@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -19,16 +20,13 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
             return;
 
         FindAvailableVillager();
-        // AssignStorage();
     }
     
     public void AssignStorage()
     {
         var location = StorageManager.storageLocations.ElementAt(0);
         storageLocation = location;
-        StorageManager.storageLocations.Remove(location);
-        StorageManager.usedSpaces.Add(location);
-        StorageManager.UpdateStorage();
+        StorageManager.UseStorageSpace(location);
     }
     private void FindAvailableVillager()
     {

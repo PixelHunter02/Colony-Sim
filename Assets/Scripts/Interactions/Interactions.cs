@@ -7,8 +7,6 @@ public class Interactions : MonoBehaviour
 {
     private PlayerInputActions _playerInputActions;
 
-    [SerializeField] private Camera cam;
-
     #region Stockpile Variables
 
     [SerializeField] private Vector3[] vertices;
@@ -48,12 +46,11 @@ public class Interactions : MonoBehaviour
     private void Update()
     {
         OutlineInteractable();
-        isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 
     private void OutlineInteractable()
     {
-        var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit))
             return;
 
@@ -88,7 +85,7 @@ public class Interactions : MonoBehaviour
     private void Interactable()
     {
         // Get the information of the object being clicked
-        var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 100))
             return;
 
@@ -143,7 +140,7 @@ public class Interactions : MonoBehaviour
     private void BeginDrawStockpile()
     {
         // Get the information of the object being clicked
-        var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 1000) || isOverUI ||!gameManager.uiManager.stockpileMode) 
             return;
     
@@ -159,7 +156,7 @@ public class Interactions : MonoBehaviour
     
     private IEnumerator CRDrawStockpile()
     {
-        var ray = cam.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 1000)) 
             yield break;
         

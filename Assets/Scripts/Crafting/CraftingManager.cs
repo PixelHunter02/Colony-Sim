@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CraftingManager : MonoBehaviour
@@ -46,7 +43,7 @@ public class CraftingManager : MonoBehaviour
 
         if (craftableSo.instantlyEnterBuildMode)
         {
-            _gameManager.cameraMovement.CameraState = CameraState.BuildMode;
+            _gameManager.cameraMovement.PlayerState = PlayerState.BuildMode;
             return;
         }
         Instantiate(craftableSo.prefab);

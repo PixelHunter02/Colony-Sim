@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour
 
     private TMP_Text roleSelectionTMPText;
 
+    public bool IsOverUI() => UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+
     public bool stockpileMode;
     
     private void Awake()
@@ -138,7 +140,7 @@ public class UIManager : MonoBehaviour
 
     public void BuildMode()
     {
-        _gameManager.cameraMovement.CameraState = CameraState.BuildMode;
+        _gameManager.cameraMovement.PlayerState = PlayerState.BuildMode;
     }
 }
 

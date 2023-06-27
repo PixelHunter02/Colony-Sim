@@ -106,8 +106,10 @@ public class TaskHandler : MonoBehaviour
     //Worker walks to Stockpile Point
     private IEnumerator VillagerWalksToStockpilePointCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
+        var storageLocation = resourceToPickUp.storageLocation;
+        resourceToPickUp.gameObject.SetActive(false);
         // Set the villagers state to walking if not already.
-        if (assignedVillager.CurrentState != VillagerStates.Walking && Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.storageLocation) > 3f)
+        if (assignedVillager.CurrentState != VillagerStates.Walking && Vector3.Distance(assignedVillager.transform.position, storageLocation) > 3f)
         {
             assignedVillager.CurrentState = VillagerStates.Walking;
         }
@@ -115,9 +117,9 @@ public class TaskHandler : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         // Allow The Villager to move and set a destination.
         Villager.StopVillager(assignedVillager,false);
-        Villager.SetVillagerDestination(assignedVillager, resourceToPickUp.storageLocation);   
+        Villager.SetVillagerDestination(assignedVillager, storageLocation);   
         
-        while (Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.storageLocation) >= 3f)
+        while (Vector3.Distance(assignedVillager.transform.position, storageLocation) >= 3f)
         {
             yield return null;
         }

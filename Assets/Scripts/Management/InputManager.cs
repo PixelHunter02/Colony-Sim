@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,12 +8,30 @@ public class InputManager : MonoBehaviour
     
     private bool isRotating;
     private bool isPanning;
-    
+
+    private InputMode _inputMode;
+
+    private CraftableSO builtItem;
+
+    private GameManager _gameManager;
+
     private void Awake()
     {
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable(); 
         playerInputActions.UI.Enable(); 
+    }
+
+    private void Update()
+    {
+        switch (_inputMode)
+        {
+            case InputMode.BuildMode:
+                Building();
+                break;
+            case InputMode.DefaultMode:
+                break;
+        }
     }
 
     public Vector2 GetNormalizedMovement()
@@ -70,4 +89,19 @@ public class InputManager : MonoBehaviour
         }
         return false;
     }
+
+    private void Building()
+    {
+        var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
+        if (!Physics.Raycast(ray, out var hit, 1000) || _gameManager.uiManager.IsOverUI() ||!_gameManager.uiManager.stockpileMode) 
+            return;
+        
+        Debug.Log("Building");
+    }
+}
+
+public enum InputMode
+{
+    BuildMode,
+    DefaultMode,
 }

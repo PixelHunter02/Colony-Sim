@@ -92,6 +92,13 @@ public class StorageManager : MonoBehaviour
             }
         }
     }
+
+    public static void UseStorageSpace(Vector3 location)
+    {
+        storageLocations.Remove(location);
+        usedSpaces.Add(location);
+        UpdateStorage();
+    }
     
     public static void UpdateStorage() => _spaceLeft = storageLocations.Count;
 

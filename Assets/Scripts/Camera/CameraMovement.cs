@@ -27,21 +27,21 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera buildCamera;
 
     //Camera State
-    private CameraState _cameraState;
+    private PlayerState _playerState;
     // Setter Allows The State Change To Run Whatever Is Under it (similar To An Event)
-    public CameraState CameraState
+    public PlayerState PlayerState
     {
-        get => _cameraState;
+        get => _playerState;
         set
         {
-            _cameraState = value;
-            switch (_cameraState)
+            _playerState = value;
+            switch (_playerState)
             {
-                case CameraState.BuildMode:
+                case PlayerState.BuildMode:
                     mainCamera.gameObject.SetActive(false);
                     buildCamera.gameObject.SetActive(true);
                     break;
-                case CameraState.MainCamera:
+                case PlayerState.MainCamera:
                     mainCamera.gameObject.SetActive(true);
                     buildCamera.gameObject.SetActive(false);
                     break;
@@ -124,7 +124,7 @@ public class CameraMovement : MonoBehaviour
     }
 }
 
-public enum CameraState
+public enum PlayerState
 {
     MainCamera,
     BuildMode,

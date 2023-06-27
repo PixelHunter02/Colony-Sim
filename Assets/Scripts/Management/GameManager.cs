@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public SettingsManager settingsManager;
     public StorageManager storageManager;
     [FormerlySerializedAs("workerManager")] public VillagerManager villagerManager;
+    public Camera mainCamera;
+    
     private void Awake()
     {
         #region Singleton
@@ -32,6 +34,7 @@ public class GameManager : MonoBehaviour
         }
 
         #endregion
-        
+
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 }

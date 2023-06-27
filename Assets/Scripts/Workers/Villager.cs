@@ -9,7 +9,7 @@ public class Villager : MonoBehaviour, IInteractable
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
-    [FormerlySerializedAs("VillagerRole")] [SerializeField] private Roles villagerRole;
+    private Roles villagerRole;
     public Roles CurrentRole
     {
         get => villagerRole;
@@ -26,10 +26,8 @@ public class Villager : MonoBehaviour, IInteractable
                 case Roles.Fighter:
                     break;
                 case Roles.Lumberjack:
-                    // _roleImage.sprite = lumberjackImage;
                     break;
                 case Roles.Miner:
-                    // _roleImage.sprite = minerImage;
                     break;
                 case Roles.Crafter:
                     break;
@@ -66,11 +64,6 @@ public class Villager : MonoBehaviour, IInteractable
             }
         }
     }
-
-    /// <summary>
-    /// The Villagers Current model
-    /// </summary>
-    [SerializeField] private Model gender;
 
     /// <summary>
     /// The NavMeshAgent
