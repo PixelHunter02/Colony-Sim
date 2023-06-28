@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,12 @@ public class DayCycle : MonoBehaviour
     [SerializeField] private float currentTime;
     [SerializeField] private int dayCount;
     [SerializeField] GameObject monsterWavesManager;
+
+    private void Awake()
+    {
+        transform.localEulerAngles = Vector3.zero;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +50,7 @@ public class DayCycle : MonoBehaviour
         //Debug.Log(currentTime);
         print("DayTime");
         transform.Rotate(new Vector3(timeTicks/4, 0, 0));
-
+        Debug.Log(gameObject.transform.localEulerAngles.x);
         if (gameObject.transform.localEulerAngles.x > 185)
         {
             gameObject.transform.GetComponent<Light>().enabled = false;
