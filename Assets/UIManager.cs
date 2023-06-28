@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
 
     private TMP_Text roleSelectionTMPText;
 
-    public bool IsOverUI() => UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+    public bool IsOverUI() => EventSystem.current.IsPointerOverGameObject();
 
     public bool stockpileMode;
     
@@ -136,11 +136,12 @@ public class UIManager : MonoBehaviour
     public void StockpileModeEnabled()
     {
         stockpileMode = !stockpileMode;
+        _gameManager.inputManager.InputMode = InputMode.Stockpile;
     }
 
-    public void BuildMode()
-    {
-        _gameManager.cameraMovement.PlayerState = PlayerState.BuildMode;
-    }
+    // public void BuildMode()
+    // {
+    //     _gameManager.cameraMovement.PlayerState = PlayerState.BuildMode;
+    // }
 }
 
