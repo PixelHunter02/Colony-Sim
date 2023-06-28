@@ -3754,6 +3754,7 @@ Transform:
   - {fileID: 1095073156}
   - {fileID: 128993095}
   - {fileID: 779276598}
+  - {fileID: 1683140437}
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3776,6 +3777,7 @@ MonoBehaviour:
   settingsManager: {fileID: 1730565756}
   storageManager: {fileID: 1739517382}
   villagerManager: {fileID: 1095073157}
+  mainCamera: {fileID: 0}
 --- !u!4 &287210599 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5386681439893192499, guid: ba25351719974f7478500c06196de010,
@@ -4341,7 +4343,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.14521313, y: -0.00000003296683, z: 0.0000000048385025, w: 0.98940045}
+  m_LocalRotation: {x: 0.14521314, y: -8.619646e-15, z: 9.284736e-16, w: 0.98940045}
   m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -43112,7 +43114,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124862098}
-  m_LocalRotation: {x: -0, y: -3.5527133e-15, z: 1.3322675e-15, w: 1}
+  m_LocalRotation: {x: -0, y: -1.0155086e-14, z: 2.4103786e-15, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -44414,10 +44416,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2be4e51c09343c429c350c8b8140bda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayLength: 1
-  nightLength: 0
+  daySpeed: 0.2
+  nightSpeed: 2
   speed: 1
   currentTime: 0
+  dayCount: 0
+  monsterWavesManager: {fileID: 1683140436}
 --- !u!114 &1240863345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44498,7 +44502,7 @@ Light:
   m_BounceIntensity: 0
   m_ColorTemperature: 4338
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 0, y: NaN, z: 1.3545736e-38, w: 0}
+  m_BoundingSphereOverride: {x: 4.5905e-41, y: -5.4055513e+17, z: 1.02e-43, w: 8e-45}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -44510,14 +44514,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1240863343}
-  m_LocalRotation: {x: 0.49608532, y: -0.24457516, z: 0.0846776, w: 0.8288016}
+  m_LocalRotation: {x: 0.5, y: -0, z: -0, w: -0.8660254}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 59.738, y: -39.624, z: -11.712}
+  m_LocalEulerAnglesHint: {x: 300, y: 0, z: 0}
 --- !u!1 &1245555234
 GameObject:
   m_ObjectHideFlags: 0
@@ -48426,6 +48430,58 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 74590264}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1683140436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1683140437}
+  - component: {fileID: 1683140438}
+  m_Layer: 0
+  m_Name: MonsterWaves
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1683140437
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683140436}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.71132, y: -8.445844, z: 16.761631}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 286939381}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1683140438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683140436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 982c9c28c48621b4aa0095673573f590, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 0
+  prefabs:
+  - {fileID: 6260966173753891792, guid: e13b7d7d61d4e364bb3a69b258ae54b6, type: 3}
+  - {fileID: 902391672072327782, guid: 54e0af8893bc6ae4b9754e3da71ed78c, type: 3}
+  minX: -80
+  minZ: -80
+  maxX: 80
+  maxZ: 80
 --- !u!1 &1688937006
 GameObject:
   m_ObjectHideFlags: 0
@@ -50906,7 +50962,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1324232336d5bbc44998d825356de09b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 330585545}
   vertices: []
   stockpileMaterial: {fileID: 2100000, guid: 6322c80a01e8c4d449ca3bb875111add, type: 2}
 --- !u!4 &1868416838 stripped
