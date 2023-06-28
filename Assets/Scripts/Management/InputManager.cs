@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,8 +12,17 @@ public class InputManager : MonoBehaviour
 
     private InputMode _inputMode;
 
-    private CraftableSO builtItem;
+    public InputMode InputMode
+    {
+        get => _inputMode;
+        set
+        {
+            _inputMode = value;
+        }
+    }
 
+    public CraftableSO itemBeingBuilt;
+    
     private GameManager _gameManager;
 
     private void Awake()
@@ -20,21 +30,26 @@ public class InputManager : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable(); 
         playerInputActions.UI.Enable(); 
+        
+        // Get reference to Game Manager
+        _gameManager = GameManager.Instance;
     }
 
     private void Update()
     {
         switch (_inputMode)
         {
+            case InputMode.DefaultMode:
+                break;
             case InputMode.BuildMode:
                 Building();
                 break;
-            case InputMode.DefaultMode:
+            case InputMode.Stockpile:
                 break;
         }
     }
 
-    public Vector2 GetNormalizedMovement()
+    public Vector2 GetNormalizedMovement()  
     {
         var inputDirection = playerInputActions.Player.MoveCamera.ReadValue<Vector2>();
 
@@ -95,13 +110,14 @@ public class InputManager : MonoBehaviour
         var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 1000) || _gameManager.uiManager.IsOverUI() ||!_gameManager.uiManager.stockpileMode) 
             return;
-        
-        Debug.Log("Building");
+
+        var placementPosition = hit.point;
     }
 }
 
 public enum InputMode
 {
     BuildMode,
+    Stockpile,
     DefaultMode,
 }
