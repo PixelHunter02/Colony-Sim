@@ -11,7 +11,7 @@ public class TaskHandler : MonoBehaviour
 
     private void Awake()
     {
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        _gameManager = GameManager.Instance;
     }
 
     public IEnumerator RunTaskCR(Villager assignedVillager, HarvestObjectManager task)
@@ -140,7 +140,8 @@ public class TaskHandler : MonoBehaviour
         objectInformation._isHeld = false;
         assignedVillager.currentlyHolding = null;
         objectInformation._isStored = true;
-        _gameManager.storageManager.AddToStorage(new Resource{itemSO = objectInformation.Item, amount = 1});
+        Debug.Log(_gameManager);
+        _gameManager.storageManager.AddToStorage(new Item{itemSO = objectInformation.Item, amount = 1});
     }
 
     private static void BeginWalking(Villager assignedVillager, Component location)

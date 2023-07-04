@@ -1,23 +1,41 @@
 using System;
-using Unity.Mathematics;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : MonoBehaviour
 {
-    private PlayerInputActions playerInputActions;
+    public PlayerInputActions playerInputActions;
     
     private bool isRotating;
     private bool isPanning;
 
+    //Cameras
+    [SerializeField] private CinemachineVirtualCamera mainCamera;
+    [SerializeField] private CinemachineVirtualCamera buildCamera;
+    
     private InputMode _inputMode;
-
+    
     public InputMode InputMode
     {
         get => _inputMode;
         set
         {
             _inputMode = value;
+            
+            switch (_inputMode)
+            {
+                case InputMode.DefaultMode:
+                    mainCamera.gameObject.SetActive(true);
+                    buildCamera.gameObject.SetActive(false);
+                    break;
+                case InputMode.BuildMode:
+                    mainCamera.gameObject.SetActive(false);
+                    buildCamera.gameObject.SetActive(true);
+                    break;
+                case InputMode.Stockpile:
+                    break;
+            }
         }
     }
 
@@ -25,28 +43,19 @@ public class InputManager : MonoBehaviour
     
     private GameManager _gameManager;
 
+    [SerializeField] private float interactDistance = 25;
+
+    [SerializeField] private LayerMask _layerMask;
+
     private void Awake()
     {
+        // Activate Input Actions
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable(); 
         playerInputActions.UI.Enable(); 
         
         // Get reference to Game Manager
         _gameManager = GameManager.Instance;
-    }
-
-    private void Update()
-    {
-        switch (_inputMode)
-        {
-            case InputMode.DefaultMode:
-                break;
-            case InputMode.BuildMode:
-                Building();
-                break;
-            case InputMode.Stockpile:
-                break;
-        }
     }
 
     public Vector2 GetNormalizedMovement()  
@@ -68,8 +77,6 @@ public class InputManager : MonoBehaviour
             _ => 0,
         };
         
-        Debug.Log(scrollValue);
-       
         return scrollValue;
     }
 
@@ -105,19 +112,29 @@ public class InputManager : MonoBehaviour
         return false;
     }
 
-    private void Building()
+    public Vector3 GetMouseToWorldPosition()
     {
         var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000) || _gameManager.uiManager.IsOverUI() ||!_gameManager.uiManager.stockpileMode) 
-            return;
+        if (Physics.Raycast(ray, out var hit, 1000) && !_gameManager.IsOverUI()) 
+            return hit.point;
 
-        var placementPosition = hit.point;
+        return Vector3.zero;
+    }
+    
+    public Vector3 GetMouseToWorldPositionCursor()
+    {
+        var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
+        // if(Physics.Raycast(ray, out var hitObj, Mathf.Infinity,~3))
+        if (Physics.Raycast(ray, out var hit, interactDistance,_layerMask) && !_gameManager.IsOverUI()) 
+            return hit.point;
+
+        return Vector3.zero;
     }
 }
 
 public enum InputMode
 {
+    DefaultMode,
     BuildMode,
     Stockpile,
-    DefaultMode,
 }

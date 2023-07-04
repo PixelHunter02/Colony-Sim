@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class Interactions : MonoBehaviour
 {
-    private PlayerInputActions _playerInputActions;
+    // private PlayerInputActions _playerInputActions;
 
     #region Stockpile Variables
 
@@ -24,23 +24,21 @@ public class Interactions : MonoBehaviour
 
     private static bool isOverUI;
 
-    private GameManager gameManager;
+    private GameManager _gameManager;
+
+    public LayerMask ground;
 
     private void Awake()
     {
-        // Enable Input Actions
-        _playerInputActions = new PlayerInputActions();
-        _playerInputActions.Enable();
-
         InitializeStockpiles();
 
-        gameManager = FindObjectOfType<GameManager>(true);
+        _gameManager = GameManager.Instance;
     }
 
     private void Start()
     {
-        _playerInputActions.Player.Select.performed += ClickContext;
-        _playerInputActions.Player.Select.canceled += ClickContext;
+        _gameManager.inputManager.playerInputActions.Player.Select.performed += ClickContext;
+        _gameManager.inputManager.playerInputActions.Player.Select.canceled += ClickContext;
     }
 
     private void Update()
@@ -50,7 +48,7 @@ public class Interactions : MonoBehaviour
 
     private void OutlineInteractable()
     {
-        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit))
             return;
 
@@ -85,7 +83,7 @@ public class Interactions : MonoBehaviour
     private void Interactable()
     {
         // Get the information of the object being clicked
-        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 100))
             return;
 
@@ -140,8 +138,8 @@ public class Interactions : MonoBehaviour
     private void BeginDrawStockpile()
     {
         // Get the information of the object being clicked
-        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000) || isOverUI ||!gameManager.uiManager.stockpileMode) 
+        var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
+        if (!Physics.Raycast(ray, out var hit, 1000,ground) || isOverUI ||!_gameManager.stockpileMode) 
             return;
     
         // Check if the clicked object is tagged with Ground
@@ -156,7 +154,7 @@ public class Interactions : MonoBehaviour
     
     private IEnumerator CRDrawStockpile()
     {
-        var ray = gameManager.mainCamera.ScreenPointToRay(_playerInputActions.UI.Point.ReadValue<Vector2>());
+        var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 1000)) 
             yield break;
         

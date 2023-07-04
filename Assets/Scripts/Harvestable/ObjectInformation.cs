@@ -1,11 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
 {
-    [SerializeField] private PickUpItemSO _itemSO;
-    public PickUpItemSO Item
+    [SerializeField] private StoredItemSO _itemSO;
+    public StoredItemSO Item
     {
         get => _itemSO;
     }
@@ -30,16 +32,41 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
     }
     private void FindAvailableVillager()
     {
-        foreach (var villager in VillagerManager.GetVillagers())
+        // foreach (var villager in VillagerManager.GetVillagers())
+        // {
+        //     if (villager.CurrentState == VillagerStates.Idle &&
+        //         villager.TryGetComponent(out TaskHandler taskHandler) && !_isHeld && !villager.currentlyHolding && assignedVillager == null)
+        //     {
+        //         AssignStorage();
+        //         assignedVillager = villager;
+        //         StartCoroutine(taskHandler.PickUpResource(villager, this));
+        //         break;
+        //     }
+        // }
+
+        AssignStorage();
+        foreach (var worker in VillagerManager.GetVillagers())
         {
-            if (villager.CurrentState == VillagerStates.Idle &&
-                villager.TryGetComponent(out TaskHandler taskHandler) && !_isHeld && !villager.currentlyHolding && assignedVillager == null)
+            if (assignedVillager)
             {
-                AssignStorage();
-                assignedVillager = villager;
-                StartCoroutine(taskHandler.PickUpResource(villager, this));
-                break;
+                if (assignedVillager.TasksToQueue.Count > worker.TasksToQueue.Count ||
+                    worker.CurrentState is VillagerStates.Idle)
+                {
+                    assignedVillager = worker;
+                    Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
+                }
             }
+            else
+            {
+                assignedVillager = worker;
+                Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
+
+            }
+        }
+        if (assignedVillager && assignedVillager.TryGetComponent(out TaskHandler taskHandler))
+        {
+            assignedVillager.AddTaskToQueue(taskHandler.PickUpResource(assignedVillager, this));
+            assignedVillager = null;
         }
     }
     

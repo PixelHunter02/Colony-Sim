@@ -5,4 +5,5 @@ using UnityEngine;
 public class ButtonReference : MonoBehaviour
 {
     public Villager workerReference;
+    public CraftableSO recipeReference;
 }

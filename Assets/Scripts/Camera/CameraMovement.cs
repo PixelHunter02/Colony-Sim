@@ -1,4 +1,3 @@
-using System;
 using Cinemachine;
 using UnityEngine;
 
@@ -21,42 +20,14 @@ public class CameraMovement : MonoBehaviour
     //zoom
     private CinemachineCameraOffset _cinemachineCameraOffset;
     private CinemachineVirtualCamera _cinemachineVCam;
-    
-    //Cameras
-    [SerializeField] private CinemachineVirtualCamera mainCamera;
-    [SerializeField] private CinemachineVirtualCamera buildCamera;
 
-    //Camera State
-    private PlayerState _playerState;
-    // Setter Allows The State Change To Run Whatever Is Under it (similar To An Event)
-    public PlayerState PlayerState
-    {
-        get => _playerState;
-        set
-        {
-            _playerState = value;
-            switch (_playerState)
-            {
-                case PlayerState.BuildMode:
-                    mainCamera.gameObject.SetActive(false);
-                    buildCamera.gameObject.SetActive(true);
-                    break;
-                case PlayerState.MainCamera:
-                    mainCamera.gameObject.SetActive(true);
-                    buildCamera.gameObject.SetActive(false);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-    }
-    
-    
+    public GameObject cursorGO;
+
     private void Awake()
     {
         _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _cinemachineVCam = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        _gameManager = GameManager.Instance;
     }
 
     private void Update()
@@ -69,6 +40,7 @@ public class CameraMovement : MonoBehaviour
         MoveCamera();
         CameraPanning();
         RotateCamera();
+        MoveCursor();
     }
 
     private void MoveCamera()
@@ -121,6 +93,22 @@ public class CameraMovement : MonoBehaviour
         rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;
         followObject.transform.rotation = Quaternion.Euler(rotation);
         _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
+    }
+
+    private void MoveCursor()
+    {
+        // var cursorPosition = ;
+        if (_gameManager.inputManager.GetMouseToWorldPositionCursor() != Vector3.zero)
+        {
+            cursorGO.SetActive(true);
+            var cell = _gameManager.inputManager.GetMouseToWorldPositionCursor();
+            var cellPos = _gameManager.grid.GetCellCenterWorld(Vector3Int.FloorToInt(cell));
+            cursorGO.transform.position= new Vector3(cellPos.x, cellPos.y-0.48f, cellPos.z); 
+        }
+        else
+        {
+            cursorGO.SetActive(false);
+        }
     }
 }
 

@@ -393,7 +393,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10
   field of view: 60
   orthographic: 1
   orthographic size: 0.5
@@ -429,10 +429,10 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 0
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
@@ -813,7 +813,7 @@ Transform:
   - {fileID: 2854160077247609187}
   - {fileID: 5076460291324739992}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &-5275581244050757907
 NavMeshAgent:
@@ -828,12 +828,12 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 220
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 1.5
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -849,13 +849,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54d87338958a6243857496e0e553bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  workerRole: 1
-  gender: 0
-  workerName: Jimmy
+  _agent: {fileID: 0}
+  villagerName: Bobby
   interactingWith: {fileID: 0}
   _animator: {fileID: 2312240014063291449}
-  minerImage: {fileID: 21300000, guid: 19e01388fb191e64897f319b41e9885a, type: 3}
-  lumberjackImage: {fileID: 21300000, guid: 1b7df36e72bd2c4409fc8819f13679bc, type: 3}
+  currentlyHolding: {fileID: 0}
 --- !u!114 &-3868179326325950328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -871,7 +869,6 @@ MonoBehaviour:
   slider: {fileID: 4118414458716063183}
   taskImage: {fileID: 2921920565365457082}
   status: {fileID: 2626547123195063789}
-  _worker: {fileID: -7626861745308731260}
 --- !u!136 &6966523878823600022
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -892,9 +889,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 1.5
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!114 &1186300357741817972
 MonoBehaviour:
   m_ObjectHideFlags: 0
