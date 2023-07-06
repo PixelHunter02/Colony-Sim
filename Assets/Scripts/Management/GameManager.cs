@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
             var button = cell.transform.Find("Button").GetComponent<Button>();
             button.GetComponent<ButtonReference>().workerReference = villager;
             button.onClick.AddListener(() => OpenRoleManagementUI(button.GetComponent<ButtonReference>().workerReference));
-            Debug.Log(button.GetComponent<ButtonReference>().workerReference);
+             Debug.Log(button.GetComponent<ButtonReference>().workerReference);
             cell.SetActive(true);
         }
     }
@@ -297,8 +297,62 @@ public class GameManager : MonoBehaviour
             var buttonRef = button.GetComponent<ButtonReference>();
             buttonRef.recipeReference = craftingManager.CraftingRecipes[i];
             craftingButtons.Add(buttonRef.recipeReference);
-            button.GetComponent<Button>().onClick.AddListener(() => craftingManager.Crafting(buttonRef.recipeReference));
+            button.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(craftingManager.BeginCrafting(buttonRef.recipeReference)));
         }
+    }
+
+    public static bool TryGetVillagerByRole(Roles role, out Villager value)
+    {
+        Villager villagerToReturn = null;
+        foreach (var villager in VillagerManager.GetVillagers())
+        {
+            if (villagerToReturn)
+            {
+                if (villager.CurrentRole == role)
+                {
+                    Debug.Log("Found Worker");
+                    if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count ||
+                        villager.CurrentState is VillagerStates.Idle)
+                    {
+                        villagerToReturn = villager;
+                        Debug.Log(villager.TasksToQueue.Count + " : " + villager.VillagerName);
+                        value = villagerToReturn;
+                    }
+                }
+            }
+            else
+            {
+                if (villager.CurrentRole == role)
+                {
+                    villagerToReturn = villager;
+                    value = villagerToReturn; 
+                }
+            }
+        }
+        value = villagerToReturn;
+        return villagerToReturn;
+        
+        
+// // Run through each worker for an available worker who is of the correct role.
+//         foreach (var worker in VillagerManager.GetVillagers())
+//         {
+//             if (!harvestableObject.canInteract.Contains(worker.CurrentRole) || assignedVillager != null) 
+//                 continue;
+//             if (workerToAssign)
+//             {
+//                 if (workerToAssign.TasksToQueue.Count > worker.TasksToQueue.Count || worker.CurrentState is VillagerStates.Idle)
+//                 {
+//                     workerToAssign = worker;
+//                     Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
+//                 }
+//             }
+//             else
+//             {
+//                 workerToAssign = worker;
+//                 Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
+//
+//             }
+//         }
     }
 }
 

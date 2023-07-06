@@ -15,7 +15,9 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: ba345f2f643d842459447c374943401d, type: 3}
   requiredResource:
   - itemSO: {fileID: 11400000, guid: 950d01fadf8da244692cceeaffa3fcda, type: 2}
-    amount: 1
+    storageLocation: {x: 0, y: 0, z: 0}
+    go: {fileID: 0}
+    amount: 2
   instantlyEnterBuildMode: 0
   prefab: {fileID: 375041380958578721, guid: c512639c846cd684ca66487a0e2b1a82, type: 3}
   itemToStore: {fileID: 11400000, guid: 1bb9c8b503966b04db112a926d0ddd5f, type: 2}

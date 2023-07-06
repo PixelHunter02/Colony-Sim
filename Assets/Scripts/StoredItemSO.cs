@@ -12,12 +12,14 @@ public class StoredItemSO : ScriptableObject
     public Sprite uiSprite;
     public AudioClip pickupSound;
     public AudioClip useSound;
+    public bool canBePlaced;
 }
 
 [System.Serializable]
 public sealed class Item
-
 {
     public StoredItemSO itemSO;
+    public Vector3 storageLocation;
+    public GameObject go;
     public int amount;
 }

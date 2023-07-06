@@ -23,14 +23,13 @@ public class HarvestObjectManager : MonoBehaviour, IInteractable
                 if (workerToAssign.TasksToQueue.Count > worker.TasksToQueue.Count || worker.CurrentState is VillagerStates.Idle)
                 {
                     workerToAssign = worker;
-                    Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
+                    // Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
                 }
             }
             else
             {
                 workerToAssign = worker;
-                Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
-
+                // Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
             }
         }
         

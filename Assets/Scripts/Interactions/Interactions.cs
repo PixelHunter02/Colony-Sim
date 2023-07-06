@@ -149,10 +149,10 @@ public class Interactions : MonoBehaviour
         _drawingStockpile = true;
         var point = new Vector3(Mathf.FloorToInt(hit.point.x), hit.point.y + 0.1f, Mathf.FloorToInt(hit.point.z));
         vertices[0] = point;
-        StartCoroutine(CRDrawStockpile());
+        StartCoroutine(DrawStockpileCR());
     }
     
-    private IEnumerator CRDrawStockpile()
+    private IEnumerator DrawStockpileCR()
     {
         var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 1000)) 
@@ -203,7 +203,7 @@ public class Interactions : MonoBehaviour
         yield return new WaitForEndOfFrame();
         
         //Update Drawing
-        StartCoroutine(CRDrawStockpile());
+        StartCoroutine(DrawStockpileCR());
     }
 
     private void AssignUVs()

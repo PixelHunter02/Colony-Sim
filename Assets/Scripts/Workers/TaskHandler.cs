@@ -1,4 +1,8 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.Networking.Transport;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -141,7 +145,7 @@ public class TaskHandler : MonoBehaviour
         assignedVillager.currentlyHolding = null;
         objectInformation._isStored = true;
         Debug.Log(_gameManager);
-        _gameManager.storageManager.AddToStorage(new Item{itemSO = objectInformation.Item, amount = 1});
+        _gameManager.storageManager.AddToStorage(new Item{itemSO = objectInformation.Item, amount = 1, storageLocation = objectInformation.storageLocation, go = objectInformation.gameObject});
     }
 
     private static void BeginWalking(Villager assignedVillager, Component location)

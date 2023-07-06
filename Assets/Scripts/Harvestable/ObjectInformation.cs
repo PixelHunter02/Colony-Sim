@@ -30,6 +30,7 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         storageLocation = location;
         StorageManager.UseStorageSpace(location);
     }
+    
     private void FindAvailableVillager()
     {
         // foreach (var villager in VillagerManager.GetVillagers())

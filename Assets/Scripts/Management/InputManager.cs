@@ -61,7 +61,6 @@ public class InputManager : MonoBehaviour
     public Vector2 GetNormalizedMovement()  
     {
         var inputDirection = playerInputActions.Player.MoveCamera.ReadValue<Vector2>();
-
         var normalizedValue = inputDirection.normalized;
         return normalizedValue;
     }
