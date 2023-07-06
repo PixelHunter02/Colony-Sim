@@ -9,6 +9,8 @@ public class BuildingManager : MonoBehaviour
     public StoredItemSO currentBuilding;
     
     public static event Action<StoredItemSO> itemBuilt;
+
+    private int currentBuildingRotationModifier;
     
     private void Awake()
     {
@@ -18,11 +20,13 @@ public class BuildingManager : MonoBehaviour
     private void OnEnable()
     {
         _gameManager.inputManager.playerInputActions.Player.Select.performed += Building;
+        _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed += RotateBuilding;
     }
     
     private void OnDisable()
     {
         _gameManager.inputManager.playerInputActions.Player.Select.performed -= Building;
+        _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed -= RotateBuilding;
     }
 
     private void Building(InputAction.CallbackContext context)
@@ -33,7 +37,8 @@ public class BuildingManager : MonoBehaviour
         {
             var cellPosition = _gameManager.grid.WorldToCell(mousePosition);
             // PlaceBuilding(currentBuilding.prefab, cellPosition);
-            Instantiate(currentBuilding.prefab, cellPosition, Quaternion.identity);
+            var placedItem = Instantiate(currentBuilding.prefab, cellPosition, Quaternion.identity);
+            placedItem.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
             itemBuilt?.Invoke(currentBuilding);
         }
     }
@@ -42,5 +47,25 @@ public class BuildingManager : MonoBehaviour
     {
         // Debug.Log("Building Created");
         // Instantiate(building, buildingPosition, Quaternion.identity);
+    }
+
+    public void RotateBuilding(InputAction.CallbackContext context)
+    {
+        if (context.ReadValue<float>() > 0)
+        {
+            currentBuildingRotationModifier++;
+            if (currentBuildingRotationModifier > 3)
+            {
+                currentBuildingRotationModifier = 0;
+            }
+        }
+        else
+        {
+            currentBuildingRotationModifier--;
+            if (currentBuildingRotationModifier < 0)
+            {
+                currentBuildingRotationModifier = 3;
+            }
+        }
     }
 }

@@ -89,6 +89,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateBuilding"",
+                    ""type"": ""Value"",
+                    ""id"": ""519ca4dd-563b-46a1-a28e-456db6dbe5c9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -212,6 +221,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Escape"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""32bde0bc-92db-4a76-b088-8f6c97a0ac5b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateBuilding"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""6039b127-8610-493a-8f66-0db7d7bdfd4b"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""d5745651-ddb5-429d-9ad7-c22d4ea7aff0"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -804,6 +846,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_ShiftSelect = m_Player.FindAction("ShiftSelect", throwIfNotFound: true);
         m_Player_RotateCamera = m_Player.FindAction("RotateCamera", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
+        m_Player_RotateBuilding = m_Player.FindAction("RotateBuilding", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -884,6 +927,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ShiftSelect;
     private readonly InputAction m_Player_RotateCamera;
     private readonly InputAction m_Player_Escape;
+    private readonly InputAction m_Player_RotateBuilding;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -895,6 +939,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @ShiftSelect => m_Wrapper.m_Player_ShiftSelect;
         public InputAction @RotateCamera => m_Wrapper.m_Player_RotateCamera;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
+        public InputAction @RotateBuilding => m_Wrapper.m_Player_RotateBuilding;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -925,6 +970,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Escape.started += instance.OnEscape;
             @Escape.performed += instance.OnEscape;
             @Escape.canceled += instance.OnEscape;
+            @RotateBuilding.started += instance.OnRotateBuilding;
+            @RotateBuilding.performed += instance.OnRotateBuilding;
+            @RotateBuilding.canceled += instance.OnRotateBuilding;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -950,6 +998,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Escape.started -= instance.OnEscape;
             @Escape.performed -= instance.OnEscape;
             @Escape.canceled -= instance.OnEscape;
+            @RotateBuilding.started -= instance.OnRotateBuilding;
+            @RotateBuilding.performed -= instance.OnRotateBuilding;
+            @RotateBuilding.canceled -= instance.OnRotateBuilding;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1139,6 +1190,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnShiftSelect(InputAction.CallbackContext context);
         void OnRotateCamera(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
+        void OnRotateBuilding(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

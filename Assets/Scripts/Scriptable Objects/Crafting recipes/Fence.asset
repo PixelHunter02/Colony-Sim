@@ -19,6 +19,6 @@ MonoBehaviour:
     go: {fileID: 0}
     amount: 2
   instantlyEnterBuildMode: 0
-  prefab: {fileID: 375041380958578721, guid: c512639c846cd684ca66487a0e2b1a82, type: 3}
+  prefab: {fileID: 7065364331563479968, guid: 43228c1ba5016bd4e937a5b55a4494a1, type: 3}
   itemToStore: {fileID: 11400000, guid: 1bb9c8b503966b04db112a926d0ddd5f, type: 2}
   isUnlocked: 0
