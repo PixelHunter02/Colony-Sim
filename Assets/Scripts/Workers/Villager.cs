@@ -110,6 +110,8 @@ public class Villager : MonoBehaviour, IInteractable
 
     private List<IEnumerator> tasksToQueue;
 
+    public int health;
+
     public List<IEnumerator> TasksToQueue
     {
         get => tasksToQueue;
@@ -117,6 +119,7 @@ public class Villager : MonoBehaviour, IInteractable
 
     private void Awake()
     {
+        health = 200;
         _gameManager = GameManager.Instance;
         _agent = GetComponent<NavMeshAgent>();
         tasks = new List<IEnumerator>();

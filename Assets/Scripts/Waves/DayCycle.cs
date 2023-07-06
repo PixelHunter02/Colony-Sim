@@ -49,7 +49,7 @@ public class DayCycle : MonoBehaviour
         currentTime++;
         //Debug.Log(currentTime);
         // print("DayTime");
-        transform.Rotate(new Vector3(timeTicks/4, 0, 0));
+        transform.Rotate(new Vector3((timeTicks/4) * speed, 0, 0));
         // Debug.Log(gameObject.transform.localEulerAngles.x);
         if (gameObject.transform.localEulerAngles.x > 185)
         {
@@ -70,7 +70,7 @@ public class DayCycle : MonoBehaviour
         currentTime++;
         //Debug.Log(currentTime);
         // print("NightTime");
-        transform.Rotate(new Vector3(timeTicks * 5, 0, 0));
+        transform.Rotate(new Vector3((timeTicks * 5) * speed, 0, 0));
 
         if (gameObject.transform.localEulerAngles.x < 185)
         {
