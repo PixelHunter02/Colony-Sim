@@ -68,7 +68,8 @@ public class StorageManager : MonoBehaviour
                 GameObject slot = Instantiate(inventoryTemplate, inventoryMenu);
                 if (item.itemSO.canBePlaced)
                 {
-                    slot.GetComponent<Button>().onClick.AddListener( () => _gameManager.buildingManager.currentBuilding = item.itemSO);
+                    slot.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.currentBuilding = item.itemSO);
+                    slot.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.PreviewSetup(item.itemSO.prefab));
                 }
                 inventorySlot.TryAdd(item.itemSO,slot);
                 var image = slot.transform.GetChild(0);

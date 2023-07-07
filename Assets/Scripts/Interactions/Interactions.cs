@@ -150,6 +150,7 @@ public class Interactions : MonoBehaviour
 
         _drawingStockpile = true;
         var point = new Vector3(Mathf.FloorToInt(hit.point.x), hit.point.y + 0.1f, Mathf.FloorToInt(hit.point.z));
+        //var point = grid.WorldToCell(hit.transform.position);
         vertices[0] = point;
         StartCoroutine(DrawStockpileCR());
     }

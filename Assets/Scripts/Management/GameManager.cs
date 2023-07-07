@@ -351,28 +351,6 @@ public class GameManager : MonoBehaviour
         }
         value = villagerToReturn;
         return villagerToReturn;
-        
-        
-// // Run through each worker for an available worker who is of the correct role.
-//         foreach (var worker in VillagerManager.GetVillagers())
-//         {
-//             if (!harvestableObject.canInteract.Contains(worker.CurrentRole) || assignedVillager != null) 
-//                 continue;
-//             if (workerToAssign)
-//             {
-//                 if (workerToAssign.TasksToQueue.Count > worker.TasksToQueue.Count || worker.CurrentState is VillagerStates.Idle)
-//                 {
-//                     workerToAssign = worker;
-//                     Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
-//                 }
-//             }
-//             else
-//             {
-//                 workerToAssign = worker;
-//                 Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
-//
-//             }
-//         }
     }
 }
 

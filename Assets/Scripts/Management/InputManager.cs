@@ -114,7 +114,7 @@ public class InputManager : MonoBehaviour
     public Vector3 GetMouseToWorldPosition()
     {
         var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (Physics.Raycast(ray, out var hit, 1000) && !_gameManager.IsOverUI()) 
+        if (Physics.Raycast(ray, out var hit, 1000, _layerMask) && !_gameManager.IsOverUI()) 
             return hit.point;
 
         return Vector3.zero;

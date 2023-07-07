@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 public class BuildingManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class BuildingManager : MonoBehaviour
     public static event Action<StoredItemSO> itemBuilt;
 
     private int currentBuildingRotationModifier;
+
+    private GameObject previewGO;
     
     private void Awake()
     {
@@ -29,12 +32,47 @@ public class BuildingManager : MonoBehaviour
         _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed -= RotateBuilding;
     }
 
+    private void Update()
+    {
+        MovePreview(previewGO);
+    }
+
+    public void PreviewSetup(GameObject go)
+    {
+        previewGO = Instantiate(go);
+        previewGO.GetComponent<MeshCollider>().enabled = false;
+        previewGO.GetComponent<NavMeshObstacle>().enabled = false;
+    }
+
+    public void MovePreview(GameObject previewObj)
+    {
+        if (previewObj != null)
+        {
+            var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
+            Vector3Int cellPosition = new Vector3Int();
+            if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
+                currentBuilding != null)
+            {
+                cellPosition = _gameManager.grid.WorldToCell(mousePosition);
+            }
+
+            previewObj.transform.position = cellPosition;
+            previewGO.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
+        }
+        else if (_gameManager.inputManager.InputMode is not InputMode.BuildMode)
+        {
+            Destroy(previewGO);
+        }
+
+    }
+
     private void Building(InputAction.CallbackContext context)
     {
         var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
         if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
             currentBuilding != null)
         {
+
             var cellPosition = _gameManager.grid.WorldToCell(mousePosition);
             // PlaceBuilding(currentBuilding.prefab, cellPosition);
             var placedItem = Instantiate(currentBuilding.prefab, cellPosition, Quaternion.identity);
