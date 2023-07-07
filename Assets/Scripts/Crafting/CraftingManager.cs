@@ -40,6 +40,7 @@ public class CraftingManager : MonoBehaviour
                 {
                     foreach (var resource in resources)
                     {
+                        Debug.Log(resource.itemSO.objectName);
                         resourcesToRemove.Add(resource);
                     }
                 }
@@ -75,9 +76,10 @@ public class CraftingManager : MonoBehaviour
         {
             yield return null;
         }
+        assignedVillager.CurrentState = VillagerStates.Pickup;
         Debug.Log("Hit");
         Villager.StopVillager(assignedVillager, true);
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1f);
         
         StorageManager.EmptyStockpileSpace(location);
     }
@@ -121,7 +123,8 @@ public class CraftingManager : MonoBehaviour
         {
             yield return null;
         }
+        assignedVillager.CurrentState = VillagerStates.Pickup;
         Villager.StopVillager(assignedVillager, true);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
     }
 }

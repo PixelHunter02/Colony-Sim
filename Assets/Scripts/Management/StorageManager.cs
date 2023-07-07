@@ -131,11 +131,13 @@ public class StorageManager : MonoBehaviour
     public static bool TryFindItemsInInventory(Item itemType, int requiredAmount, out List<Item> itemToReturn)
     {
         itemToReturn = new List<Item>();
+        int count = 0;
         foreach (var item in itemList)
         {
-            if (itemType.itemSO == item.itemSO)
+            if (itemType.itemSO == item.itemSO && count<requiredAmount)
             {
                 itemToReturn.Add(item);
+                count++;
             }
         }
 

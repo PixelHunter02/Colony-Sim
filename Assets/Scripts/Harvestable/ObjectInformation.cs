@@ -66,6 +66,7 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         }
         if (assignedVillager && assignedVillager.TryGetComponent(out TaskHandler taskHandler))
         {
+            _isHeld = true;
             assignedVillager.AddTaskToQueue(taskHandler.PickUpResource(assignedVillager, this));
             assignedVillager = null;
         }

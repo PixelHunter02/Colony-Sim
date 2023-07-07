@@ -28,6 +28,8 @@ public class Interactions : MonoBehaviour
 
     public LayerMask ground;
 
+    public Grid grid;
+
     private void Awake()
     {
         InitializeStockpiles();

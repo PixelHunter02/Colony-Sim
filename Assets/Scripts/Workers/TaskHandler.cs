@@ -88,7 +88,7 @@ public class TaskHandler : MonoBehaviour
         Debug.Log("walking to resource");
         BeginWalking(assignedVillager, resourceToPickUp);
 
-        while (Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.transform.position) > 3f)
+        while (Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.transform.position) > 1f)
         {
             yield return null;
         }    
@@ -103,6 +103,8 @@ public class TaskHandler : MonoBehaviour
     {
         assignedVillager.currentlyHolding = resourceToPickUp.Item;
         resourceToPickUp._isHeld = true;
+        assignedVillager.CurrentState = VillagerStates.Pickup;
+        yield return new WaitForSeconds(1f);
         // resourceToPickUp.gameObject.SetActive(false);
         yield return null;
     }
@@ -113,7 +115,7 @@ public class TaskHandler : MonoBehaviour
         var storageLocation = resourceToPickUp.storageLocation;
         resourceToPickUp.gameObject.SetActive(false);
         // Set the villagers state to walking if not already.
-        if (assignedVillager.CurrentState != VillagerStates.Walking && Vector3.Distance(assignedVillager.transform.position, storageLocation) > 3f)
+        if (assignedVillager.CurrentState != VillagerStates.Walking && Vector3.Distance(assignedVillager.transform.position, storageLocation) > 1f)
         {
             assignedVillager.CurrentState = VillagerStates.Walking;
         }
@@ -123,14 +125,15 @@ public class TaskHandler : MonoBehaviour
         Villager.StopVillager(assignedVillager,false);
         Villager.SetVillagerDestination(assignedVillager, storageLocation);   
         
-        while (Vector3.Distance(assignedVillager.transform.position, storageLocation) >= 3f)
+        while (Vector3.Distance(assignedVillager.transform.position, storageLocation) >= 2f)
         {
             yield return null;
         }
         
         // Stop The Villager
         Villager.StopVillager(assignedVillager,true);
-        assignedVillager.CurrentState = VillagerStates.Idle;
+        assignedVillager.CurrentState = VillagerStates.Pickup;
+        yield return new WaitForSeconds(0.5f);
         MoveObjectToStorage(assignedVillager, resourceToPickUp);
     }
 

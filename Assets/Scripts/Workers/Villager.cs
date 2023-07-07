@@ -66,6 +66,9 @@ public class Villager : MonoBehaviour, IInteractable
                 case VillagerStates.Walking:
                     _animator.Play("Walking");
                     break;
+                case VillagerStates.Pickup:
+                    _animator.Play("Pickup");
+                    break;
             }
         }
     }
@@ -243,6 +246,7 @@ public enum VillagerStates
     Working,
     Sleeping,
     Walking,
+    Pickup,
 }
 public enum Model
 {

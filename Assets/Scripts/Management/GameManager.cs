@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -113,6 +111,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]private GameObject craftingButtonTemplate;
     [SerializeField]private GameObject craftingContainer;
     private List<CraftableSO> craftingButtons;
+
+    private Villager lastSelected;
     
     private void Awake()
     {
@@ -144,19 +144,40 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (_gameManager.inputManager.EscapePressed())
+        if (_gameManager.inputManager.EscapePressed() && GameState is not GameState.Playing)
         {
-            CloseAllUI();
+            GameState = GameState.Playing;    
+        }
+        else if (_gameManager.inputManager.EscapePressed())
+        {
+            GameState = GameState.Paused;
         }
     }
 
     // On Villager Click
     public void ShowVillagerInformation(Villager villager)
     {
-        var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
-        villagerLogTMP.text = storedLog;
-        _infoUI.SetActive(true);
-        _villagerName.text = villager.VillagerName;
+        if (lastSelected == villager && _infoUI.activeSelf == true)
+        {
+            _infoUI.SetActive(false);
+        }
+        else if (!lastSelected == villager && _infoUI.activeSelf)
+        {
+            lastSelected = villager;
+            var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
+            villagerLogTMP.text = storedLog;
+            _infoUI.SetActive(false);
+            _villagerName.text = villager.VillagerName;
+        }
+        else
+        {
+            lastSelected = villager;
+            var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
+            villagerLogTMP.text = storedLog;
+            _infoUI.SetActive(true);
+            _villagerName.text = villager.VillagerName;
+        }
+        
     }
 
     // Button Set In Inspector
@@ -199,7 +220,6 @@ public class GameManager : MonoBehaviour
             var button = cell.transform.Find("Button").GetComponent<Button>();
             button.GetComponent<ButtonReference>().workerReference = villager;
             button.onClick.AddListener(() => OpenRoleManagementUI(button.GetComponent<ButtonReference>().workerReference));
-             Debug.Log(button.GetComponent<ButtonReference>().workerReference);
             cell.SetActive(true);
         }
     }
