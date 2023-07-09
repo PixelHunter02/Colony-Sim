@@ -14,6 +14,8 @@ public class BuildingManager : MonoBehaviour
     private int currentBuildingRotationModifier;
 
     private GameObject previewGO;
+
+    [SerializeField] private Material placmentMaterial;
     
     private void Awake()
     {
@@ -40,14 +42,20 @@ public class BuildingManager : MonoBehaviour
     public void PreviewSetup(GameObject go)
     {
         previewGO = Instantiate(go);
-        previewGO.GetComponent<MeshCollider>().enabled = false;
-        previewGO.GetComponent<NavMeshObstacle>().enabled = false;
+        previewGO.GetComponentInChildren<MeshCollider>().enabled = false;
+        previewGO.GetComponentInChildren<NavMeshObstacle>().enabled = false;
+        previewGO.GetComponentInChildren<Renderer>().material = placmentMaterial;
     }
 
     public void MovePreview(GameObject previewObj)
     {
         if (previewObj != null)
         {
+            if (_gameManager.inputManager.InputMode is not InputMode.BuildMode)
+            {
+                Destroy(previewGO);
+            }
+            
             var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
             Vector3Int cellPosition = new Vector3Int();
             if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
@@ -59,11 +67,6 @@ public class BuildingManager : MonoBehaviour
             previewObj.transform.position = cellPosition;
             previewGO.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
         }
-        else if (_gameManager.inputManager.InputMode is not InputMode.BuildMode)
-        {
-            Destroy(previewGO);
-        }
-
     }
 
     private void Building(InputAction.CallbackContext context)
@@ -79,12 +82,6 @@ public class BuildingManager : MonoBehaviour
             placedItem.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
             itemBuilt?.Invoke(currentBuilding);
         }
-    }
-    
-    public void PlaceBuilding(GameObject building, Vector3 buildingPosition)
-    {
-        // Debug.Log("Building Created");
-        // Instantiate(building, buildingPosition, Quaternion.identity);
     }
 
     public void RotateBuilding(InputAction.CallbackContext context)
