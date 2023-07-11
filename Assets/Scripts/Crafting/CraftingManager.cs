@@ -102,14 +102,16 @@ public class CraftingManager : MonoBehaviour
         var location = StorageManager.storageLocations.ElementAt(0);
         StorageManager.UseStorageSpace(location);
 
+        var craftedItem = Instantiate(craftingRecipe.itemToStore.prefab, location, quaternion.identity);
+        craftedItem.transform.localScale /= 3;
+        craftedItem.SetActive(false);
         var itemToAdd = new Item()
         {
-            itemSO = craftingRecipe.itemToStore, storageLocation = location
+            itemSO = craftingRecipe.itemToStore, storageLocation = location, go = craftedItem
         }; 
         _gameManager.storageManager.AddToStorage(itemToAdd);
         yield return StartCoroutine(PlaceCraftedItem(assignedVillager, itemToAdd));
-        var craftedItem = Instantiate(itemToAdd.itemSO.prefab,itemToAdd.storageLocation, quaternion.identity);
-        craftedItem.transform.localScale = craftedItem.transform.localScale / 3;
+        craftedItem.SetActive(true);
     }
     
     private IEnumerator PlaceCraftedItem(Villager assignedVillager, Item location)

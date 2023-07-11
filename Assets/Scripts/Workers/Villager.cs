@@ -160,14 +160,6 @@ public class Villager : MonoBehaviour, IInteractable
             runningTasks = true;
             StartCoroutine(RunTasks());
         }
-
-        //
-        // if (tasks.Count > 0 && !runningTasks && tasksToQueue.Count == 0) ;
-        // {
-        //     // ClearCompleteTasks();
-        //     runningTasks = true;
-        //     StartCoroutine(RunTasks());
-        // }
     }
 
 
@@ -217,17 +209,6 @@ public class Villager : MonoBehaviour, IInteractable
         runningTasks = false;
         tasks.Clear();
     }
-
-    // void ClearCompleteTasks()
-    // {
-    //     foreach (var task in tasks)
-    //     {
-    //         if (completeTasks.Contains(task))
-    //         {
-    //             tasks.Remove(task);
-    //         }
-    //     }
-    // }
 }
 
 public enum Roles 

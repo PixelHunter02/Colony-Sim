@@ -104,21 +104,42 @@ public class StorageManager : MonoBehaviour
             }
         }
 
+        List<StoredItemSO> itemsToBeRemoved = new List<StoredItemSO>();
         foreach (var item in inventorySlot)
         {
             if (!itemsInList.ContainsKey(item.Key))
             {
                 Destroy(item.Value);
+                itemsToBeRemoved.Add(item.Key);
             }
         }
-        
+
+        foreach (var itemSo in itemsToBeRemoved)
+        {
+            inventorySlot.Remove(itemSo);
+        }   
     }
 
-    public static bool TryFindItemsInInventory(Item itemType, out Item itemToReturn)
+    public static bool TryFindItemInInventory(Item itemType, out Item itemToReturn)
     {
         foreach (var item in itemList)
         {
             if (itemType.itemSO == item.itemSO)
+            {
+                itemToReturn = item;
+                return true;
+            }
+        }
+
+        itemToReturn = null;
+        return false;
+    }
+
+    public static bool TryFindItemInInventory(StoredItemSO itemType, out Item itemToReturn)
+    {
+        foreach (var item in itemList)
+        {
+            if (itemType == item.itemSO)
             {
                 itemToReturn = item;
                 return true;

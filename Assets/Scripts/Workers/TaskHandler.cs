@@ -105,7 +105,6 @@ public class TaskHandler : MonoBehaviour
         resourceToPickUp._isHeld = true;
         assignedVillager.CurrentState = VillagerStates.Pickup;
         yield return new WaitForSeconds(1f);
-        // resourceToPickUp.gameObject.SetActive(false);
         yield return null;
     }
     
