@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -58,9 +60,11 @@ public class GameManager : MonoBehaviour
             switch (gameState)
             {
                 case GameState.Playing:
+                    Time.timeScale = 1;
                     CloseAllUI();
                     break;
                 case GameState.Paused:
+                    CloseAllUI();
                     Time.timeScale = 0;
                     break;
                 case GameState.Crafting:
@@ -128,7 +132,6 @@ public class GameManager : MonoBehaviour
         #endregion
 
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
         roleSelectionTMPText = GameObject.Find("RoleText").GetComponent<TMP_Text>();
         villagerLog = new Dictionary<Villager, string>();
@@ -136,24 +139,26 @@ public class GameManager : MonoBehaviour
         _infoUI.SetActive(false);
         CloseAllUI();
     }
-    
+
     private void Start()
     {
+        inputManager.playerInputActions.Player.Escape.started += Pause;
         UpdateVillagerManagementUI();
     }
 
-    private void Update()
+    private void Pause(InputAction.CallbackContext context)
     {
-        if (_gameManager.inputManager.EscapePressed() && GameState is not GameState.Playing)
+        Debug.Log("entered");
+        if (inputManager.EscapePressed() && GameState is not GameState.Playing)
         {
             GameState = GameState.Playing;    
         }
-        else if (_gameManager.inputManager.EscapePressed())
+        else if (inputManager.EscapePressed())
         {
             GameState = GameState.Paused;
         }
     }
-
+    
     // On Villager Click
     public void ShowVillagerInformation(Villager villager)
     {
@@ -248,11 +253,11 @@ public class GameManager : MonoBehaviour
     
     public static void AddToVillagerLog(Villager villager, string newLog)
     {
-        var storedLog = GameManager.villagerLog.GetValueOrDefault(villager, String.Empty);
+        var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
         StringBuilder log = new StringBuilder(storedLog);
         log.Append(newLog);
         log.Append(Environment.NewLine);
-        GameManager.villagerLog[villager] = log.ToString();
+        villagerLog[villager] = log.ToString();
         // TODO Add To Villager Log In Scene When Built
     }
 
