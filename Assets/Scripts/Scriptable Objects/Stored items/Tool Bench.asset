@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 878ba3fe7fd5b05498331b73a8f42033, type: 3}
-  m_Name: Fence
+  m_Name: Tool Bench
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8799760028346810535, guid: 04c88e53193d90f498567a36e76f34b3, type: 3}
-  objectName: WoodFence
-  maxSize: 20
-  uiSprite: {fileID: 21300000, guid: dc1d52b0239c9dc4bad3cc2d9bc4ff28, type: 3}
+  prefab: {fileID: 1385524857775532, guid: 74dd79ffd92ff194d85f9c443415d31e, type: 3}
+  objectName: Tool Bench
+  maxSize: 99
+  uiSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   pickupSound: {fileID: 0}
   useSound: {fileID: 0}
-  canBePlaced: 1
+  canBePlaced: 0

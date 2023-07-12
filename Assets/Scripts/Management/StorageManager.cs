@@ -171,6 +171,9 @@ public class StorageManager : MonoBehaviour
         itemToReturn = null;
         return false;
     }
+    
+    // public static bool 
+    
 
     public static void EmptyStockpileSpace(Item resourceToRemove)
     {

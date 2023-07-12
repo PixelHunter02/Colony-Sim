@@ -15,6 +15,7 @@ public class CraftingManager : MonoBehaviour
 
     [SerializeField] private CraftableSO[] craftingRecipes;
     public CraftableSO[] CraftingRecipes => craftingRecipes;
+    
     /// <summary>
     /// Assigned in the inspector
     /// </summary>
@@ -61,7 +62,6 @@ public class CraftingManager : MonoBehaviour
             yield return StartCoroutine(WalkToCraftingBench(villager,craftingRecipe));
             
             StorageManager.UpdateStorage();
-            // _gameManager.storageManager.DrawInventory();
         }
     }
 
@@ -103,7 +103,6 @@ public class CraftingManager : MonoBehaviour
         StorageManager.UseStorageSpace(location);
 
         var craftedItem = Instantiate(craftingRecipe.itemToStore.prefab, location, quaternion.identity);
-        craftedItem.transform.localScale /= 3;
         craftedItem.SetActive(false);
         var itemToAdd = new Item()
         {

@@ -7,6 +7,7 @@ using UnityEngine.AI;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Villager : MonoBehaviour, IInteractable
 {
@@ -56,6 +57,7 @@ public class Villager : MonoBehaviour, IInteractable
             {
                 case VillagerStates.Idle:
                     _animator.Play("Idle");
+                    StartCoroutine(RandomWalk(4));
                     break;
                 case VillagerStates.Working:
                     Debug.Log("Switching");
@@ -64,9 +66,11 @@ public class Villager : MonoBehaviour, IInteractable
                 case VillagerStates.Sleeping:
                     break;
                 case VillagerStates.Walking:
+                    _agent.isStopped = false;
                     _animator.Play("Walking");
                     break;
                 case VillagerStates.Pickup:
+                    _agent.isStopped = true;
                     _animator.Play("Pickup");
                     break;
             }
@@ -119,6 +123,8 @@ public class Villager : MonoBehaviour, IInteractable
     {
         get => tasksToQueue;
     }
+    
+
 
     private void Awake()
     {
@@ -145,6 +151,7 @@ public class Villager : MonoBehaviour, IInteractable
             tasksToQueue.Clear();
         }
         StartCoroutine(RunTasks());
+        StartCoroutine(RandomWalk(4));
     }
 
     private void Update()
@@ -208,6 +215,35 @@ public class Villager : MonoBehaviour, IInteractable
         }
         runningTasks = false;
         tasks.Clear();
+    }
+
+    private IEnumerator RandomWalk(float size)
+    {
+        _agent.isStopped = false;
+        yield return new WaitForSeconds(Random.Range(0.1f, 8f));
+        var newPosition = new Vector3(transform.position.x + Random.Range(-size, size), transform.position.y,
+            transform.position.z + Random.Range(-size, size));
+        while(!Physics.Raycast(newPosition, Vector3.down * 5, 3,~3))
+        {
+            newPosition = new Vector3(transform.position.x + Random.Range(-size, size), transform.position.y+2,
+                transform.position.z + Random.Range(-size, size));
+            yield return null;
+        }
+       
+        if (tasks.Count > 0 || tasksToQueue.Count > 0 || CurrentState is not VillagerStates.Idle) 
+        {
+            yield break;
+        }
+        
+        _agent.SetDestination(newPosition);
+
+        _animator.Play("Walking");
+        while (Vector3.Distance(transform.position, newPosition) > 0.5)
+        {
+            yield return null;
+        }
+
+        CurrentState = VillagerStates.Idle;
     }
 }
 

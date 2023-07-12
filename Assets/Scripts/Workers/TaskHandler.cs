@@ -146,8 +146,8 @@ public class TaskHandler : MonoBehaviour
         objectInformation._isHeld = false;
         assignedVillager.currentlyHolding = null;
         objectInformation._isStored = true;
-        Debug.Log(_gameManager);
         _gameManager.storageManager.AddToStorage(new Item{itemSO = objectInformation.Item, amount = 1, storageLocation = objectInformation.storageLocation, go = objectInformation.gameObject});
+        assignedVillager.CurrentState = VillagerStates.Idle;
     }
 
     private static void BeginWalking(Villager assignedVillager, Component location)

@@ -68,31 +68,39 @@ public class BuildingManager : MonoBehaviour
             previewObj.transform.position = cellPosition;
             previewGO.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
         }
-        if(!StorageManager.TryFindItemInInventory(currentBuilding, out Item item))
-        {
-            placmentMaterial.color = Color.red;
-        }
-        else
-        {
-            placmentMaterial.color = Color.blue;
-        }
+        // if(!StorageManager.TryFindItemInInventory(currentBuilding, out Item item))
+        // {
+        //     placmentMaterial.color = Color.red;
+        // }
+        // else
+        // {
+        //     placmentMaterial.color = Color.blue;
+        // }
     }
 
     private void Building(InputAction.CallbackContext context)
     {
         var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
+        // if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
+        //     currentBuilding != null && StorageManager.TryFindItemInInventory(currentBuilding, out Item item))
+        // {
+        //     Debug.Log(item.go);
+        //     StorageManager.EmptyStockpileSpace(item);
+        //
+        //     var cellPosition = _gameManager.grid.WorldToCell(mousePosition);
+        //     var placedItem = Instantiate(currentBuilding.prefab, cellPosition, Quaternion.identity);
+        //     placedItem.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
+        //     itemBuilt?.Invoke(currentBuilding);
+        // }
         if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
-            currentBuilding != null && StorageManager.TryFindItemInInventory(currentBuilding, out Item item))
+            currentBuilding != null)
         {
-            Debug.Log(item.go);
-            StorageManager.EmptyStockpileSpace(item);
-
             var cellPosition = _gameManager.grid.WorldToCell(mousePosition);
             var placedItem = Instantiate(currentBuilding.prefab, cellPosition, Quaternion.identity);
+
             placedItem.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
             itemBuilt?.Invoke(currentBuilding);
         }
-        
     }
 
     public void RotateBuilding(InputAction.CallbackContext context)
