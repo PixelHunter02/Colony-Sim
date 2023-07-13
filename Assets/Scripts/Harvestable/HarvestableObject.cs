@@ -1,45 +1,40 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class HarvestObjectManager : MonoBehaviour, IInteractable
+public class HarvestableObject : MonoBehaviour, IInteractable
 {
     public HarvestableObjectSO harvestableObject;
+
+    private GameManager _gameManager;
     
-    [FormerlySerializedAs("assignedWorker")] public Villager assignedVillager;
-    
-    Villager workerToAssign;
+    Villager villagerToAssign;
+
+    private void OnEnable()
+    {
+        _gameManager = GameManager.Instance;
+    }
 
     public void OnInteraction()
     {
         // Run through each worker for an available worker who is of the correct role.
-        foreach (var worker in VillagerManager.GetVillagers())
-        {
-            if (!harvestableObject.canInteract.Contains(worker.CurrentRole) || assignedVillager != null) 
-                continue;
-            if (workerToAssign)
-            {
-                if (workerToAssign.TasksToQueue.Count > worker.TasksToQueue.Count || worker.CurrentState is VillagerStates.Idle)
-                {
-                    workerToAssign = worker;
-                }
-            }
-            else
-            {
-                workerToAssign = worker;
-            }
-        }
-        
-        if (workerToAssign && workerToAssign.TryGetComponent(out TaskHandler taskHandler))
-        {
-            assignedVillager = workerToAssign;
-            workerToAssign.interactingWith = this;
-            workerToAssign.AddTaskToQueue(taskHandler.RunTaskCR(workerToAssign,this));
-            workerToAssign = null;
-        }
+        // foreach (var role in harvestableObject.canInteract)
+        // {
+        //     if (VillagerManager.TryGetVillagerByRole(role, out Villager villager))
+        //     {
+        //         
+        //         villager.interactingWith = this;
+        //         villager.AddTaskToQueue(_gameManager.taskHandler.RunTaskCR(villager, this));
+        //         return;
+        //     }
+        // }
+        // Debug.Log($"You dont have any villagers of role {harvestableObject.canInteract[0]}");
+        Coroutine task = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
+        _gameManager.taskHandler.queuedTasks.Enqueue(task);
     }
-    
+
     public IEnumerator CRSpawnHarvestDrops()
     {
         const float pushIntensity = 0.5f;

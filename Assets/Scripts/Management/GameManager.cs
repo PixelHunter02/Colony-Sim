@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Cinemachine;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    public UIManager uiManager;
+    public UIHolder uIHolder;
     public InputManager inputManager;
     public CameraMovement cameraMovement;
     public Interactions interactionManager;
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public BuildingManager buildingManager;
     public CraftingManager craftingManager;
+    public TaskHandler taskHandler;
 
     public Grid grid;
 
@@ -48,6 +50,10 @@ public class GameManager : MonoBehaviour
     /// Menus
     /// </summary>
     [SerializeField] private GameObject craftingMenu;
+    
+    //Cameras
+    [SerializeField] private CinemachineVirtualCamera mainVCamera;
+    [SerializeField] private CinemachineVirtualCamera buildVCamera;
 
     private GameState gameState;
 
@@ -62,10 +68,14 @@ public class GameManager : MonoBehaviour
                 case GameState.Playing:
                     Time.timeScale = 1;
                     CloseAllUI();
+                    toolbar.SetActive(true);
+                    mainVCamera.gameObject.SetActive(true);
+                    buildVCamera.gameObject.SetActive(false);
                     break;
                 case GameState.Paused:
                     CloseAllUI();
                     Time.timeScale = 0;
+                    toolbar.SetActive(true);
                     break;
                 case GameState.Crafting:
                     CloseAllUI();
@@ -82,6 +92,12 @@ public class GameManager : MonoBehaviour
                 case GameState.DoubleSpeed:
                     break;
                 case GameState.TrippleSpeed:
+                    break;
+                case GameState.Building:
+                    CloseAllUI();
+                    buildingToolbar.SetActive(true);
+                    mainVCamera.gameObject.SetActive(false);
+                    buildVCamera.gameObject.SetActive(true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -117,6 +133,9 @@ public class GameManager : MonoBehaviour
     private List<CraftableSO> craftingButtons;
 
     private Villager lastSelected;
+
+    [SerializeField] private GameObject buildingToolbar;
+    [SerializeField] private GameObject toolbar;
     
     private void Awake()
     {
@@ -138,6 +157,7 @@ public class GameManager : MonoBehaviour
         craftingButtons = new List<CraftableSO>();
         _infoUI.SetActive(false);
         CloseAllUI();
+        toolbar.SetActive(true);
     }
 
     private void Start()
@@ -162,7 +182,7 @@ public class GameManager : MonoBehaviour
     // On Villager Click
     public void ShowVillagerInformation(Villager villager)
     {
-        if (lastSelected == villager && _infoUI.activeSelf == true)
+        if (lastSelected == villager && _infoUI.activeSelf)
         {
             _infoUI.SetActive(false);
         }
@@ -205,13 +225,14 @@ public class GameManager : MonoBehaviour
     
     public void BuildMode()
     {
-        if (inputManager.InputMode == InputMode.BuildMode)
+        if (GameState == GameState.Building)
         {
-            inputManager.InputMode = InputMode.DefaultMode;
+            GameState = GameState.Playing;
         }
         else
         {
-            inputManager.InputMode = InputMode.BuildMode;
+            // inputManager.InputMode = InputMode.BuildMode;
+            GameState = GameState.Building;
         }
     }
 
@@ -286,12 +307,13 @@ public class GameManager : MonoBehaviour
         roleAssignmentUI.SetActive(false);
         villagerSelectUI.SetActive(false);
         craftingMenu.SetActive(false);
+        buildingToolbar.SetActive(false);
+        toolbar.SetActive(false);
     }
 
     public void StockpileModeEnabled()
     {
         stockpileMode = !stockpileMode;
-        _gameManager.inputManager.InputMode = InputMode.Stockpile;
     }
 
     // Set Mode to Crafting
@@ -326,37 +348,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static bool TryGetVillagerByRole(Roles role, out Villager value)
-    {
-        Villager villagerToReturn = null;
-        foreach (var villager in VillagerManager.GetVillagers())
-        {
-            if (villagerToReturn)
-            {
-                if (villager.CurrentRole == role)
-                {
-                    Debug.Log("Found Worker");
-                    if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count ||
-                        villager.CurrentState is VillagerStates.Idle)
-                    {
-                        villagerToReturn = villager;
-                        Debug.Log(villager.TasksToQueue.Count + " : " + villager.VillagerName);
-                        value = villagerToReturn;
-                    }
-                }
-            }
-            else
-            {
-                if (villager.CurrentRole == role)
-                {
-                    villagerToReturn = villager;
-                    value = villagerToReturn; 
-                }
-            }
-        }
-        value = villagerToReturn;
-        return villagerToReturn;
-    }
+}
+
+public class UIHolder
+{
+    
 }
 
 public enum GameState
@@ -367,5 +363,6 @@ public enum GameState
     VillagerManagement,
     Inventory,
     DoubleSpeed,
-    TrippleSpeed
+    TrippleSpeed,
+    Building,
 }

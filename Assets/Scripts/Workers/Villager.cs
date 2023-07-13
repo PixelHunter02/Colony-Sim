@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Experimental.Rendering;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -102,7 +99,7 @@ public class Villager : MonoBehaviour, IInteractable
     /// <summary>
     /// The object that the Villager is interacting with
     /// </summary>
-    public HarvestObjectManager interactingWith;
+    public HarvestableObject interactingWith;
 
     /// <summary>
     /// Reference To The Animator Component of the Villager

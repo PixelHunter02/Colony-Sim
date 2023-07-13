@@ -1,50 +1,85 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Networking.Transport;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TaskHandler : MonoBehaviour
 {
-    [SerializeField] private Slider slider;
-    [SerializeField] private Image taskImage;
-    [SerializeField] private GameObject status;
     private GameManager _gameManager;
-
+    // public List<IEnumerator> queuedTasks;
+    public Queue<Coroutine> queuedTasks;
+    public LayerMask pickupLayerMask;
     private void Awake()
     {
         _gameManager = GameManager.Instance;
+        queuedTasks = new Queue<Coroutine>();
     }
 
-    public IEnumerator RunTaskCR(Villager assignedVillager, HarvestObjectManager task)
+    #region Assign
+
+    public IEnumerator TaskToAssign(HarvestableObject task)
     {
-        yield return StartCoroutine(VillagerWalksToTask(assignedVillager, task));
+        if (VillagerManager.TryGetVillagerByRole(task.harvestableObject.canInteract, out Villager villager))
+        {
+            yield return StartCoroutine(RunTaskCR(villager, task));
+            queuedTasks.Dequeue();
+        }
+        else
+        {
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(TaskToAssign(task));
+        }
+    }
+    
+    public IEnumerator TaskToAssign(ObjectInformation task)
+    {
+        if (VillagerManager.TryGetVillagerByRole(out Villager villager))
+        {
+            yield return StartCoroutine(RunTaskCR(villager, task));
+            queuedTasks.Dequeue();
+        }
+        else
+        {
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(TaskToAssign(task));
+        }
+    }
+    
+    public IEnumerator TaskToAssign(BuildStats task)
+    {
+        if (VillagerManager.TryGetVillagerByRole(Roles.Crafter, out Villager villager))
+        {
+            yield return StartCoroutine(RunTaskCR(villager, task));
+            queuedTasks.Dequeue();
+        }
+        else
+        {
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(TaskToAssign(task));
+        }
+    }
+
+    #endregion
+
+    #region Harvest
+
+    public IEnumerator RunTaskCR(Villager assignedVillager, HarvestableObject task)
+    {
+        
+        yield return StartCoroutine(WalkToLocationCR(assignedVillager, task,3f));
         yield return StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
     }
     
-    // Villager Walks To Task
-    private static IEnumerator VillagerWalksToTask(Villager assignedVillager, HarvestObjectManager task)
-    {
-        BeginWalking(assignedVillager,task);
-        
-        // Check the distance between the Villager and the task
-        while (Vector3.Distance(assignedVillager.transform.position, task.transform.position) > 3)
-        {
-            yield return null;
-        }
-        
-        // Stop The Villager
-        Villager.StopVillager(assignedVillager,true);
-    }
-
     // Villager Does Task
-    private IEnumerator VillagerDoesTaskCR(Villager assignedVillager, HarvestObjectManager task)
+    private IEnumerator VillagerDoesTaskCR(Villager assignedVillager, HarvestableObject task)
     {
         // Set Slider To be Visible
-        status.SetActive(true);
-        taskImage.sprite = task.harvestableObject.taskSprite;
+        GameObject sliderGo = assignedVillager.transform.Find("Canvas").Find("Slider").gameObject;
+        sliderGo.SetActive(true);
+        Slider slider = sliderGo.GetComponent<Slider>();
+        var sprite = slider.transform.Find("Fill Area").Find("Inner").Find("CurrentTaskImage").GetComponent<Image>();
+        sprite.sprite = task.harvestableObject.taskSprite;
         
         // Set The Villager To The Working State
         assignedVillager.CurrentState = VillagerStates.Working;
@@ -61,7 +96,7 @@ public class TaskHandler : MonoBehaviour
         }
 
         // Show The Task Has Been Completed
-        taskImage.sprite = task.harvestableObject.taskCompleteSprite;
+        sprite.sprite = task.harvestableObject.taskCompleteSprite;
         StartCoroutine(task.CRSpawnHarvestDrops());
         
         //Set The Villager To Its  Idle State
@@ -71,31 +106,18 @@ public class TaskHandler : MonoBehaviour
         // Disable The Canvas And Un-Assign Tasks
         yield return new WaitForSeconds(1.5f);
         assignedVillager.interactingWith = null;
-        task.assignedVillager = null;
-        status.SetActive(false);
+        sliderGo.SetActive(false);
     }
 
-    public IEnumerator PickUpResource(Villager assignedVillager, ObjectInformation resourceToPickUp)
+    #endregion
+
+    #region Pickup Resources
+
+    public IEnumerator RunTaskCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
-        yield return StartCoroutine(VillagerWalksToResourceCR(assignedVillager, resourceToPickUp));
+        yield return StartCoroutine(WalkToLocationCR(assignedVillager, resourceToPickUp,0.5f));
         yield return StartCoroutine(VillagerPicksUpItemCR(assignedVillager, resourceToPickUp));
         yield return StartCoroutine(VillagerWalksToStockpilePointCR(assignedVillager, resourceToPickUp));
-    }
-    
-    // Worker Walks To Item
-    private IEnumerator VillagerWalksToResourceCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
-    {
-        Debug.Log("walking to resource");
-        BeginWalking(assignedVillager, resourceToPickUp);
-
-        while (Vector3.Distance(assignedVillager.transform.position, resourceToPickUp.transform.position) > 1f)
-        {
-            yield return null;
-        }    
-        
-        // Stop The Villager
-        Villager.StopVillager(assignedVillager,true);
-        assignedVillager.CurrentState = VillagerStates.Idle;
     }
     
     //Worker Picks Up Item
@@ -105,6 +127,7 @@ public class TaskHandler : MonoBehaviour
         resourceToPickUp._isHeld = true;
         assignedVillager.CurrentState = VillagerStates.Pickup;
         yield return new WaitForSeconds(1f);
+        resourceToPickUp.gameObject.SetActive(false);
         yield return null;
     }
     
@@ -112,31 +135,16 @@ public class TaskHandler : MonoBehaviour
     private IEnumerator VillagerWalksToStockpilePointCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
         var storageLocation = resourceToPickUp.storageLocation;
-        resourceToPickUp.gameObject.SetActive(false);
-        // Set the villagers state to walking if not already.
-        if (assignedVillager.CurrentState != VillagerStates.Walking && Vector3.Distance(assignedVillager.transform.position, storageLocation) > 1f)
-        {
-            assignedVillager.CurrentState = VillagerStates.Walking;
-        }
 
-        yield return new WaitForSeconds(0.1f);
-        // Allow The Villager to move and set a destination.
-        Villager.StopVillager(assignedVillager,false);
-        Villager.SetVillagerDestination(assignedVillager, storageLocation);   
+        yield return WalkToLocationCR(assignedVillager, storageLocation);
         
-        while (Vector3.Distance(assignedVillager.transform.position, storageLocation) >= 2f)
-        {
-            yield return null;
-        }
-        
-        // Stop The Villager
-        Villager.StopVillager(assignedVillager,true);
         assignedVillager.CurrentState = VillagerStates.Pickup;
+        
         yield return new WaitForSeconds(0.5f);
+        
         MoveObjectToStorage(assignedVillager, resourceToPickUp);
     }
-
-
+    
     //Worker puts down Item
     private void MoveObjectToStorage(Villager assignedVillager, ObjectInformation objectInformation)
     {
@@ -150,16 +158,114 @@ public class TaskHandler : MonoBehaviour
         assignedVillager.CurrentState = VillagerStates.Idle;
     }
 
-    private static void BeginWalking(Villager assignedVillager, Component location)
+    #endregion
+
+    #region Build
+
+    public IEnumerator RunTaskCR(Villager assignedVillager, BuildStats buildStats)
     {
+            List<Item> resourcesToRemove = new List<Item>();
+
+            foreach (var required in buildStats.craftingRecipe.requiredResource)
+            {
+                if (StorageManager.TryFindItemsInInventory(required, required.amount, out List<Item> resources))
+                {
+                    foreach (var resource in resources)
+                    {
+                        Debug.Log(resource.itemSO.objectName);
+                        resourcesToRemove.Add(resource);
+                    }
+                }
+                else
+                {
+                    Debug.Log("You dont have required resources");
+                    yield return new WaitForSeconds(5f);
+                    Coroutine cr = StartCoroutine(_gameManager.taskHandler.TaskToAssign(buildStats));
+                    _gameManager.taskHandler.queuedTasks.Enqueue(cr);
+                    yield break;
+                }
+            }
+            
+            
+            Debug.Log("Has Resources");
+
+            foreach (var item in resourcesToRemove)
+            {
+                yield return StartCoroutine(PickUpItems(assignedVillager, item));
+            }
+
+            yield return WalkToLocationCR(assignedVillager, buildStats,1);
+            yield return new WaitForSeconds(3);
+            assignedVillager.CurrentState = VillagerStates.Idle;
+            buildStats.building.SetActive(false);
+            buildStats.built.SetActive(true);
+    }
+    
+    private IEnumerator PickUpItems(Villager assignedVillager, Item location)
+    {
+        // Allow The Villager to move and set a destination.
+        Villager.StopVillager(assignedVillager,false);
+        Villager.SetVillagerDestination(assignedVillager, location.storageLocation);
+        assignedVillager.CurrentState = VillagerStates.Walking;
+       
+        while (!Physics.Raycast(new Vector3(assignedVillager.transform.position.x,assignedVillager.transform.position.y+1.5f,assignedVillager.transform.position.z),Vector3.down*2,10,pickupLayerMask))
+        {
+            yield return null;
+        }
+        assignedVillager.CurrentState = VillagerStates.Pickup;
+        Debug.Log("Hit");
+        Villager.StopVillager(assignedVillager, true);
+        yield return new WaitForSeconds(1f);
+        
+        StorageManager.EmptyStockpileSpace(location);
+    }
+
+
+    #endregion
+
+    
+    public IEnumerator WalkToLocationCR(Villager assignedVillager, Component location, float distance)
+    {
+        Villager.StopVillager(assignedVillager,false);
+        Villager.SetVillagerDestination(assignedVillager, location.transform.position);
+
         // Set the villagers state to walking if not already.
-        if (assignedVillager.CurrentState != VillagerStates.Walking && Vector3.Distance(assignedVillager.transform.position, location.transform.position) > 3f)
+        if (assignedVillager.CurrentState != VillagerStates.Walking)
         {
             assignedVillager.CurrentState = VillagerStates.Walking;
         }
         
-        // Allow The Villager to move and set a destination.
-        Villager.StopVillager(assignedVillager,false);
-        Villager.SetVillagerDestination(assignedVillager, location.transform.position);    
+        while (Vector3.Distance(assignedVillager.transform.position, location.transform.position) > distance)
+        {
+            yield return null;
+        }
+        
+        Villager.StopVillager(assignedVillager,true);
+
+        yield return null;
     }
+    
+    public IEnumerator WalkToLocationCR(Villager assignedVillager, Vector3 location)
+    {
+        Villager.StopVillager(assignedVillager,false);
+        Villager.SetVillagerDestination(assignedVillager, location);
+
+        // Set the villagers state to walking if not already.
+        if (assignedVillager.CurrentState != VillagerStates.Walking)
+        {
+            assignedVillager.CurrentState = VillagerStates.Walking;
+        }
+        
+        while (Vector3.Distance(assignedVillager.transform.position, location) > 2f)
+        {
+            yield return null;
+        }
+        
+        Villager.StopVillager(assignedVillager,true);
+
+        yield return null;
+    }
+    
+    
 }
+

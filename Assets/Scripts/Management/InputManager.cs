@@ -10,34 +10,31 @@ public class InputManager : MonoBehaviour
     private bool isRotating;
     private bool isPanning;
 
-    //Cameras
-    [SerializeField] private CinemachineVirtualCamera mainCamera;
-    [SerializeField] private CinemachineVirtualCamera buildCamera;
+    
     
     private InputMode _inputMode;
     
-    public InputMode InputMode
-    {
-        get => _inputMode;
-        set
-        {
-            _inputMode = value;
-            
-            switch (_inputMode)
-            {
-                case InputMode.DefaultMode:
-                    mainCamera.gameObject.SetActive(true);
-                    buildCamera.gameObject.SetActive(false);
-                    break;
-                case InputMode.BuildMode:
-                    mainCamera.gameObject.SetActive(false);
-                    buildCamera.gameObject.SetActive(true);
-                    break;
-                case InputMode.Stockpile:
-                    break;
-            }
-        }
-    }
+    // public InputMode InputMode
+    // {
+    //     get => _inputMode;
+    //     set
+    //     {
+    //         _inputMode = value;
+    //         
+    //         switch (_inputMode)
+    //         {
+    //             case InputMode.DefaultMode:
+    //                 
+    //                 break;
+    //             case InputMode.BuildMode:
+    //                 
+    //                 _gameManager.GameState = GameState.Building;
+    //                 break;
+    //             case InputMode.Stockpile:
+    //                 break;
+    //         }
+    //     }
+    // }
 
     public CraftableSO itemBeingBuilt;
     
@@ -46,6 +43,8 @@ public class InputManager : MonoBehaviour
     [SerializeField] private float interactDistance = 25;
 
     [SerializeField] private LayerMask _layerMask;
+
+    private bool overUI;
 
     private void Awake()
     {
@@ -56,6 +55,11 @@ public class InputManager : MonoBehaviour
         
         // Get reference to Game Manager
         _gameManager = GameManager.Instance;
+    }
+
+    private void Update()
+    {
+        overUI = _gameManager.IsOverUI();
     }
 
     public Vector2 GetNormalizedMovement()  
@@ -114,7 +118,7 @@ public class InputManager : MonoBehaviour
     public Vector3 GetMouseToWorldPosition()
     {
         var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (Physics.Raycast(ray, out var hit, 1000, _layerMask) && !_gameManager.IsOverUI()) 
+        if (Physics.Raycast(ray, out var hit, 1000, _layerMask) && !overUI) 
             return hit.point;
 
         return Vector3.zero;
@@ -124,7 +128,7 @@ public class InputManager : MonoBehaviour
     {
         var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
         // if(Physics.Raycast(ray, out var hitObj, Mathf.Infinity,~3))
-        if (Physics.Raycast(ray, out var hit, interactDistance,_layerMask) && !_gameManager.IsOverUI()) 
+        if (Physics.Raycast(ray, out var hit, interactDistance,_layerMask) && !overUI) 
             return hit.point;
 
         return Vector3.zero;

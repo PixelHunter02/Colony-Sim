@@ -109,11 +109,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8799760028346810535}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cec4c05b2d0ee20489743cdc89c22e5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  craftingRecipe: {fileID: 11400000, guid: 26231ffc77dfa6a4789c94b9df181b1d, type: 2}
+  building: {fileID: 6548955723025171748}
+  built: {fileID: 6510636025924290211}
 --- !u!1001 &321153445672319166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -266,14 +269,25 @@ PrefabInstance:
     - target: {fileID: 23724546501361084, guid: 8157d7b10c2fa75449c20daa36513d38,
         type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23724546501361084, guid: 8157d7b10c2fa75449c20daa36513d38,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 3fa865c6ba086644f9d3768d32774de7,
+        type: 3}
     - target: {fileID: 23724546501361084, guid: 8157d7b10c2fa75449c20daa36513d38,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: -876546973899608171, guid: 3fa865c6ba086644f9d3768d32774de7,
         type: 3}
+    - target: {fileID: 64583392694535746, guid: 8157d7b10c2fa75449c20daa36513d38,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -296,7 +310,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191302953757793629}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 1.251, y: 0.541, z: 0.025}
@@ -370,14 +384,25 @@ PrefabInstance:
     - target: {fileID: 23215643516728646, guid: 286d328b8dca35848a0ff503fe6e2030,
         type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23215643516728646, guid: 286d328b8dca35848a0ff503fe6e2030,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 3fa865c6ba086644f9d3768d32774de7,
+        type: 3}
     - target: {fileID: 23215643516728646, guid: 286d328b8dca35848a0ff503fe6e2030,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: -876546973899608171, guid: 3fa865c6ba086644f9d3768d32774de7,
         type: 3}
+    - target: {fileID: 64645402089632460, guid: 286d328b8dca35848a0ff503fe6e2030,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -400,7 +425,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4822858846920145498}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 0.08400001, y: 0.832, z: 0.08400001}
@@ -660,14 +685,25 @@ PrefabInstance:
     - target: {fileID: 23215643516728646, guid: 286d328b8dca35848a0ff503fe6e2030,
         type: 3}
       propertyPath: m_Materials.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23215643516728646, guid: 286d328b8dca35848a0ff503fe6e2030,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -876546973899608171, guid: 3fa865c6ba086644f9d3768d32774de7,
+        type: 3}
     - target: {fileID: 23215643516728646, guid: 286d328b8dca35848a0ff503fe6e2030,
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: -876546973899608171, guid: 3fa865c6ba086644f9d3768d32774de7,
         type: 3}
+    - target: {fileID: 64645402089632460, guid: 286d328b8dca35848a0ff503fe6e2030,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -690,7 +726,7 @@ NavMeshObstacle:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6371413547250039798}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 0.08400001, y: 0.832, z: 0.08400001}

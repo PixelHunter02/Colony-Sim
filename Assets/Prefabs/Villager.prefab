@@ -788,7 +788,6 @@ GameObject:
   - component: {fileID: 7540412494523879976}
   - component: {fileID: -5275581244050757907}
   - component: {fileID: -7626861745308731260}
-  - component: {fileID: -3868179326325950328}
   - component: {fileID: 6966523878823600022}
   - component: {fileID: 1186300357741817972}
   m_Layer: 0
@@ -813,7 +812,7 @@ Transform:
   - {fileID: 2854160077247609187}
   - {fileID: 5076460291324739992}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &-5275581244050757907
 NavMeshAgent:
@@ -849,26 +848,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54d87338958a6243857496e0e553bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  villagerRole: 0
   _agent: {fileID: 0}
   villagerName: Bobby
   interactingWith: {fileID: 0}
   _animator: {fileID: 2312240014063291449}
   currentlyHolding: {fileID: 0}
---- !u!114 &-3868179326325950328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4772233114219575443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4023008604cf134cbe83284ddf61d9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slider: {fileID: 4118414458716063183}
-  taskImage: {fileID: 2921920565365457082}
-  status: {fileID: 2626547123195063789}
+  health: 0
 --- !u!136 &6966523878823600022
 CapsuleCollider:
   m_ObjectHideFlags: 0

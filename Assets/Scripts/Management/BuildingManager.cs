@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
@@ -16,6 +18,8 @@ public class BuildingManager : MonoBehaviour
     private GameObject previewGO;
 
     [SerializeField] private Material placmentMaterial;
+
+    private List<BuildStats> buildQueue;
     
     private void Awake()
     {
@@ -24,13 +28,13 @@ public class BuildingManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _gameManager.inputManager.playerInputActions.Player.Select.performed += Building;
+        _gameManager.inputManager.playerInputActions.Player.Select.performed += PlaceBuilding;
         _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed += RotateBuilding;
     }
     
     private void OnDisable()
     {
-        _gameManager.inputManager.playerInputActions.Player.Select.performed -= Building;
+        _gameManager.inputManager.playerInputActions.Player.Select.performed -= PlaceBuilding;
         _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed -= RotateBuilding;
     }
 
@@ -41,7 +45,6 @@ public class BuildingManager : MonoBehaviour
 
     public void PreviewSetup(GameObject go)
     {
-        // placmentMaterial.color = Color.blue;
         previewGO = Instantiate(go);
         previewGO.GetComponentInChildren<MeshCollider>().enabled = false;
         previewGO.GetComponentInChildren<NavMeshObstacle>().enabled = false;
@@ -52,47 +55,33 @@ public class BuildingManager : MonoBehaviour
     {
         if (previewObj != null)
         {
-            if (_gameManager.inputManager.InputMode is not InputMode.BuildMode)
+            if (_gameManager.GameState is not GameState.Building)
             {
                 Destroy(previewGO);
             }
             
             var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
             Vector3Int cellPosition = new Vector3Int();
-            if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
+            if (mousePosition != Vector3.zero && _gameManager.GameState is GameState.Building &&
                 currentBuilding != null)
             {
+                previewGO.SetActive(true);
                 cellPosition = _gameManager.grid.WorldToCell(mousePosition);
+            }
+            else
+            {
+                previewGO.SetActive(false);
             }
 
             previewObj.transform.position = cellPosition;
             previewGO.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
         }
-        // if(!StorageManager.TryFindItemInInventory(currentBuilding, out Item item))
-        // {
-        //     placmentMaterial.color = Color.red;
-        // }
-        // else
-        // {
-        //     placmentMaterial.color = Color.blue;
-        // }
     }
 
-    private void Building(InputAction.CallbackContext context)
+    private void PlaceBuilding(InputAction.CallbackContext context)
     {
         var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
-        // if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
-        //     currentBuilding != null && StorageManager.TryFindItemInInventory(currentBuilding, out Item item))
-        // {
-        //     Debug.Log(item.go);
-        //     StorageManager.EmptyStockpileSpace(item);
-        //
-        //     var cellPosition = _gameManager.grid.WorldToCell(mousePosition);
-        //     var placedItem = Instantiate(currentBuilding.prefab, cellPosition, Quaternion.identity);
-        //     placedItem.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
-        //     itemBuilt?.Invoke(currentBuilding);
-        // }
-        if (mousePosition != Vector3.zero && _gameManager.inputManager.InputMode is InputMode.BuildMode &&
+        if (mousePosition != Vector3.zero && _gameManager.GameState is GameState.Building &&
             currentBuilding != null)
         {
             var cellPosition = _gameManager.grid.WorldToCell(mousePosition);
@@ -100,6 +89,10 @@ public class BuildingManager : MonoBehaviour
 
             placedItem.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
             itemBuilt?.Invoke(currentBuilding);
+            placedItem.GetComponent<BuildStats>().enabled = true;
+            // _gameManager.taskHandler.queuedTasks.Add(_gameManager.taskHandler.TaskToAssign(placedItem.GetComponent<BuildStats>()));
+            Coroutine cr = StartCoroutine(_gameManager.taskHandler.TaskToAssign(placedItem.GetComponent<BuildStats>()));
+            _gameManager.taskHandler.queuedTasks.Enqueue(cr);
         }
     }
 
@@ -121,5 +114,11 @@ public class BuildingManager : MonoBehaviour
                 currentBuildingRotationModifier = 3;
             }
         }
+    }
+
+    public void AssignBuilding(StoredItemSO building)
+    {
+        currentBuilding = building;
+        PreviewSetup(building.prefab);
     }
 }

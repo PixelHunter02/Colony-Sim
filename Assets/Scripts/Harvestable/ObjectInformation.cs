@@ -15,7 +15,13 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
     public bool _isHeld;
     public Vector3 storageLocation;
     public Villager assignedVillager;
-    
+    private GameManager _gameManager;
+
+    private void Awake()
+    {
+        _gameManager = GameManager.Instance;
+    }
+
     public void OnInteraction()
     {
         if(!CanBeStored())
@@ -33,43 +39,11 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
     
     private void FindAvailableVillager()
     {
-        // foreach (var villager in VillagerManager.GetVillagers())
-        // {
-        //     if (villager.CurrentState == VillagerStates.Idle &&
-        //         villager.TryGetComponent(out TaskHandler taskHandler) && !_isHeld && !villager.currentlyHolding && assignedVillager == null)
-        //     {
-        //         AssignStorage();
-        //         assignedVillager = villager;
-        //         StartCoroutine(taskHandler.PickUpResource(villager, this));
-        //         break;
-        //     }
-        // }
-
         AssignStorage();
-        foreach (var worker in VillagerManager.GetVillagers())
-        {
-            if (assignedVillager)
-            {
-                if (assignedVillager.TasksToQueue.Count > worker.TasksToQueue.Count ||
-                    worker.CurrentState is VillagerStates.Idle)
-                {
-                    assignedVillager = worker;
-                    Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
-                }
-            }
-            else
-            {
-                assignedVillager = worker;
-                Debug.Log(worker.TasksToQueue.Count + " : " + worker.VillagerName);
+        _isHeld = true;
+        Coroutine cr = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
+        _gameManager.taskHandler.queuedTasks.Enqueue(cr);
 
-            }
-        }
-        if (assignedVillager && assignedVillager.TryGetComponent(out TaskHandler taskHandler))
-        {
-            _isHeld = true;
-            assignedVillager.AddTaskToQueue(taskHandler.PickUpResource(assignedVillager, this));
-            assignedVillager = null;
-        }
     }
     
     private bool CanBeStored() => StorageManager.HasStorageSpace() && !_isHeld && !_isStored;

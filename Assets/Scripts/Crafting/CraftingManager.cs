@@ -30,9 +30,8 @@ public class CraftingManager : MonoBehaviour
     
     public IEnumerator BeginCrafting(CraftableSO craftingRecipe)
     {
-        if (GameManager.TryGetVillagerByRole(Roles.Crafter, out Villager villager))
+        if (VillagerManager.TryGetVillagerByRole(Roles.Crafter, out Villager villager))
         {
-            int matchingItems = 0;
             List<Item> resourcesToRemove = new List<Item>();
 
             foreach (var required in craftingRecipe.requiredResource)

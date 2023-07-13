@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 public class CraftableSO : ScriptableObject
 {
     public Sprite sprite;
-    public Item[] requiredResource;
+    public List<Item> requiredResource;
     public StoredItemSO itemToStore;
     public bool isUnlocked;
 }

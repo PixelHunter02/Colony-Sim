@@ -1,18 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class BuildStats : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public CraftableSO craftingRecipe;
+    private GameManager _gameManager;
+    public GameObject building;
+    public GameObject built;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        _gameManager = GameManager.Instance;
     }
 }
