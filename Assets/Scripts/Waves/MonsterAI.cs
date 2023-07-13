@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.UIElements;
 
 public class MonsterAI : MonoBehaviour
 {
@@ -13,9 +14,14 @@ public class MonsterAI : MonoBehaviour
     
     public GameObject target;
 
+    public GameObject nearestObject;
+
     public bool inRange;
 
     public float coolDown;
+
+    [SerializeField] private float distance;
+    [SerializeField] private float nearestDistance;
 
     private Animator _animator;
     [SerializeField] private string _currentState;
@@ -25,17 +31,50 @@ public class MonsterAI : MonoBehaviour
 
     private void Start()
     {
+        //target nearest crop, if no crop, target person
+        //if target unreachable, destroy structure blocking way when collide ig?
         health = 100;
         _animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        GameObject[] villagers = GameObject.FindGameObjectsWithTag("Villagers");
-        target = villagers[Random.Range(0,3)];
-        //randomly selecting a target cuz too tired to do it based off closest
 
+        GameObject[] crops = GameObject.FindGameObjectsWithTag("Crops");
+        GameObject[] villagers = GameObject.FindGameObjectsWithTag("Villagers");
+
+        for (int i = 0; i < crops.Length; i++)
+        {
+            //check for closest crop
+            distance = Vector3.Distance(this.transform.position, crops[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                nearestObject = crops[i];
+                nearestDistance = distance;
+                target = nearestObject;
+            }
+        }
+        //if no crops are available
+        if (crops == null)
+        {
+            for (int i = 0; i < villagers.Length; i++)
+            {
+                //check for closest villager
+                distance = Vector3.Distance(this.transform.position, villagers[i].transform.position);
+                if (distance < nearestDistance)
+                {
+                    nearestObject = villagers[i];
+                    nearestDistance = distance;
+                    target = nearestObject;
+                }
+            }
+        }
+        //target = villagers[Random.Range(0,3)];
     }
 
     void Update()
     {
+        if (health < 0)
+        {
+            Destroy(gameObject);
+        }
         if (!inRange)//not in range, move closer
         {
             ChangeAnimationState(_moving);
