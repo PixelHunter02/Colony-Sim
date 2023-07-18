@@ -20,6 +20,8 @@ public class BuildingManager : MonoBehaviour
     [SerializeField] private Material placmentMaterial;
 
     private List<BuildStats> buildQueue;
+
+    public StoredItemSO[] buildings;
     
     private void Awake()
     {
@@ -55,14 +57,14 @@ public class BuildingManager : MonoBehaviour
     {
         if (previewObj != null)
         {
-            if (_gameManager.GameState is not GameState.Building)
+            if (_gameManager.level.GameState is not GameState.Building)
             {
                 Destroy(previewGO);
             }
             
             var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
             Vector3Int cellPosition = new Vector3Int();
-            if (mousePosition != Vector3.zero && _gameManager.GameState is GameState.Building &&
+            if (mousePosition != Vector3.zero && _gameManager.level.GameState is GameState.Building &&
                 currentBuilding != null)
             {
                 previewGO.SetActive(true);
@@ -81,7 +83,7 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
-        if (mousePosition != Vector3.zero && _gameManager.GameState is GameState.Building &&
+        if (mousePosition != Vector3.zero && _gameManager.level.GameState is GameState.Building &&
             currentBuilding != null)
         {
             var cellPosition = _gameManager.grid.WorldToCell(mousePosition);

@@ -18,6 +18,6 @@ public class CraftingBench : MonoBehaviour, IInteractable
 
     private void ShowCraftingMenu()
     {
-        _gameManager.GameState = GameState.Crafting;
+        _gameManager.level.GameState = GameState.Crafting;
     }
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -11,7 +13,7 @@ public class Villager : MonoBehaviour, IInteractable
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
-    public Roles villagerRole;
+    private Roles villagerRole;
     public Roles CurrentRole
     {
         get => villagerRole;
@@ -22,16 +24,22 @@ public class Villager : MonoBehaviour, IInteractable
             switch (villagerRole)
             {
                 case Roles.Default:
+                    Debug.Log($"{villagerName} Changed To {villagerRole}");
                     break;
                 case Roles.Farmer:
+                    Debug.Log($"{villagerName} Changed To {villagerRole}");
                     break;
                 case Roles.Fighter:
+                    Debug.Log($"{villagerName} Changed To {villagerRole}");
                     break;
                 case Roles.Lumberjack:
+                    Debug.Log($"{villagerName} Changed To {villagerRole}");
                     break;
                 case Roles.Miner:
+                    Debug.Log($"{villagerName} Changed To {villagerRole}");
                     break;
                 case Roles.Crafter:
+                    Debug.Log($"{villagerName} Changed To {villagerRole}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -73,23 +81,11 @@ public class Villager : MonoBehaviour, IInteractable
             }
         }
     }
-
-    private List<IEnumerator> tasks;
-    private List<IEnumerator> completeTasks;
-
+    
     /// <summary>
     /// The NavMeshAgent
     /// </summary>
     public NavMeshAgent _agent;
-
-    /// <summary>
-    /// Villager Information
-    /// </summary>
-    [SerializeField] private string villagerName;
-    public string VillagerName
-    {
-        get => villagerName;
-    }
 
     /// <summary>
     /// Villager Image
@@ -97,30 +93,128 @@ public class Villager : MonoBehaviour, IInteractable
     private Image _roleImage;
     
     /// <summary>
-    /// The object that the Villager is interacting with
-    /// </summary>
-    public HarvestableObject interactingWith;
-
-    /// <summary>
     /// Reference To The Animator Component of the Villager
     /// </summary>
     [SerializeField]private Animator _animator;
 
     private GameManager _gameManager;
-
-    public StoredItemSO currentlyHolding;
-
+    
     private bool runningTasks;
 
-    private List<IEnumerator> tasksToQueue;
+    private List<IEnumerator> tasks;
 
-    public int health;
+    private List<IEnumerator> tasksToQueue;
 
     public List<IEnumerator> TasksToQueue
     {
         get => tasksToQueue;
     }
+
     
+    private Model gender;
+
+    public Model Gender
+    {
+        get => gender;
+        set
+        {
+            gender = value;
+            Debug.Log($"The Gender of The Villager {villagerName} has changed to {gender}");
+            switch (gender)
+            {
+                case Model.Man:
+                    femaleHead.SetActive(false);
+                    femaleBody.SetActive(false);
+                    maleHead.SetActive(true);
+                    maleBody.SetActive(true);
+                    maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = hairColour;
+                    break;
+                case Model.Woman:
+                    femaleHead.SetActive(true);
+                    femaleBody.SetActive(true);
+                    maleHead.SetActive(false);
+                    maleBody.SetActive(false);
+                    femaleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = hairColour;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
+    #region BodyParts
+
+    [SerializeField] private GameObject femaleHead;
+    [SerializeField] private GameObject maleHead;
+    [SerializeField] private GameObject femaleBody;
+    [SerializeField] private GameObject maleBody;
+    public Material hairColour;
+
+    #endregion
+
+
+    #region Stats
+
+    public TMP_Text magicText;
+    public TMP_Text craftText;
+    public TMP_Text strengthText;
+    public TMP_InputField nameText;
+    public int health;
+
+    private string villagerName;
+    public string VillagerName
+    {
+        get => villagerName;
+        set
+        {
+            villagerName = value;
+            if(SceneManager.GetActiveScene().name.Equals("Main Menu"))
+                nameText.text = villagerName;
+            Debug.Log($"A New Name Has Been Assigned! The new value is {villagerName}");
+        }
+    }
+    
+    private int strength;
+    public int Strength
+    {
+        get => strength;
+        set
+        {
+            strength = value;
+            Debug.Log($"A New Craft Value Has Been Assigned! The new value is {strength}");
+            if(SceneManager.GetActiveScene().name == _gameManager.mainMenu)
+                strengthText.text = $"Strength: {strength}";
+        }
+    }
+    private int craft;
+
+    public int Craft
+    {
+        get => craft;
+        set
+        {
+            craft = value;
+            Debug.Log($"A New Craft Value Has Been Assigned! The new value is {craft}");
+            if(SceneManager.GetActiveScene().name == _gameManager.mainMenu)
+                craftText.text = $"Craft: {craft}";
+        }
+    }
+    
+    private int magic;
+
+    public int Magic
+    {
+        get => magic;
+        set
+        {
+            magic = value;
+            Debug.Log($"A New Craft Value Has Been Assigned! The new value is {craft}");
+            if(SceneManager.GetActiveScene().name == _gameManager.mainMenu)
+                magicText.text = $"Magic: {magic}";
+        }
+    }
+
+    #endregion
 
 
     private void Awake()
@@ -130,27 +224,40 @@ public class Villager : MonoBehaviour, IInteractable
         _agent = GetComponent<NavMeshAgent>();
         tasks = new List<IEnumerator>();
 
-        completeTasks = new List<IEnumerator>();
         tasksToQueue = new List<IEnumerator>();
+        _animator = transform.GetChild(0).GetComponent<Animator>();
     }
 
     private void Start()
     {
-        TryGetComponent(out Outline outline);
-        outline.UpdateMaterialProperties();
-        if (tasks.Count == 0 && !runningTasks && tasksToQueue.Count > 0)
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
         {
-            // ClearCompleteTasks();
-            foreach (var task in tasksToQueue)
+            transform.Find("FemaleCharacterPBR").Find("PortraitCamera").gameObject.SetActive(false);
+            TryGetComponent(out Outline outline);
+            outline.UpdateMaterialProperties();
+            if (tasks.Count == 0 && !runningTasks && tasksToQueue.Count > 0)
             {
-                tasks.Add(task);
+                foreach (var task in tasksToQueue)
+                {
+                    tasks.Add(task);
+                }
+                tasksToQueue.Clear();
             }
-            tasksToQueue.Clear();
+            StartCoroutine(RunTasks());
+            StartCoroutine(RandomWalk(4));
         }
-        StartCoroutine(RunTasks());
-        StartCoroutine(RandomWalk(4));
+        else if (SceneManager.GetActiveScene().name.Equals("Main Menu"))
+        {
+            nameText.onEndEdit.AddListener(EditName);
+        }
     }
 
+    private void EditName(string text)
+    {
+        VillagerName = text;
+        // Debug.Log(villagerName);
+    }
+    
     private void Update()
     {
         if (tasks.Count == 0 && !runningTasks && tasksToQueue.Count > 0)
@@ -194,7 +301,7 @@ public class Villager : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        _gameManager.ShowVillagerInformation(this);
+        _gameManager.level.ShowVillagerInformation(this);
         Interactions.SetNewSelectedVillager(this);
     }
 
@@ -205,7 +312,6 @@ public class Villager : MonoBehaviour, IInteractable
 
     private IEnumerator RunTasks()
     {
-        completeTasks = new List<IEnumerator>();
         foreach (var task in tasks)
         {
             yield return task;

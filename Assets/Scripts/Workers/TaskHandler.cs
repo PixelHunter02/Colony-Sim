@@ -105,7 +105,7 @@ public class TaskHandler : MonoBehaviour
         
         // Disable The Canvas And Un-Assign Tasks
         yield return new WaitForSeconds(1.5f);
-        assignedVillager.interactingWith = null;
+        // assignedVillager.interactingWith = null;
         sliderGo.SetActive(false);
     }
 
@@ -123,7 +123,7 @@ public class TaskHandler : MonoBehaviour
     //Worker Picks Up Item
     private IEnumerator VillagerPicksUpItemCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
-        assignedVillager.currentlyHolding = resourceToPickUp.Item;
+        // assignedVillager.currentlyHolding = resourceToPickUp.Item;
         resourceToPickUp._isHeld = true;
         assignedVillager.CurrentState = VillagerStates.Pickup;
         yield return new WaitForSeconds(1f);
@@ -152,7 +152,7 @@ public class TaskHandler : MonoBehaviour
         objectInformation.gameObject.SetActive(true);
         objectInformation.transform.rotation = Quaternion.Euler(0,0,0);
         objectInformation._isHeld = false;
-        assignedVillager.currentlyHolding = null;
+        // assignedVillager.currentlyHolding = null;
         objectInformation._isStored = true;
         _gameManager.storageManager.AddToStorage(new Item{itemSO = objectInformation.Item, amount = 1, storageLocation = objectInformation.storageLocation, go = objectInformation.gameObject});
         assignedVillager.CurrentState = VillagerStates.Idle;

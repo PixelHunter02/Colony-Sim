@@ -1,5 +1,7 @@
+using System;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -25,22 +27,28 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
-        _cinemachineVCam = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
         _gameManager = GameManager.Instance;
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += AssignValues;
     }
 
     private void Update()
     {
-        if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
         {
-            CameraZoom();
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                CameraZoom();
+            }
+
+            MoveCamera();
+            CameraPanning();
+            RotateCamera();
+            MoveCursor();
         }
-        
-        MoveCamera();
-        CameraPanning();
-        RotateCamera();
-        MoveCursor();
     }
 
     private void MoveCamera()
@@ -108,6 +116,16 @@ public class CameraMovement : MonoBehaviour
         else
         {
             cursorGO.SetActive(false);
+        }
+    }
+
+    private void AssignValues(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name.Equals("New Scene"))
+        {
+            _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
+            _cinemachineVCam = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();  
+            followObject = GameObject.Find("Follow Object");
         }
     }
 }

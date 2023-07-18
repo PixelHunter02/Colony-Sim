@@ -19,18 +19,7 @@ public class HarvestableObject : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        // Run through each worker for an available worker who is of the correct role.
-        // foreach (var role in harvestableObject.canInteract)
-        // {
-        //     if (VillagerManager.TryGetVillagerByRole(role, out Villager villager))
-        //     {
-        //         
-        //         villager.interactingWith = this;
-        //         villager.AddTaskToQueue(_gameManager.taskHandler.RunTaskCR(villager, this));
-        //         return;
-        //     }
-        // }
-        // Debug.Log($"You dont have any villagers of role {harvestableObject.canInteract[0]}");
+        Debug.Log("Hit");
         Coroutine task = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
         _gameManager.taskHandler.queuedTasks.Enqueue(task);
     }

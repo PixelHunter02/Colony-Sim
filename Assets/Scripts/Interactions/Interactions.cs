@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 
 public class Interactions : MonoBehaviour
@@ -27,9 +28,7 @@ public class Interactions : MonoBehaviour
     private GameManager _gameManager;
 
     public LayerMask ground;
-
-    public Grid grid;
-
+    
     private void Awake()
     {
         InitializeStockpiles();
@@ -141,7 +140,7 @@ public class Interactions : MonoBehaviour
     {
         // Get the information of the object being clicked
         var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000,ground) || isOverUI ||!_gameManager.stockpileMode) 
+        if (!Physics.Raycast(ray, out var hit, 1000,ground) || isOverUI ||!_gameManager.level.stockpileMode) 
             return;
     
         // Check if the clicked object is tagged with Ground
