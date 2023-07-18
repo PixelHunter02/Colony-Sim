@@ -21,7 +21,7 @@ public class MonsterAI : MonoBehaviour
     public float coolDown;
 
     [SerializeField] private float distance;
-    [SerializeField] private float nearestDistance;
+    [SerializeField] private float nearestDistance = 1000;
 
     private Animator _animator;
     [SerializeField] private string _currentState;
@@ -29,35 +29,57 @@ public class MonsterAI : MonoBehaviour
     [SerializeField] private string _moving = "Run Forward In Place";
     [SerializeField] private string _attack = "Bite Attack";
 
-    private void Start()
+    [SerializeField] private List<GameObject> crops;
+    [SerializeField] private List<GameObject> villagers;
+
+    private void Awake()
     {
+        crops = new List<GameObject>();
+        villagers = new List<GameObject>();
+
         //target nearest crop, if no crop, target person
         //if target unreachable, destroy structure blocking way when collide ig?
         health = 100;
         _animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
 
-        GameObject[] crops = GameObject.FindGameObjectsWithTag("Crops");
-        GameObject[] villagers = GameObject.FindGameObjectsWithTag("Villagers");
-
-        for (int i = 0; i < crops.Length; i++)
+        foreach (Villager villager in VillagerManager.GetVillagers())
         {
-            //check for closest crop
-            distance = Vector3.Distance(this.transform.position, crops[i].transform.position);
-            if (distance < nearestDistance)
+            villagers.Add(villager.gameObject);
+        }
+
+        foreach (GameObject crop in GameObject.FindGameObjectsWithTag("Crops"))
+        {
+            crops.Add(crop);
+        }
+        if (crops.Count > 0)
+        {
+            for (int i = 0; i < crops.Count; i++)
             {
-                nearestObject = crops[i];
-                nearestDistance = distance;
-                target = nearestObject;
+                //check for closest crop
+                distance = Vector3.Distance(this.transform.position, crops[i].transform.position);
+                if (distance < nearestDistance)
+                {
+                    nearestObject = crops[i];
+                    nearestDistance = distance;
+                    target = nearestObject;
+                }
             }
         }
+
         //if no crops are available
-        if (crops == null)
+        if (crops.Count == 0)
         {
-            for (int i = 0; i < villagers.Length; i++)
+            nearestDistance = 1000;
+            //print("crops none");
+            for (int i = 0; i < villagers.Count; i++)
             {
+                //print(i);
+                
                 //check for closest villager
-                distance = Vector3.Distance(this.transform.position, villagers[i].transform.position);
+                distance = Vector3.Distance(transform.position, villagers[i].transform.position);
+                print(distance);
+                print(nearestDistance);
                 if (distance < nearestDistance)
                 {
                     nearestObject = villagers[i];
@@ -65,7 +87,13 @@ public class MonsterAI : MonoBehaviour
                     target = nearestObject;
                 }
             }
+            
         }
+    }
+
+    private void Start()
+    {
+        
         //target = villagers[Random.Range(0,3)];
     }
 

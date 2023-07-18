@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class DayCycle : MonoBehaviour
 {
-    [SerializeField] private float daySpeed;
-    [SerializeField] private float nightSpeed;
+    [SerializeField] private float dayInterval;
+    [SerializeField] private float nightInterval;
     [SerializeField] private float speed;
     [SerializeField] private float currentTime;
     [SerializeField] private int dayCount;
@@ -20,7 +20,7 @@ public class DayCycle : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(DayTime(daySpeed));
+        StartCoroutine(DayTime(dayInterval));
     }
 
     // Update is called once per frame
@@ -56,11 +56,11 @@ public class DayCycle : MonoBehaviour
             gameObject.transform.GetComponent<Light>().enabled = false;
             dayCount++;
             monsterWavesManager.GetComponent<MonsterWaves>().SpawnWave(dayCount);
-            StartCoroutine(NightTime(nightSpeed));
+            StartCoroutine(NightTime(nightInterval));
         }
         else
         {
-            StartCoroutine(DayTime(daySpeed));
+            StartCoroutine(DayTime(dayInterval));
         }
     }
 
@@ -75,11 +75,11 @@ public class DayCycle : MonoBehaviour
         if (gameObject.transform.localEulerAngles.x < 185)
         {
             gameObject.transform.GetComponent<Light>().enabled = true;
-            StartCoroutine(DayTime(daySpeed));
+            StartCoroutine(DayTime(dayInterval));
         }
         else
         {
-            StartCoroutine(NightTime(nightSpeed));
+            StartCoroutine(NightTime(nightInterval));
         }
     }
 

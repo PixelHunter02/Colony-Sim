@@ -16,7 +16,7 @@ public class TriggerZone : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other == GetComponentInParent<MonsterAI>().target)
+        if (other.gameObject == GetComponentInParent<MonsterAI>().target.gameObject)
         {
             print("outRange");
             GetComponentInParent<MonsterAI>().inRange = false;

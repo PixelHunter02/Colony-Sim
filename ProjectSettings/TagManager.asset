@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - HarvestableLumberJack
   - InventorySlot
+  - Crops
   layers:
   - Default
   - TransparentFX
