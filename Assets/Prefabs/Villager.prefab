@@ -848,29 +848,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c54d87338958a6243857496e0e553bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  villagerRole: 0
-  _agent: {fileID: 0}
-  villagerName: Bobby
+  agent: {fileID: 0}
   _animator: {fileID: 2312240014063291449}
   femaleHead: {fileID: 4730098340319383317}
   maleHead: {fileID: 442440180155276834}
   femaleBody: {fileID: 3561497691509820874}
   maleBody: {fileID: 8142520453675245368}
-  hairColour:
-  - {fileID: 2100000, guid: b9f69cd38bfb3434cb32a66f59b647c2, type: 2}
-  - {fileID: 2100000, guid: b7839117b31bddd4285c28ce2aaef009, type: 2}
-  - {fileID: 2100000, guid: 96a6531a76440be4384d2308910624d6, type: 2}
-  - {fileID: 2100000, guid: 7052696c46361e94cb616e3b518f1985, type: 2}
-  - {fileID: 2100000, guid: 19167e82c9e4bad409e86e814606a564, type: 2}
-  - {fileID: 2100000, guid: b52f2e95a3cd4b940b690149cb6200f5, type: 2}
-  - {fileID: 2100000, guid: 845e6ffec5716004f8d712449b6b4d8e, type: 2}
-  - {fileID: 2100000, guid: ba5be049eb4568a4591c4250009e28d0, type: 2}
-  - {fileID: 2100000, guid: afce377f9c620544b944acdbe5ad0a50, type: 2}
-  - {fileID: 2100000, guid: 1b1292f41d6c92347828bd5d9a414532, type: 2}
+  hairColour: {fileID: 0}
   magicText: {fileID: 0}
   craftText: {fileID: 0}
   strengthText: {fileID: 0}
+  nameText: {fileID: 0}
   health: 0
+  portraitCamera: {fileID: 8934336798763194755}
 --- !u!136 &6966523878823600022
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1421,7 +1411,7 @@ PrefabInstance:
     - target: {fileID: 1626525826500718860, guid: cc91c8ba8b9a34f4d99e70d721f60b64,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1844394383874551803, guid: cc91c8ba8b9a34f4d99e70d721f60b64,
         type: 3}
@@ -1716,7 +1706,7 @@ PrefabInstance:
     - target: {fileID: 7280059624002132426, guid: cc91c8ba8b9a34f4d99e70d721f60b64,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7337319955318858171, guid: cc91c8ba8b9a34f4d99e70d721f60b64,
         type: 3}

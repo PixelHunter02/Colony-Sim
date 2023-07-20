@@ -16,10 +16,35 @@ public class VillagerManager : MonoBehaviour
 
     [SerializeField] private GameObject villagerPrefab;
 
+    public static List<string> maleNames;
+    public static List<string> femaleNames;
+
     private void Awake()
     {
         if(villagers == null)
             villagers = new List<Villager>();
+
+        
+        maleNames ??= new List<string>()
+        {
+            "James",
+            "Jack",
+            "Joseph",
+            "Liam",
+            "Lenny",
+            "Louis",
+        };
+        
+        femaleNames ??= new List<string>()
+        {
+            "Caitlin",
+            "Jess",
+            "Joanna",
+            "Alice",
+            "Lucy",
+            "Amanda",
+        };
+        
     }
 
     public static List<Villager> GetVillagers()
@@ -112,26 +137,47 @@ public class VillagerManager : MonoBehaviour
             villager.Craft = Random.Range(1, 7);
             villager.Magic = Random.Range(1, 7);
             villager.Strength = Random.Range(1, 7);
-            
             villager.hairColour = hairColours[Random.Range(0, hairColours.Length)];
 
+            maleNames = null;
+            femaleNames = null;
+            
+            maleNames ??= new List<string>()
+            {
+                "James",
+                "Jack",
+                "Joseph",
+                "Liam",
+                "Lenny",
+                "Louis",
+            };
+        
+            femaleNames ??= new List<string>()
+            {
+                "Caitlin",
+                "Jess",
+                "Joanna",
+                "Alice",
+                "Lucy",
+                "Amanda",
+            };
+            
             var gender = Enum.GetValues(typeof(Gender));
             var position = Random.Range(0,gender.Length-1);
+            
             Model newGender = (Model)gender.GetValue(position);
             villager.Gender = newGender;
-
-            // villager.GetComponent<Villager>().Craft = Random.Range(1, 7);
     }
 
     public void SpawnVillager(Villager villagerToSpawn, out Villager villagerToReturn)
     {
         var villager = Instantiate(villagerPrefab, Vector3.zero, quaternion.identity);
-        villager.GetComponent<Villager>().VillagerName = villagerToSpawn.VillagerName;
         villager.GetComponent<Villager>().Craft = villagerToSpawn.Craft;
         villager.GetComponent<Villager>().Magic = villagerToSpawn.Magic;
         villager.GetComponent<Villager>().Strength = villagerToSpawn.Strength;
         villager.GetComponent<Villager>().hairColour = villagerToSpawn.hairColour;
         villager.GetComponent<Villager>().Gender = villagerToSpawn.Gender;
+        villager.GetComponent<Villager>().VillagerName = villagerToSpawn.VillagerName;
         villagerToReturn = villager.GetComponent<Villager>();
     }
 }

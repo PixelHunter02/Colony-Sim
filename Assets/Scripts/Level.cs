@@ -47,15 +47,18 @@ public class Level : MonoBehaviour
                     break;
                 case GameState.Crafting:
                     CloseAllUI();
+                    toolbar.SetActive(true);
                     OpenCrafting();
                     break;
                 case GameState.VillagerManagement:
                     CloseAllUI();
-                    ShowVillagerSelectUI();
+                    toolbar.SetActive(true);
+                    _gameManager.uiManager.OpenVillagerMenu();
                     break;
                 case GameState.Inventory:
                     CloseAllUI();
                     ShowInventory();
+                    toolbar.SetActive(true);
                     break;
                 case GameState.DoubleSpeed:
                     break;
@@ -104,7 +107,6 @@ public class Level : MonoBehaviour
 
     [SerializeField] private GameObject buildingToolbar;
     [SerializeField] private GameObject toolbar;
-
     #endregion
 
     private void Awake()
@@ -129,8 +131,6 @@ public class Level : MonoBehaviour
         {
             VillagerManager.AddVillagerToList(villager);
         }
-        UpdateVillagerManagementUI();
-    
     }
 
     private void Start()
@@ -140,7 +140,7 @@ public class Level : MonoBehaviour
     
     private void Pause(InputAction.CallbackContext context)
     {
-        if (_gameManager.inputManager.EscapePressed() && GameState is not GameState.Playing)
+        if (_gameManager.inputManager.EscapePressed() && GameState != GameState.Playing)
         {
             GameState = GameState.Playing;
         }
@@ -163,6 +163,7 @@ public class Level : MonoBehaviour
             var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
             villagerLogTMP.text = storedLog;
             _infoUI.SetActive(false);
+            GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
             _villagerName.text = villager.VillagerName;
         }
         else
@@ -171,15 +172,10 @@ public class Level : MonoBehaviour
             var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
             villagerLogTMP.text = storedLog;
             _infoUI.SetActive(true);
+            GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
             _villagerName.text = villager.VillagerName;
         }
 
-    }
-
-    // Button Set In Inspector
-    private void ShowVillagerSelectUI()
-    {
-        villagerSelectUI.SetActive(true);
     }
 
     public void VillagerUI()
@@ -204,50 +200,6 @@ public class Level : MonoBehaviour
         {
             GameState = GameState.Building;
         }
-    }
-
-    private void UpdateVillagerManagementUI()
-    {
-        for (int i = 0; i < VillagerManager.GetVillagers().Count; i++)
-        {
-            var villager = VillagerManager.GetVillagers()[i];
-            var cell = Instantiate(villagerManagementCell, villagerManagementContainer);
-            cell.transform.Find("Label").Find("Name").GetComponent<TMP_Text>().text = villager.VillagerName;
-            var button = cell.transform.Find("Button").GetComponent<Button>();
-            // button.GetComponent<ButtonReference>().workerReference = villager;
-            button.onClick.AddListener(() =>
-                // OpenRoleManagementUI(button.GetComponent<ButtonReference>().workerReference));
-            OpenRoleManagementUI(villager));
-            cell.SetActive(true);
-        }
-    }
-
-    private void OpenRoleManagementUI(Villager villager)
-    {
-        foreach (var button in roleButtons)
-        {
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => SetVillagerRole(villager));
-        }
-
-        CloseAllUI();
-        roleSelectionTMPText.text = "Select Role For: \n" + villager.VillagerName;
-        villagerManagementUI.SetActive(true);
-        roleAssignmentUI.SetActive(true);
-    }
-
-    private void SetVillagerRole(Villager villager)
-    {
-        Debug.Log(villager.VillagerName);
-        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
-        
-        string originalRole = villager.CurrentRole.ToString();
-        Enum.TryParse(EventSystem.current.currentSelectedGameObject.name, out Roles role);
-        Debug.Log(role);
-        
-        villager.CurrentRole = role;
-        AddToVillagerLog(villager, villager.VillagerName + " has changed from " + originalRole + " to " + role);
-        GameState = GameState.Playing;
     }
 
     public static void AddToVillagerLog(Villager villager, string newLog)

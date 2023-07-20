@@ -48,9 +48,18 @@ public class BuildingManager : MonoBehaviour
     public void PreviewSetup(GameObject go)
     {
         previewGO = Instantiate(go);
-        previewGO.GetComponentInChildren<MeshCollider>().enabled = false;
-        previewGO.GetComponentInChildren<NavMeshObstacle>().enabled = false;
-        previewGO.GetComponentInChildren<Renderer>().material = placmentMaterial;
+        if (previewGO.transform.childCount > 0)
+        {
+            previewGO.GetComponentInChildren<MeshCollider>().enabled = false;
+            previewGO.GetComponentInChildren<NavMeshObstacle>().enabled = false;
+            previewGO.GetComponentInChildren<Renderer>().material = placmentMaterial;
+        }
+        else
+        {
+            previewGO.GetComponent<MeshCollider>().enabled = false;
+            previewGO.GetComponent<NavMeshObstacle>().enabled = false;
+            previewGO.GetComponent<Renderer>().material = placmentMaterial;
+        }
     }
 
     public void MovePreview(GameObject previewObj)

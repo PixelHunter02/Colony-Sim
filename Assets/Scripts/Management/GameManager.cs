@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     public CraftingManager craftingManager;
     public TaskHandler taskHandler;
     public Level level;
+    public UIManager uiManager;
     
     public Grid grid;
     
@@ -73,7 +74,10 @@ public class GameManager : MonoBehaviour
     #region MainMenu
 
     private GameObject mainMenuCanvas;
-    private GameObject CharacterCreatorCanvas;
+    private GameObject characterCreatorCanvas;
+
+    [SerializeField] private GameObject characterCreationTemplate;
+    [SerializeField] private Transform characterCreationContainer;
 
     #endregion
 
@@ -108,9 +112,25 @@ public class GameManager : MonoBehaviour
    
     public void GenerateStats()
     {
+        for (int i = 0; i < characterCreationContainer.childCount; i++)
+        {
+            Destroy(characterCreationContainer.GetChild(i).gameObject);
+        }
+        
         foreach (var value in FindObjectsOfType(typeof(Villager)))
         {
-            villagerManager.GenerateNewVillagerStats(value.GetComponent<Villager>());
+            var villager = value.GetComponent<Villager>();
+            villagerManager.GenerateNewVillagerStats(villager);
+            
+            var template = Instantiate(characterCreationTemplate, characterCreationContainer);
+            var portrait = template.transform.GetChild(0);
+            portrait.GetComponent<RawImage>().texture = value.GetComponent<Villager>()._portraitRenderTexture;
+            var nameText = portrait.Find("Name").GetComponent<TMP_InputField>();
+            nameText.text = villager.VillagerName;
+            nameText.onEndEdit.AddListener(villager.EditName);
+            portrait.Find("Strength").GetComponent<TMP_Text>().text = $"Strength: {villager.Strength}";
+            portrait.Find("Craft").GetComponent<TMP_Text>().text = $"Craft: {villager.Craft}";
+            portrait.Find("Magic").GetComponent<TMP_Text>().text = $"Magic: {villager.Magic}";
         }
     }
 
@@ -119,8 +139,10 @@ public class GameManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name.Equals(mainMenu))
         {
             mainMenuCanvas.SetActive(false);
-            CharacterCreatorCanvas.SetActive(true);
+            characterCreatorCanvas.SetActive(true);
             GenerateStats();
+            
+            
         }
     }
 
@@ -145,14 +167,15 @@ public class GameManager : MonoBehaviour
         {
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             mainMenuCanvas = GameObject.Find("MainMenu");
-            CharacterCreatorCanvas = GameObject.Find("Character Creation");
+            characterCreatorCanvas = GameObject.Find("Character Creation");
             mainMenuCanvas.SetActive(true);
-            CharacterCreatorCanvas.SetActive(false);
+            characterCreatorCanvas.SetActive(false);
         }
         else if(scene.name.Equals(gameScene))
         {
             level = GameObject.Find("LocalSettings").GetComponent<Level>();
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         }
     }
 
