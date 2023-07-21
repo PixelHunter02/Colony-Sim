@@ -19,12 +19,20 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         _gameManager = GameManager.Instance;
     }
 
-    public void OnInteraction()
+    private void Update()
     {
-        if(!CanBeStored())
+        if (!CanBeStored())
             return;
 
         FindAvailableVillager();
+    }
+
+    public void OnInteraction()
+    {
+        //if(!CanBeStored())
+        //    return;
+
+        //FindAvailableVillager();
     }
     
     public void AssignStorage()

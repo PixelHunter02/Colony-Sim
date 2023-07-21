@@ -823,7 +823,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 4772233114219575443}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.8
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -855,12 +855,9 @@ MonoBehaviour:
   femaleBody: {fileID: 3561497691509820874}
   maleBody: {fileID: 8142520453675245368}
   hairColour: {fileID: 0}
-  magicText: {fileID: 0}
-  craftText: {fileID: 0}
-  strengthText: {fileID: 0}
-  nameText: {fileID: 0}
   health: 0
   portraitCamera: {fileID: 8934336798763194755}
+  _portraitRenderTexture: {fileID: 0}
 --- !u!136 &6966523878823600022
 CapsuleCollider:
   m_ObjectHideFlags: 0
