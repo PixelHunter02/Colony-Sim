@@ -2319,6 +2319,7 @@ MonoBehaviour:
   buildingManager: {fileID: 1817348799}
   craftingManager: {fileID: 779276597}
   taskHandler: {fileID: 1095073158}
+  monsterWaves: {fileID: 0}
   level: {fileID: 0}
   uiManager: {fileID: 0}
   grid: {fileID: 1536979215}
@@ -39670,7 +39671,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124862098}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: 3.5527133e-15, z: -1.3322675e-15, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -40451,6 +40452,7 @@ GameObject:
   - component: {fileID: 1240863346}
   - component: {fileID: 1240863345}
   - component: {fileID: 1240863344}
+  - component: {fileID: 1240863348}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -40473,7 +40475,6 @@ MonoBehaviour:
   dayInterval: 0.2
   nightInterval: 1
   speed: 1
-  currentTime: 0
   dayCount: 0
   monsterWavesManager: {fileID: 1683140436}
 --- !u!114 &1240863345
@@ -40576,6 +40577,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1240863348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240863343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6540f780eb721f43977f36a06dcfd38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1284216470 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7002549689221129443, guid: 7577a25d9a85fea46a8abd68ee59d759,
@@ -44643,8 +44656,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896196924}
-  m_LocalRotation: {x: 0.4344402, y: 0.000000011889915, z: -0.000000010875616, w: 0.90070075}
-  m_LocalPosition: {x: 0, y: 21.072178, z: -6.321653}
+  m_LocalRotation: {x: 0.4344402, y: 0.000000011889917, z: -0.000000010875613, w: 0.90070075}
+  m_LocalPosition: {x: -1.9539925e-14, y: 21.072178, z: -6.321653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
