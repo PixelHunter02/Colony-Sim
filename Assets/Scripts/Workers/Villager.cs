@@ -17,6 +17,8 @@ public class Villager : MonoBehaviour, IInteractable
     [SerializeField] private List<GameObject> objInTriggerZone;
     [SerializeField] private List<GameObject> objInAwarenessZone;
     public GameObject target;
+    private bool attackStarted;
+    private bool finding;
     [SerializeField] private float distance;
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
@@ -83,6 +85,9 @@ public class Villager : MonoBehaviour, IInteractable
                 case VillagerStates.Pickup:
                     agent.isStopped = true;
                     _animator.Play("Pickup");
+                    break;
+                case VillagerStates.Fighting:
+                    _animator.Play("Attack03_SwordAndShiled");
                     break;
             }
         }
@@ -277,40 +282,54 @@ public class Villager : MonoBehaviour, IInteractable
             {
                 return;
             }
-                if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
+            if (objInAwarenessZone[i].GetComponent<Monster>())
+            {
+                if (_villagerRole == Roles.Fighter && !finding)
                 {
-                    if (_villagerRole == Roles.Fighter)
-                    {
-                        StartCoroutine(AttackMonster(3));
-                    }
-                    else
-                    {
-                    //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
-                    }
-                    
-                    if (!monsters.Contains(objInAwarenessZone[i]))
-                    {
-                        monsters.Add(objInAwarenessZone[i]);
-
-                    }
+                    finding = true;
+                    StartCoroutine(FindTarget(3));
                 }
+                else
+                {
+                    //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
+                }
+
+                if (!monsters.Contains(objInAwarenessZone[i]))
+                {
+                    monsters.Add(objInAwarenessZone[i]);
+                }
+            }
+        }
+        if (target)
+        {
+            transform.LookAt(target.transform);
+
+            for (int i = 0; i < objInTriggerZone.Count; i++)
+            {
+                //print(gameObject.name + " has come into contact with " + objInTriggerZone[i]);
+                //print(gameObject.name + " is looking for " + target);
+                if (objInTriggerZone[i] == target && !attackStarted)
+                {
+                    attackStarted = true;
+                    print(gameObject.name + " has found its target");
+                    StartCoroutine(AttackMonster());
+                }
+            }
         }
     }
 
-    private IEnumerator AttackMonster(float cooldown)
+    public IEnumerator FindTarget(float timeTicks)
     {
-        //including the moving to and searching for with attacking, acts as a stunner I think, which should be good?
-        yield return new WaitForSeconds(cooldown);
+        yield return new WaitForSeconds(timeTicks);
+
         float nearestDistance = 1000;
-        //find closest monster
         for (int i = 0; i < monsters.Count; i++)
         {
-            if (!monsters[i])
-            {
-                continue;
-            }
-             
-            distance = Vector3.Distance(this.transform.position, monsters[i].transform.position);
+            //check for closest villager
+            distance = Vector3.Distance(transform.position, monsters[i].transform.position);
+            //print(distance);
+            //print(nearestDistance);
+
             if (distance < nearestDistance)
             {
                 nearestObject = monsters[i];
@@ -318,7 +337,24 @@ public class Villager : MonoBehaviour, IInteractable
                 target = nearestObject;
             }
         }
-        //ChangeAnimationState(_moving);
+
+        if (target)
+        {
+            CurrentState = VillagerStates.Walking;
+            agent.SetDestination(target.transform.position);
+        }
+        finding = false;
+    }
+
+    private IEnumerator AttackMonster()
+    {
+        CurrentState = VillagerStates.Fighting;
+        agent.isStopped = true;
+
+        yield return new WaitForSeconds(1);
+        
+        agent.isStopped = false;
+
         if (target)
         {
             GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
@@ -329,21 +365,23 @@ public class Villager : MonoBehaviour, IInteractable
                 if (objInTriggerZone[i] == target)
                 {
                     //transform.LookAt(target.transform);
-                    //animation to attack
+                    //CurrentState = VillagerStates.Fighting;
                     print("Villager fights Back");
                     target.GetComponent<Monster>().health -= 1;
-                    objInAwarenessZone.Remove(target);
                     print(target.name + " health is down to: " + target.GetComponent<Monster>().health);
+                    
                     if (target.GetComponent<Monster>().health <= 0)
                     {
                         monsters.Remove(target.gameObject);
                         Destroy(target.gameObject);
 
                     }
+                    CurrentState = VillagerStates.Idle;
                 }
             }
         }
-        
+        attackStarted = false;
+        StartCoroutine(FindTarget(1));
     }
 
 
@@ -438,6 +476,7 @@ public enum VillagerStates
     Sleeping,
     Walking,
     Pickup,
+    Fighting,
 }
 public enum Model
 {

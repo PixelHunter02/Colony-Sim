@@ -75,6 +75,10 @@ public class Monster : MonoBehaviour
                 StartCoroutine(AttackTarget(attackCoolDown));
             }
         }
+        if (target)
+        {
+            transform.LookAt(target.transform);
+        }
     }
     private void OnNightTime()
     {
@@ -90,6 +94,7 @@ public class Monster : MonoBehaviour
 
         foreach (Villager villager in VillagerManager.GetVillagers())
         {
+            villagers.Clear();
             if (!villagers.Contains(villager.gameObject))
             {
                 villagers.Add(villager.gameObject);
