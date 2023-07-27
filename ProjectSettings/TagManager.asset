@@ -10,6 +10,7 @@ TagManager:
   - HarvestableLumberJack
   - InventorySlot
   - Crops
+  - Monster
   layers:
   - Default
   - TransparentFX

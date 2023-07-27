@@ -17,7 +17,12 @@ public class MonsterWaves : MonoBehaviour
         for (var i = 1; i < day * 2; i++)
         {
             //will need to be changed to avoid spawning near characters and base
-            Instantiate(prefabs[Random.Range(0,2)], new Vector3(Random.Range(minX,maxX), -2, Random.Range(minZ, maxZ)), Quaternion.identity);
+            Instantiate(prefabs[0], new Vector3(Random.Range(minX,maxX), -2, Random.Range(minZ, maxZ)), Quaternion.identity);
         }
+    }
+    public void SpawnDayMonsters(int day)
+    {
+        Instantiate(prefabs[1], new Vector3(Random.Range(minX, maxX), -2, Random.Range(minZ, maxZ)), Quaternion.identity);
+
     }
 }

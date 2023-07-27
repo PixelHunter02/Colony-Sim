@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     public BuildingManager buildingManager;
     public CraftingManager craftingManager;
     public TaskHandler taskHandler;
+    public MonsterWaves monsterWaves;
     public Level level;
     public UIManager uiManager;
     

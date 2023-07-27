@@ -2,23 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerZone : MonoBehaviour
+public class AwarenessZone : MonoBehaviour
 {
-    public List<GameObject> objInTriggerZone;
+    public List<GameObject> objInAwarenessZone;
 
     private void OnTriggerEnter(Collider other)
     {
-        objInTriggerZone.Add(other.gameObject);
+        objInAwarenessZone.Add(other.gameObject);
     }
     private void OnTriggerExit(Collider other)
     {
-        objInTriggerZone.Remove(other.gameObject);
+        objInAwarenessZone.Remove(other.gameObject);
     }
-
     private void Update()
     {
         List<GameObject> temp = new List<GameObject>();
-        foreach(GameObject obj in objInTriggerZone)
+        foreach (GameObject obj in objInAwarenessZone)
         {
             if (!obj)
             {
@@ -30,7 +29,7 @@ public class TriggerZone : MonoBehaviour
         {
             if (!obj)
             {
-                objInTriggerZone.Remove(obj);
+                objInAwarenessZone.Remove(obj);
             }
         }
     }

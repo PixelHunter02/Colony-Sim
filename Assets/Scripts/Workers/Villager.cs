@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,12 @@ using Random = UnityEngine.Random;
 
 public class Villager : MonoBehaviour, IInteractable
 {
+    [SerializeField] private List<GameObject> monsters;
+    [SerializeField] private GameObject nearestObject;
+    [SerializeField] private List<GameObject> objInTriggerZone;
+    [SerializeField] private List<GameObject> objInAwarenessZone;
+    public GameObject target;
+    [SerializeField] private float distance;
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
@@ -212,6 +219,10 @@ public class Villager : MonoBehaviour, IInteractable
 
     private void Awake()
     {
+<<<<<<< Updated upstream
+=======
+        monsters = new List<GameObject>();
+>>>>>>> Stashed changes
         health = 20;
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
@@ -256,7 +267,14 @@ public class Villager : MonoBehaviour, IInteractable
     
     private void Update()
     {
+<<<<<<< Updated upstream
         if (_tasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
+=======
+
+        objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
+        objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
+        if (tasks.Count == 0 && !runningTasks && tasksToQueue.Count > 0)
+>>>>>>> Stashed changes
         {
             foreach (var task in TasksToQueue)
             {
@@ -266,6 +284,80 @@ public class Villager : MonoBehaviour, IInteractable
             _runningTasks = true;
             StartCoroutine(RunTasks());
         }
+
+        for (int i = 0; i < objInAwarenessZone.Count; i++)
+        {
+            if (!objInAwarenessZone[i])
+            {
+                return;
+            }
+                if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
+                {
+                    if (villagerRole == Roles.Fighter)
+                    {
+                        StartCoroutine(AttackMonster(3));
+                    }
+                    else
+                    {
+                    //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
+                    }
+                    
+                    if (!monsters.Contains(objInAwarenessZone[i]))
+                    {
+                        monsters.Add(objInAwarenessZone[i]);
+
+                    }
+                }
+        }
+    }
+
+    private IEnumerator AttackMonster(float cooldown)
+    {
+        //including the moving to and searching for with attacking, acts as a stunner I think, which should be good?
+        yield return new WaitForSeconds(cooldown);
+        float nearestDistance = 1000;
+        //find closest monster
+        for (int i = 0; i < monsters.Count; i++)
+        {
+            if (!monsters[i])
+            {
+                continue;
+            }
+             
+            distance = Vector3.Distance(this.transform.position, monsters[i].transform.position);
+            if (distance < nearestDistance)
+            {
+                nearestObject = monsters[i];
+                nearestDistance = distance;
+                target = nearestObject;
+            }
+        }
+        //ChangeAnimationState(_moving);
+        if (target)
+        {
+            GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
+            for (int i = 0; i < objInTriggerZone.Count; i++)
+            {
+                print(villagerName + " has come into contact with " + objInTriggerZone[i]);
+                print(villagerName + " is looking for " + target);
+                if (objInTriggerZone[i] == target)
+                {
+                    //transform.LookAt(target.transform);
+                    //animation to attack
+                    print("Villager fights Back");
+                    target.GetComponent<Monster>().health -= 1;
+                    objInAwarenessZone.Remove(target);
+                    print(target.name + " health is down to: " + target.GetComponent<Monster>().health);
+                    if (target.GetComponent<Monster>().health <= 0)
+                    {
+                        monsters.Remove(target.gameObject);
+                        Destroy(target.gameObject);
+
+                    }
+                }
+            }
+        }
+        
     }
 
 
