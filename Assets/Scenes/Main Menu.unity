@@ -5012,6 +5012,7 @@ MonoBehaviour:
   buildingManager: {fileID: 600667009}
   craftingManager: {fileID: 1024999329}
   taskHandler: {fileID: 197457713}
+  monsterWaves: {fileID: 580698364}
   level: {fileID: 0}
   uiManager: {fileID: 0}
   grid: {fileID: 833682252}
