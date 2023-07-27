@@ -219,10 +219,8 @@ public class Villager : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-<<<<<<< Updated upstream
-=======
+
         monsters = new List<GameObject>();
->>>>>>> Stashed changes
         health = 20;
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
@@ -267,14 +265,10 @@ public class Villager : MonoBehaviour, IInteractable
     
     private void Update()
     {
-<<<<<<< Updated upstream
-        if (_tasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
-=======
 
         objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
         objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
-        if (tasks.Count == 0 && !runningTasks && tasksToQueue.Count > 0)
->>>>>>> Stashed changes
+        if (_tasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
         {
             foreach (var task in TasksToQueue)
             {
@@ -293,7 +287,7 @@ public class Villager : MonoBehaviour, IInteractable
             }
                 if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
                 {
-                    if (villagerRole == Roles.Fighter)
+                    if (_villagerRole == Roles.Fighter)
                     {
                         StartCoroutine(AttackMonster(3));
                     }
@@ -338,8 +332,8 @@ public class Villager : MonoBehaviour, IInteractable
             GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
             for (int i = 0; i < objInTriggerZone.Count; i++)
             {
-                print(villagerName + " has come into contact with " + objInTriggerZone[i]);
-                print(villagerName + " is looking for " + target);
+                print(_villagerName + " has come into contact with " + objInTriggerZone[i]);
+                print(_villagerName + " is looking for " + target);
                 if (objInTriggerZone[i] == target)
                 {
                     //transform.LookAt(target.transform);
