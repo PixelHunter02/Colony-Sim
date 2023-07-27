@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CraftingBench : MonoBehaviour, IInteractable
+public class CraftingBench : MonoBehaviour
 {
     private GameManager _gameManager;
     private void Awake()

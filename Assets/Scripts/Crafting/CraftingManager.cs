@@ -29,7 +29,8 @@ public class CraftingManager : MonoBehaviour
     
     public IEnumerator BeginCrafting(CraftableSO craftingRecipe)
     {
-        if (VillagerManager.TryGetVillagerByRole(Roles.Crafter, out Villager villager))
+        List<Roles> roles = new List<Roles>() { Roles.Crafter, Roles.Leader };
+        if (VillagerManager.TryGetVillagerByRole(roles, out Villager villager))
         {
             List<Item> resourcesToRemove = new List<Item>();
 
@@ -57,9 +58,15 @@ public class CraftingManager : MonoBehaviour
                 yield return StartCoroutine(PickUpItems(villager, item));
             }
 
-            yield return StartCoroutine(WalkToCraftingBench(villager,craftingRecipe));
+            yield return StartCoroutine(WalkToVillageHeart(villager,craftingRecipe));
             
             StorageManager.UpdateStorage();
+            villager.CurrentState = VillagerStates.Idle;
+            villager.StartCoroutine(villager.RandomWalk(4));
+        }
+        else
+        {
+            Debug.Log("Cant find anyone");
         }
     }
 
@@ -70,7 +77,8 @@ public class CraftingManager : MonoBehaviour
         Villager.SetVillagerDestination(assignedVillager, location.storageLocation);
         assignedVillager.CurrentState = VillagerStates.Walking;
        
-        while (!Physics.Raycast(new Vector3(assignedVillager.transform.position.x,assignedVillager.transform.position.y+1.5f,assignedVillager.transform.position.z),Vector3.down*2,10,pickupLayermask))
+        // while (!Physics.Raycast(new Vector3(assignedVillager.transform.position.x,assignedVillager.transform.position.y+1.5f,assignedVillager.transform.position.z),Vector3.down*2,10,pickupLayermask))
+        while (Vector3.Distance(assignedVillager.transform.position,location.storageLocation) > 1f)
         {
             yield return null;
         }
@@ -82,14 +90,14 @@ public class CraftingManager : MonoBehaviour
         StorageManager.EmptyStockpileSpace(location);
     }
 
-    private IEnumerator WalkToCraftingBench(Villager assignedVillager, CraftableSO craftingRecipe)
+    private IEnumerator WalkToVillageHeart(Villager assignedVillager, CraftableSO craftingRecipe)
     {
-        var craftingBench = FindAnyObjectByType(typeof(CraftingBench)).GameObject();
+        var villageHeart = FindAnyObjectByType(typeof(VillageHeart)).GameObject();
         Villager.StopVillager(assignedVillager,false);
-        Villager.SetVillagerDestination(assignedVillager, craftingBench.transform.position);
+        Villager.SetVillagerDestination(assignedVillager, villageHeart.transform.position);
         assignedVillager.CurrentState = VillagerStates.Walking;
        
-        while (Vector3.Distance(assignedVillager.transform.position, craftingBench.transform.position) > 2)
+        while (Vector3.Distance(assignedVillager.transform.position, villageHeart.transform.position) > 2)
         {
             yield return null;
         }
@@ -109,6 +117,11 @@ public class CraftingManager : MonoBehaviour
         _gameManager.storageManager.AddToStorage(itemToAdd);
         yield return StartCoroutine(PlaceCraftedItem(assignedVillager, itemToAdd));
         craftedItem.SetActive(true);
+
+        if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.CraftingTutorial)
+        {
+            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.VillagerManagementTutorial;
+        }
     }
     
     private IEnumerator PlaceCraftedItem(Villager assignedVillager, Item location)

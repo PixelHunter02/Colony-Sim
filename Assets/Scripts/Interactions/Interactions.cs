@@ -42,7 +42,8 @@ public class Interactions : MonoBehaviour
 
     private void Update()
     {
-        OutlineInteractable();
+        if(SceneManager.GetActiveScene().name.Equals("New Scene"))
+            OutlineInteractable();
     }
 
     private void OutlineInteractable()
@@ -61,8 +62,12 @@ public class Interactions : MonoBehaviour
         // Detect if there is an outline component on the gameobject, If there is enable it
         if (!hit.transform.TryGetComponent(out Outline outline))
             return;
-        _lastHitOutline = outline;
-        outline.enabled = true;
+
+        if (hit.transform.TryGetComponent(out IInteractable interactable) && interactable.CanInteract())
+        {
+            _lastHitOutline = outline;
+            outline.enabled = true;
+        }
     }
 
     private void ClickContext(InputAction.CallbackContext context)
@@ -82,11 +87,11 @@ public class Interactions : MonoBehaviour
     private void Interactable()
     {
         // Get the information of the object being clicked
-        var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 100))
+        var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
+        if (!Physics.Raycast(ray, out var hit, 1000))
             return;
 
-        if (hit.transform.TryGetComponent(out IInteractable interactable) && !isOverUI)
+        if (hit.transform.TryGetComponent(out IInteractable interactable) && !isOverUI && interactable.CanInteract())
         {
             interactable.OnInteraction();
         }
@@ -106,12 +111,8 @@ public class Interactions : MonoBehaviour
     private void BeginDrawStockpile()
     {
         // Get the information of the object being clicked
-        var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000,ground) || isOverUI ||!_gameManager.level.stockpileMode) 
-            return;
-    
-        // Check if the clicked object is tagged with Ground
-        if (!hit.transform.tag.Equals("Ground"))
+        var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
+        if (!Physics.Raycast(ray, out var hit, 100,ground) || isOverUI ||!_gameManager.level.stockpileMode) 
             return;
 
         _drawingStockpile = true;
@@ -122,8 +123,8 @@ public class Interactions : MonoBehaviour
     
     private IEnumerator DrawStockpileCR()
     {
-        var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (!Physics.Raycast(ray, out var hit, 1000)) 
+        var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
+        if (!Physics.Raycast(ray, out var hit, 100,ground)) 
             yield break;
         
         var startingPoint = vertices[0];
@@ -133,7 +134,6 @@ public class Interactions : MonoBehaviour
             yield break;
         
         var xDistance = startingPoint.x - mousePosition.x;
-        
         if (xDistance > 5)
         {
             mousePosition.x = startingPoint.x - 5;
@@ -142,7 +142,7 @@ public class Interactions : MonoBehaviour
         {
             mousePosition.x = startingPoint.x + 5;
         }
-
+        
         var zDistance = startingPoint.z - mousePosition.z;
         if (zDistance > 5)
         {
@@ -152,10 +152,11 @@ public class Interactions : MonoBehaviour
         {
             mousePosition.z = startingPoint.z + 5;
         }
-
+        
         vertices[1] = new Vector3(Mathf.FloorToInt(mousePosition.x),startingPoint.y,startingPoint.z);
         vertices[2] = new Vector3(startingPoint.x,startingPoint.y,Mathf.FloorToInt(mousePosition.z));
         vertices[3] = new Vector3(Mathf.FloorToInt(mousePosition.x),startingPoint.y,Mathf.FloorToInt(mousePosition.z));
+        
         
         DrawTriangles();
         
@@ -184,7 +185,7 @@ public class Interactions : MonoBehaviour
     
     private void DrawTriangles()
     {
-        if ((vertices[1].x < vertices[0].x && vertices[2].z < vertices[0].z)||(vertices[1].x >= vertices[0].x && vertices[2].z >= vertices[0].z))
+        if ((vertices[1].x < vertices[0].x && vertices[2].z < vertices[0].z)||(vertices[1].x > vertices[0].x && vertices[2].z > vertices[0].z))
         {
             _triangles[0] = 2;
             _triangles[1] = 1;
@@ -218,7 +219,8 @@ public class Interactions : MonoBehaviour
         {
             _gameManager.level.tutorialManager.TutorialStage = TutorialStage.InventoryTutorial;
         }
-        
+
+        _gameManager.level.stockpileMode = false;
         _drawingStockpile = false;
         GenerateStockpile();
         _stockpileMesh.Clear();

@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -51,30 +47,7 @@ public class GameManager : MonoBehaviour
     
     public Grid grid;
     
-    private GameManager _gameManager;
-    
-    private TMP_Text _villagerName;
-    private static Dictionary<Villager, string> villagerLog;
-
-    private TMP_Text roleSelectionTMPText;
-
     public bool IsOverUI() => EventSystem.current.IsPointerOverGameObject();
-
-    // public bool stockpileMode;
-
-    private List<CraftableSO> craftingButtons;
-
-    private Villager lastSelected;
-    #endregion
-
-    #region MainMenu
-
-    private GameObject mainMenuCanvas;
-    private GameObject characterCreatorCanvas;
-
-    [SerializeField] private GameObject characterCreationTemplate;
-    [SerializeField] private Transform characterCreationContainer;
-
     #endregion
 
 
@@ -105,75 +78,10 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= SceneSetup;
     }
-   
-    public void GenerateStats()
-    {
-        for (int i = 0; i < characterCreationContainer.childCount; i++)
-        {
-            Destroy(characterCreationContainer.GetChild(i).gameObject);
-        }
-        
-        foreach (var value in FindObjectsOfType(typeof(Villager)))
-        {
-            var villager = value.GetComponent<Villager>();
-            villagerManager.GenerateNewVillagerStats(villager);
-            
-            var template = Instantiate(characterCreationTemplate, characterCreationContainer);
-            var portrait = template.transform.GetChild(0);
-            portrait.GetComponent<RawImage>().texture = value.GetComponent<Villager>()._portraitRenderTexture;
-            var nameText = portrait.Find("Name").GetComponent<TMP_InputField>();
-            nameText.text = villager.VillagerName;
-            nameText.onEndEdit.AddListener(villager.EditName);
-            portrait.Find("Strength").GetComponent<TMP_Text>().text = $"Strength: {villager.Strength}";
-            portrait.Find("Craft").GetComponent<TMP_Text>().text = $"Craft: {villager.Craft}";
-            portrait.Find("Magic").GetComponent<TMP_Text>().text = $"Magic: {villager.Magic}";
-        }
-    }
-
-    public void NewGame()
-    {
-        if (SceneManager.GetActiveScene().name.Equals(mainMenu))
-        {
-            mainMenuCanvas.SetActive(false);
-            characterCreatorCanvas.SetActive(true);
-            GenerateStats();
-        }
-    }
-
-    public void ContinueToGame()
-    {
-        if (SceneManager.GetActiveScene().name.Equals(mainMenu))
-        {
-            foreach (var villager in GameObject.FindGameObjectsWithTag("Villagers"))
-            {
-                // Debug.Log(villager);
-                VillagerManager.AddVillagerToList(villager.GetComponent<Villager>());
-            }
-
-            // Debug.Log("Changed");
-            SceneManager.LoadScene(gameScene);
-        }
-    }
 
     private void SceneSetup(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name.Equals(mainMenu))
-        {
-            mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            mainMenuCanvas = GameObject.Find("MainMenu");
-            characterCreatorCanvas = GameObject.Find("Character Creation");
-            mainMenuCanvas.SetActive(true);
-            characterCreatorCanvas.SetActive(false);
-        }
-        if (scene.name.Equals("Main Menu 2"))
-        {
-            mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            mainMenuCanvas = GameObject.Find("MainMenu");
-            characterCreatorCanvas = GameObject.Find("Character Creation");
-            mainMenuCanvas.SetActive(true);
-            characterCreatorCanvas.SetActive(false);
-        }
-        else if(scene.name.Equals(gameScene))
+        if(scene.name.Equals(gameScene))
         {
             level = GameObject.Find("LocalSettings").GetComponent<Level>();
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -192,10 +100,4 @@ public enum GameState
     DoubleSpeed,
     TrippleSpeed,
     Building,
-}
-
-public enum ButtonType
-{
-    Craft,
-    Build,
 }

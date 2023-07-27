@@ -5,6 +5,7 @@ using Cinemachine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Level : MonoBehaviour
@@ -58,6 +59,10 @@ public class Level : MonoBehaviour
                     CloseAllUI();
                     ShowInventory();
                     toolbar.SetActive(true);
+                    if (tutorialManager.TutorialStage == TutorialStage.InventoryTutorial)
+                    {
+                        tutorialManager.TutorialStage = TutorialStage.VillageHeartTutorial;
+                    }
                     break;
                 case GameState.DoubleSpeed:
                     break;
@@ -106,6 +111,8 @@ public class Level : MonoBehaviour
 
     public Tutorial tutorialManager;
 
+    public Camera Camera;
+
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -129,8 +136,18 @@ public class Level : MonoBehaviour
         }
 
         _buildingToolbarButtons = new Dictionary<StoredItemSO, GameObject>();
-        
-        tutorialManager.TutorialStage = TutorialStage.StockpileTutorial;
+        tutorialManager.TutorialStage = TutorialStage.VillagerStatsTutorial;
+
+    }
+
+    private void OnEnable()
+    {
+            AddToVillagerLogAction += ShowVillagerInformationOnUpdate;
+    }
+
+    private void OnDisable()
+    {
+            AddToVillagerLogAction -= ShowVillagerInformationOnUpdate;
     }
 
     private void Start()
@@ -151,7 +168,7 @@ public class Level : MonoBehaviour
     }
 
     // On Villager Click
-    public void ShowVillagerInformation(Villager villager)
+    public void ShowVillagerInformationOnClick(Villager villager)
     {
         if (lastSelected == villager && _infoUI.activeSelf)
         {
@@ -178,6 +195,18 @@ public class Level : MonoBehaviour
 
     }
 
+    public void ShowVillagerInformationOnUpdate(Villager villager)
+    {
+        if (lastSelected == villager && _infoUI.activeSelf)
+        {
+            lastSelected = villager;
+            var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
+            villagerLogTMP.text = storedLog;
+            GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
+            _villagerName.text = villager.VillagerName;
+        }
+    }
+
     public void VillagerUI()
     {
         if (GameState is GameState.VillagerManagement)
@@ -202,6 +231,8 @@ public class Level : MonoBehaviour
         }
     }
 
+
+    public static event Action<Villager> AddToVillagerLogAction;
     public static void AddToVillagerLog(Villager villager, string newLog)
     {
         var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
@@ -209,7 +240,7 @@ public class Level : MonoBehaviour
         log.Append(newLog);
         log.Append(Environment.NewLine);
         villagerLog[villager] = log.ToString();
-        // TODO Add To Villager Log In Scene When Built
+        AddToVillagerLogAction?.Invoke(villager);
     }
 
     // Button Set In Inspector

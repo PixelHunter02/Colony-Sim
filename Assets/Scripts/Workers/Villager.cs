@@ -1,13 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class Villager : MonoBehaviour, IInteractable
@@ -29,7 +26,10 @@ public class Villager : MonoBehaviour, IInteractable
         get => _villagerRole;
         set
         {
-            Level.AddToVillagerLog(this, $"{_villagerName} Changed From {_villagerRole} To {value}");
+            if (SceneManager.GetActiveScene().name == "New Scene")
+            {
+                Level.AddToVillagerLog(this, $"{_villagerName} Changed From {_villagerRole} To {value}");
+            }
 
             _villagerRole = value;
 
@@ -44,10 +44,19 @@ public class Villager : MonoBehaviour, IInteractable
                 case Roles.Fighter:
                     break;
                 case Roles.Lumberjack:
+                    if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillagerManagementTutorial)
+                    {
+                        _gameManager.level.tutorialManager.TutorialStage = TutorialStage.BuildingTutorial;
+                    }
                     break;
                 case Roles.Miner:
                     break;
                 case Roles.Crafter:
+                    break;
+                case Roles.Leader:
+                    Strength = 6;
+                    Craft = 6;
+                    Magic = 6;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -134,7 +143,7 @@ public class Villager : MonoBehaviour, IInteractable
                     maleBody.SetActive(true);
                     var randomPositionMale = Random.Range(0, VillagerManager.maleNames.Count);
                     VillagerName = VillagerManager.maleNames[randomPositionMale];
-                    maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = hairColour;
+                    maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
                     break;
                 case Model.Woman:
                     femaleHead.SetActive(true);
@@ -143,7 +152,7 @@ public class Villager : MonoBehaviour, IInteractable
                     maleBody.SetActive(false);
                     var randomPosition = Random.Range(0, VillagerManager.femaleNames.Count);
                     VillagerName = VillagerManager.femaleNames[randomPosition];
-                    femaleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = hairColour;
+                    femaleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -157,7 +166,19 @@ public class Villager : MonoBehaviour, IInteractable
     [SerializeField] private GameObject maleHead;
     [SerializeField] private GameObject femaleBody;
     [SerializeField] private GameObject maleBody;
-    public Material hairColour;
+    private Material _hairColour;
+
+    public Material HairColour
+    {
+        get => _hairColour;
+        set
+        {
+            _hairColour = value;
+            
+            maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
+            femaleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
+        }
+    }
 
     #endregion
 
@@ -184,7 +205,7 @@ public class Villager : MonoBehaviour, IInteractable
         set
         {
             _strength = value;
-            Debug.Log($"A New Craft Value Has Been Assigned! The new value is {_strength}");
+            Debug.Log($"A New Strength Value Has Been Assigned! The new value is {_strength}");
         }
     }
     
@@ -206,7 +227,7 @@ public class Villager : MonoBehaviour, IInteractable
         set
         {
             _magic = value;
-            Debug.Log($"A New Craft Value Has Been Assigned! The new value is {_craft}");
+            Debug.Log($"A New Magic Value Has Been Assigned! The new value is {_magic}");
         }
     }
 
@@ -225,9 +246,12 @@ public class Villager : MonoBehaviour, IInteractable
 
         TasksToQueue = new List<IEnumerator>();
         _animator = transform.GetChild(0).GetComponent<Animator>();
-        _portraitRenderTexture = new RenderTexture(256,256, 8);
-        portraitCamera.targetTexture = _portraitRenderTexture;
-
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        {
+            _portraitRenderTexture = new RenderTexture(256, 256, 8);
+            portraitCamera.targetTexture = _portraitRenderTexture;
+            _gameManager.villagerManager.GenerateNewVillagerStats(this);
+        }
     }
 
     private void Start()
@@ -262,9 +286,12 @@ public class Villager : MonoBehaviour, IInteractable
     
     private void Update()
     {
-
-        objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
-        objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        {
+            objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
+            objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
+        }
+        
         if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
         {
             foreach (var task in TasksToQueue)
@@ -412,8 +439,22 @@ public class Villager : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        _gameManager.level.ShowVillagerInformation(this);
+        _gameManager.level.ShowVillagerInformationOnClick(this);
         _gameManager.uiManager.SetVillagerStatsUI(this);
+        if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.VillagerStatsTutorial)
+        {
+            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.StockpileTutorial;
+        }
+    }
+
+    public bool CanInteract()
+    {
+        if (!_gameManager.level.stockpileMode)
+        {
+            return true;
+        }
+
+        return true;
     }
 
 
@@ -427,7 +468,7 @@ public class Villager : MonoBehaviour, IInteractable
         _villagerTasks.Clear();
     }
 
-    private IEnumerator RandomWalk(float size)
+    public IEnumerator RandomWalk(float size)
     {
         agent.isStopped = false;
         yield return new WaitForSeconds(Random.Range(0.1f, 8f));
@@ -460,13 +501,13 @@ public class Villager : MonoBehaviour, IInteractable
 
 public enum Roles 
 {
-    Default,
-    Lumberjack,
-    Farmer,
-    Fighter,
-    Miner,
-    Crafter,
-    Leader,
+    Default = 0,
+    Lumberjack = 1,
+    Farmer = 2,
+    Fighter = 3,
+    Miner = 4,
+    Crafter = 5,
+    Leader = 6,
 }
 
 public enum VillagerStates

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
@@ -25,7 +26,8 @@ public class InputManager : MonoBehaviour
         // Activate Input Actions
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable(); 
-        playerInputActions.UI.Enable(); 
+        playerInputActions.UI.Enable();  
+        
         
         // Get reference to Game Manager
         _gameManager = GameManager.Instance;
@@ -95,7 +97,8 @@ public class InputManager : MonoBehaviour
         if (Physics.Raycast(ray, out var hit, 1000, _layerMask) && !overUI) 
             return hit.point;
 
-        return Vector3.zero;
+        return Vector3.zero;  
+
     }
     
     public Vector3 GetMouseToWorldPositionCursor()

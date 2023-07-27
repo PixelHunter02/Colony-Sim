@@ -115,7 +115,7 @@ public class TaskHandler : MonoBehaviour
 
     public IEnumerator RunTaskCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
-        yield return StartCoroutine(WalkToLocationCR(assignedVillager, resourceToPickUp,0.5f));
+        yield return StartCoroutine(WalkToLocationCR(assignedVillager, resourceToPickUp,2f));
         yield return StartCoroutine(VillagerPicksUpItemCR(assignedVillager, resourceToPickUp));
         yield return StartCoroutine(VillagerWalksToStockpilePointCR(assignedVillager, resourceToPickUp));
     }
@@ -194,7 +194,7 @@ public class TaskHandler : MonoBehaviour
                 yield return StartCoroutine(PickUpItems(assignedVillager, item));
             }
 
-            yield return WalkToLocationCR(assignedVillager, buildStats,1);
+            yield return WalkToLocationCR(assignedVillager, buildStats,2);
             yield return new WaitForSeconds(3);
             assignedVillager.CurrentState = VillagerStates.Idle;
             buildStats.building.SetActive(false);

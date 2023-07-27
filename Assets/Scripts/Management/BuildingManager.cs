@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class BuildingManager : MonoBehaviour
 {
@@ -30,18 +31,20 @@ public class BuildingManager : MonoBehaviour
     private void OnEnable()
     {
         _gameManager.inputManager.playerInputActions.Player.Select.performed += PlaceBuilding;
-        _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed += RotateBuilding;
+        _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed += RotateBuilding; 
     }
     
     private void OnDisable()
     {
+
         _gameManager.inputManager.playerInputActions.Player.Select.performed -= PlaceBuilding;
         _gameManager.inputManager.playerInputActions.Player.RotateBuilding.performed -= RotateBuilding;
     }
 
     private void Update()
     {
-        MovePreview(previewGO);
+        if(SceneManager.GetActiveScene().name.Equals("New Scene"))
+            MovePreview(previewGO);
     }
 
     public void PreviewSetup(GameObject go)

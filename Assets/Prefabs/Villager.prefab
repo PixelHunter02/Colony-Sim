@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6068519437236834902}
   - component: {fileID: 8610430124885998485}
   - component: {fileID: 2921920565365457082}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: CurrentTaskImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4560290660359415905}
   - component: {fileID: 5900640399827926979}
   - component: {fileID: 4031600670431456204}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AttackZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 4213533325007479972}
   - component: {fileID: 8326228796090527385}
   - component: {fileID: 1830815960255000755}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 2523168068553506058}
   - component: {fileID: 6818001678178093209}
   - component: {fileID: 6727841171062952415}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -533,7 +533,7 @@ GameObject:
   - component: {fileID: 7841109828771768428}
   - component: {fileID: 1722743990018580258}
   - component: {fileID: 4923702141826543167}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Outer Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -608,7 +608,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6052139655963494888}
   - component: {fileID: 4118414458716063183}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -699,7 +699,7 @@ GameObject:
   - component: {fileID: 5538612967126553879}
   - component: {fileID: 6750741240123368866}
   - component: {fileID: 5661545759303701057}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Info
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -778,7 +778,7 @@ GameObject:
   - component: {fileID: 6696628926384849426}
   - component: {fileID: 2775174051868001849}
   - component: {fileID: 2624682025400551988}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -929,7 +929,6 @@ MonoBehaviour:
   maleHead: {fileID: 442440180155276834}
   femaleBody: {fileID: 3561497691509820874}
   maleBody: {fileID: 8142520453675245368}
-  hairColour: {fileID: 0}
   health: 0
   portraitCamera: {fileID: 8934336798763194755}
   _portraitRenderTexture: {fileID: 0}
@@ -985,7 +984,7 @@ GameObject:
   - component: {fileID: 2239069195729087846}
   - component: {fileID: 1317724679272624016}
   - component: {fileID: 5927168969546072989}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Inner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1063,7 +1062,7 @@ GameObject:
   - component: {fileID: 6178981825281614596}
   - component: {fileID: 1365641201020030349}
   - component: {fileID: 90865722020924299}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: AwarenessZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1130,7 +1129,7 @@ GameObject:
   - component: {fileID: 486424558935981913}
   - component: {fileID: 4406384532701678060}
   - component: {fileID: 9164874258671238722}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Job
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1265,7 +1264,7 @@ GameObject:
   - component: {fileID: 963088311332637383}
   - component: {fileID: 2662016347081285664}
   - component: {fileID: 1573504854336847926}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Job (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1339,7 +1338,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8820542580889889372}
-  m_Layer: 6
+  m_Layer: 2
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}

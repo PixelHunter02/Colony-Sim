@@ -66,14 +66,13 @@ public class VillagerManager : MonoBehaviour
             {
                 if (villager.CurrentRole == role)
                 {
-                    if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count ||
-                        villager.CurrentState is VillagerStates.Idle)
+                    if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count)
                     {
                         villagerToReturn = villager;
                     }
                 }
             }
-            else if (villager.CurrentRole == role && villager.CurrentState is VillagerStates.Idle)
+            else if (villager.CurrentRole == role)
             {
                 villagerToReturn = villager;
             }
@@ -92,7 +91,7 @@ public class VillagerManager : MonoBehaviour
                 {
                     if (villager.CurrentRole == role)
                     {
-                        if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count ||
+                        if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count||
                             villager.CurrentState is VillagerStates.Idle)
                         {
                             villagerToReturn = villager;
@@ -137,7 +136,7 @@ public class VillagerManager : MonoBehaviour
             villager.Craft = Random.Range(1, 7);
             villager.Magic = Random.Range(1, 7);
             villager.Strength = Random.Range(1, 7);
-            villager.hairColour = hairColours[Random.Range(0, hairColours.Length)];
+            villager.HairColour = hairColours[Random.Range(0, hairColours.Length)];
 
             maleNames = null;
             femaleNames = null;
@@ -175,9 +174,10 @@ public class VillagerManager : MonoBehaviour
         villager.GetComponent<Villager>().Craft = villagerToSpawn.Craft;
         villager.GetComponent<Villager>().Magic = villagerToSpawn.Magic;
         villager.GetComponent<Villager>().Strength = villagerToSpawn.Strength;
-        villager.GetComponent<Villager>().hairColour = villagerToSpawn.hairColour;
+        villager.GetComponent<Villager>().HairColour = villagerToSpawn.HairColour;
         villager.GetComponent<Villager>().Gender = villagerToSpawn.Gender;
         villager.GetComponent<Villager>().VillagerName = villagerToSpawn.VillagerName;
+        villager.GetComponent<Villager>().CurrentRole = villagerToSpawn.CurrentRole;
         villagerToReturn = villager.GetComponent<Villager>();
     }
 }

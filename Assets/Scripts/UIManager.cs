@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject villagerManagementTemplate;
     [SerializeField] private Transform villagerManagementContainer;
     private Dictionary<Villager, GameObject> templateDictionary;
-
+    
     private void Awake()
     {
         templateDictionary = new Dictionary<Villager, GameObject>();
@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour
                 template.Find("StatsBorder").Find("Craft").GetChild(0).GetComponent<TMP_Text>().text =
                     villager.Craft.ToString();
                 var dropdown = template.Find("Dropdown").GetComponent<TMP_Dropdown>();
+                dropdown.value = (int)villager.CurrentRole;
                 dropdown.onValueChanged.AddListener(delegate { RoleChanged(dropdown.value,villager); });
             }
             else
@@ -65,7 +66,15 @@ public class UIManager : MonoBehaviour
                 template.Find("StatsBorder").Find("Craft").GetChild(0).GetComponent<TMP_Text>().text =
                     villager.Craft.ToString();
                 var dropdown = template.Find("Dropdown").GetComponent<TMP_Dropdown>();
-                dropdown.onValueChanged.AddListener(delegate { RoleChanged(dropdown.value,villager); });
+                dropdown.value = (int)villager.CurrentRole;
+                if (dropdown.value != (int)Roles.Leader)
+                {
+                    dropdown.onValueChanged.AddListener(delegate { RoleChanged(dropdown.value,villager); });
+                }
+                else
+                {
+                    dropdown.interactable = false;
+                }
                 templateDictionary.Add(villager,template.gameObject);    
             }
         }

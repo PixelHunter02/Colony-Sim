@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
+public class ObjectInformation : MonoBehaviour, IStorable
 {
     [SerializeField] private StoredItemSO _itemSO;
     public StoredItemSO Item
@@ -27,14 +27,6 @@ public class ObjectInformation : MonoBehaviour, IStorable, IInteractable
         FindAvailableVillager();
     }
 
-    public void OnInteraction()
-    {
-        //if(!CanBeStored())
-        //    return;
-
-        //FindAvailableVillager();
-    }
-    
     public void AssignStorage()
     {
         var location = StorageManager.storageLocations.ElementAt(0);

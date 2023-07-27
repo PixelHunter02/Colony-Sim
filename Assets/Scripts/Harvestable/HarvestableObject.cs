@@ -22,6 +22,16 @@ public class HarvestableObject : MonoBehaviour, IInteractable
         _gameManager.taskHandler.queuedTasks.Enqueue(task);
     }
 
+    public bool CanInteract()
+    {
+        if (!_gameManager.level.stockpileMode)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public IEnumerator CRSpawnHarvestDrops()
     {
         const float pushIntensity = 0.5f;
