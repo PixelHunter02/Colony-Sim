@@ -1,13 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
-using Cinemachine;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -142,8 +137,6 @@ public class GameManager : MonoBehaviour
             mainMenuCanvas.SetActive(false);
             characterCreatorCanvas.SetActive(true);
             GenerateStats();
-            
-            
         }
     }
 
@@ -172,22 +165,20 @@ public class GameManager : MonoBehaviour
             mainMenuCanvas.SetActive(true);
             characterCreatorCanvas.SetActive(false);
         }
+        if (scene.name.Equals("Main Menu 2"))
+        {
+            mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            mainMenuCanvas = GameObject.Find("MainMenu");
+            characterCreatorCanvas = GameObject.Find("Character Creation");
+            mainMenuCanvas.SetActive(true);
+            characterCreatorCanvas.SetActive(false);
+        }
         else if(scene.name.Equals(gameScene))
         {
             level = GameObject.Find("LocalSettings").GetComponent<Level>();
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
             uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         }
-    }
-
-    public static void ButtonBuilder(Transform contentHolder, ButtonType type, GameObject button, StoredItemSO[] itemToBuild)
-    {
-        foreach (var item in itemToBuild)
-        {
-            var newButton = Instantiate(button, contentHolder);
-            newButton.GetComponent<Button>().onClick.AddListener(() => Instance.buildingManager.currentBuilding = item);
-            newButton.GetComponent<Button>().onClick.AddListener(() => Instance.buildingManager.PreviewSetup(Instance.buildingManager.currentBuilding.prefab));
-        } 
     }
 }
 

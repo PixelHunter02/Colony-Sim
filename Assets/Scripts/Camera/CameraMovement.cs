@@ -130,8 +130,3 @@ public class CameraMovement : MonoBehaviour
     }
 }
 
-public enum PlayerState
-{
-    MainCamera,
-    BuildMode,
-}

@@ -27,27 +27,25 @@ public class Villager : MonoBehaviour, IInteractable
         get => _villagerRole;
         set
         {
+            Level.AddToVillagerLog(this, $"{_villagerName} Changed From {_villagerRole} To {value}");
+
             _villagerRole = value;
+
+            Debug.Log($"{_villagerName} Changed To {_villagerRole}");
 
             switch (_villagerRole)
             {
                 case Roles.Default:
-                    Debug.Log($"{_villagerName} Changed To {_villagerRole}");
                     break;
                 case Roles.Farmer:
-                    Debug.Log($"{_villagerName} Changed To {_villagerRole}");
                     break;
                 case Roles.Fighter:
-                    Debug.Log($"{_villagerName} Changed To {_villagerRole}");
                     break;
                 case Roles.Lumberjack:
-                    Debug.Log($"{_villagerName} Changed To {_villagerRole}");
                     break;
                 case Roles.Miner:
-                    Debug.Log($"{_villagerName} Changed To {_villagerRole}");
                     break;
                 case Roles.Crafter:
-                    Debug.Log($"{_villagerName} Changed To {_villagerRole}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -94,11 +92,6 @@ public class Villager : MonoBehaviour, IInteractable
     /// The NavMeshAgent
     /// </summary>
     [FormerlySerializedAs("_agent")] public NavMeshAgent agent;
-
-    /// <summary>
-    /// Villager Image
-    /// </summary>
-    private Image _roleImage;
     
     /// <summary>
     /// Reference To The Animator Component of the Villager
@@ -109,7 +102,7 @@ public class Villager : MonoBehaviour, IInteractable
     
     private bool _runningTasks;
 
-    private List<IEnumerator> _tasks;
+    private List<IEnumerator> _villagerTasks;
 
     public List<IEnumerator> TasksToQueue 
     { 
@@ -219,14 +212,11 @@ public class Villager : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-<<<<<<< Updated upstream
-=======
         monsters = new List<GameObject>();
->>>>>>> Stashed changes
         health = 20;
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
-        _tasks = new List<IEnumerator>();
+        _villagerTasks = new List<IEnumerator>();
 
         TasksToQueue = new List<IEnumerator>();
         _animator = transform.GetChild(0).GetComponent<Animator>();
@@ -242,11 +232,11 @@ public class Villager : MonoBehaviour, IInteractable
             transform.Find("FemaleCharacterPBR").Find("PortraitCamera").gameObject.SetActive(false);
             TryGetComponent(out Outline outline);
             outline.UpdateMaterialProperties();
-            if (_tasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
+            if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
             {
                 foreach (var task in TasksToQueue)
                 {
-                    _tasks.Add(task);
+                    _villagerTasks.Add(task);
                 }
                 TasksToQueue.Clear();
             }
@@ -267,18 +257,14 @@ public class Villager : MonoBehaviour, IInteractable
     
     private void Update()
     {
-<<<<<<< Updated upstream
-        if (_tasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
-=======
 
         objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
         objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
-        if (tasks.Count == 0 && !runningTasks && tasksToQueue.Count > 0)
->>>>>>> Stashed changes
+        if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
         {
             foreach (var task in TasksToQueue)
             {
-                _tasks.Add(task);
+                _villagerTasks.Add(task);
             }
             TasksToQueue.Clear();
             _runningTasks = true;
@@ -293,7 +279,7 @@ public class Villager : MonoBehaviour, IInteractable
             }
                 if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
                 {
-                    if (villagerRole == Roles.Fighter)
+                    if (_villagerRole == Roles.Fighter)
                     {
                         StartCoroutine(AttackMonster(3));
                     }
@@ -338,8 +324,8 @@ public class Villager : MonoBehaviour, IInteractable
             GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
             for (int i = 0; i < objInTriggerZone.Count; i++)
             {
-                print(villagerName + " has come into contact with " + objInTriggerZone[i]);
-                print(villagerName + " is looking for " + target);
+                print(_villagerName + " has come into contact with " + objInTriggerZone[i]);
+                print(_villagerName + " is looking for " + target);
                 if (objInTriggerZone[i] == target)
                 {
                     //transform.LookAt(target.transform);
@@ -395,12 +381,12 @@ public class Villager : MonoBehaviour, IInteractable
 
     private IEnumerator RunTasks()
     {
-        foreach (var task in _tasks)
+        foreach (var task in _villagerTasks)
         {
             yield return task;
         }
         _runningTasks = false;
-        _tasks.Clear();
+        _villagerTasks.Clear();
     }
 
     private IEnumerator RandomWalk(float size)
@@ -417,7 +403,7 @@ public class Villager : MonoBehaviour, IInteractable
             yield return null;
         }
        
-        if (_tasks.Count > 0 || TasksToQueue.Count > 0 || CurrentState is not VillagerStates.Idle) 
+        if (_villagerTasks.Count > 0 || TasksToQueue.Count > 0 || CurrentState is not VillagerStates.Idle) 
         {
             yield break;
         }
@@ -442,6 +428,7 @@ public enum Roles
     Fighter,
     Miner,
     Crafter,
+    Leader,
 }
 
 public enum VillagerStates

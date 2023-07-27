@@ -1,5 +1,3 @@
-using System;
-using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,30 +11,6 @@ public class InputManager : MonoBehaviour
     
     
     private InputMode _inputMode;
-    
-    // public InputMode InputMode
-    // {
-    //     get => _inputMode;
-    //     set
-    //     {
-    //         _inputMode = value;
-    //         
-    //         switch (_inputMode)
-    //         {
-    //             case InputMode.DefaultMode:
-    //                 
-    //                 break;
-    //             case InputMode.BuildMode:
-    //                 
-    //                 _gameManager.GameState = GameState.Building;
-    //                 break;
-    //             case InputMode.Stockpile:
-    //                 break;
-    //         }
-    //     }
-    // }
-
-    public CraftableSO itemBeingBuilt;
     
     private GameManager _gameManager;
 

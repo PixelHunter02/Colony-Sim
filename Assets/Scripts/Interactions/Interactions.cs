@@ -6,8 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class Interactions : MonoBehaviour
 {
-    // private PlayerInputActions _playerInputActions;
-
     #region Stockpile Variables
 
     [SerializeField] private Vector3[] vertices;
@@ -94,37 +92,6 @@ public class Interactions : MonoBehaviour
         }
     }
 
-    public static void SetNewSelectedVillager(Villager villager)
-    {
-        //Check if Previously Selected = null
-        if (!previouslySelected)
-        {
-            //Assign Previously Selected If previously Selected is null
-            previouslySelected = villager;
-            SetAllChildLayers(villager.gameObject, 6);
-            villager.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(true);
-        }
-        // If Previously Selected Is not null
-        else
-        {
-            // set the layer of previously selected to be 0
-            SetAllChildLayers(previouslySelected.gameObject, 0);
-            previouslySelected.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(false);
-            previouslySelected = villager;
-            SetAllChildLayers(previouslySelected.gameObject, 6);
-            previouslySelected.transform.GetChild(0).Find("PortraitCamera").gameObject.SetActive(true);
-        }
-    }
-
-    private static void SetAllChildLayers(GameObject root, int layer)
-    {
-        var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
-        foreach (var child in children)
-        {
-            child.gameObject.layer = layer;
-        }
-    }
-
     #region Stockpiles
 
     private void InitializeStockpiles()
@@ -149,7 +116,6 @@ public class Interactions : MonoBehaviour
 
         _drawingStockpile = true;
         var point = new Vector3(Mathf.FloorToInt(hit.point.x), hit.point.y + 0.1f, Mathf.FloorToInt(hit.point.z));
-        //var point = grid.WorldToCell(hit.transform.position);
         vertices[0] = point;
         StartCoroutine(DrawStockpileCR());
     }
@@ -167,6 +133,7 @@ public class Interactions : MonoBehaviour
             yield break;
         
         var xDistance = startingPoint.x - mousePosition.x;
+        
         if (xDistance > 5)
         {
             mousePosition.x = startingPoint.x - 5;
@@ -175,7 +142,7 @@ public class Interactions : MonoBehaviour
         {
             mousePosition.x = startingPoint.x + 5;
         }
-        
+
         var zDistance = startingPoint.z - mousePosition.z;
         if (zDistance > 5)
         {
@@ -185,12 +152,10 @@ public class Interactions : MonoBehaviour
         {
             mousePosition.z = startingPoint.z + 5;
         }
-        
+
         vertices[1] = new Vector3(Mathf.FloorToInt(mousePosition.x),startingPoint.y,startingPoint.z);
         vertices[2] = new Vector3(startingPoint.x,startingPoint.y,Mathf.FloorToInt(mousePosition.z));
         vertices[3] = new Vector3(Mathf.FloorToInt(mousePosition.x),startingPoint.y,Mathf.FloorToInt(mousePosition.z));
-
-        
         
         DrawTriangles();
         
@@ -219,7 +184,7 @@ public class Interactions : MonoBehaviour
     
     private void DrawTriangles()
     {
-        if ((vertices[1].x < vertices[0].x && vertices[2].z < vertices[0].z)||(vertices[1].x > vertices[0].x && vertices[2].z > vertices[0].z))
+        if ((vertices[1].x < vertices[0].x && vertices[2].z < vertices[0].z)||(vertices[1].x >= vertices[0].x && vertices[2].z >= vertices[0].z))
         {
             _triangles[0] = 2;
             _triangles[1] = 1;
@@ -247,6 +212,11 @@ public class Interactions : MonoBehaviour
         {
             _drawingStockpile = false;
             return;
+        }
+     
+        if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.StockpileTutorial)
+        {
+            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.InventoryTutorial;
         }
         
         _drawingStockpile = false;

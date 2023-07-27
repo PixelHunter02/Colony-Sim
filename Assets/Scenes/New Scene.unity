@@ -1027,24 +1027,17 @@ MonoBehaviour:
     type: 3}
   _infoUI: {fileID: 913285451}
   inventoryUI: {fileID: 1193775080}
-  villagerManagementUI: {fileID: 346983238}
   villagerSelectUI: {fileID: 346983238}
-  villagerManagementCell: {fileID: 5701017855162931229, guid: cc0d58f76000dfd4e9987f01fecd809f,
-    type: 3}
-  villagerManagementContainer: {fileID: 264878756}
-  roleButtons:
-  - {fileID: 833641466}
-  - {fileID: 1924877350}
-  - {fileID: 233834364}
-  - {fileID: 718399252}
   roleAssignmentUI: {fileID: 1031717193}
   villagerLogTMP: {fileID: 953701118}
+  inventoryMenu: {fileID: 2083795508}
   stockpileMode: 0
   craftingButtonTemplate: {fileID: 6881741811815660555, guid: 40e2d4c1ad95a18488d4117fa3963b39,
     type: 3}
   craftingContainer: {fileID: 1500315155}
   buildingToolbar: {fileID: 2041756124}
   toolbar: {fileID: 1113877504}
+  tutorialManager: {fileID: 259851042}
 --- !u!1001 &151475401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2025,6 +2018,55 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37c0a096a485b0f4aa8374fb106d5121, type: 3}
+--- !u!1 &259851041
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 259851043}
+  - component: {fileID: 259851042}
+  m_Layer: 0
+  m_Name: TutorialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &259851042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259851041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a7c7a795d591b4a9a2b1b2b8dc42ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stockpile: {fileID: 1203622225}
+  _inventory: {fileID: 868289828}
+  _crafting: {fileID: 1460142138}
+  _villagerManagement: {fileID: 1706617387}
+  _building: {fileID: 1213148137}
+--- !u!4 &259851043
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259851041}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2112.0337, y: 493.51114, z: 593718.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &264878755
 GameObject:
   m_ObjectHideFlags: 0
@@ -37455,7 +37497,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9217554b75ae03e42b2ad35650494293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: {fileID: 7016351038023154119, guid: 475e9bc77a16a344a8468b3c691938ce, type: 3}
   craftingRecipes:
   - {fileID: 11400000, guid: 26231ffc77dfa6a4789c94b9df181b1d, type: 2}
   - {fileID: 11400000, guid: 8ecdd272aa8c67843939f7b9753806e2, type: 2}
@@ -39561,7 +39602,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220dd8b1e83103a4db9388d247601641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBeingBuilt: {fileID: 0}
   interactDistance: 25
   _layerMask:
     serializedVersion: 2
@@ -39630,7 +39670,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124862098}
-  m_LocalRotation: {x: -0, y: 3.5527133e-15, z: -1.3322675e-15, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -44603,8 +44643,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896196924}
-  m_LocalRotation: {x: 0.4344402, y: 0.000000037282383, z: -0.000000034101905, w: 0.90070075}
-  m_LocalPosition: {x: -1.9539925e-14, y: 21.072178, z: -6.321653}
+  m_LocalRotation: {x: 0.4344402, y: 0.000000011889915, z: -0.000000010875616, w: 0.90070075}
+  m_LocalPosition: {x: 0, y: 21.072178, z: -6.321653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -45886,7 +45926,7 @@ GameObject:
   - component: {fileID: 2083795510}
   - component: {fileID: 2083795509}
   m_Layer: 5
-  m_Name: Image
+  m_Name: InventoryContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45940,7 +45980,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 40
     m_Right: 0
-    m_Top: 80
+    m_Top: 40
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0

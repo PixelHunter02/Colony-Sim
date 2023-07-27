@@ -11,7 +11,6 @@ public class CraftingManager : MonoBehaviour
     private PlayerInputActions playerInputActions;
     
     private GameManager _gameManager;
-    [SerializeField] private GameObject test;
 
     [SerializeField] private CraftableSO[] craftingRecipes;
     public CraftableSO[] CraftingRecipes => craftingRecipes;

@@ -4,7 +4,6 @@ using System.Text;
 using Cinemachine;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -67,7 +66,7 @@ public class Level : MonoBehaviour
                 case GameState.Building:
                     CloseAllUI();
                     buildingToolbar.SetActive(true);
-                    GameManager.ButtonBuilder(buildContentHolder, ButtonType.Build, buildButtonTemplate, _gameManager.buildingManager.buildings);
+                    AddBuildingsToBuildingToolbar();
                     mainVCamera.gameObject.SetActive(false);
                     buildVCamera.gameObject.SetActive(true);
                     break;
@@ -83,19 +82,13 @@ public class Level : MonoBehaviour
     [SerializeField] private GameObject _infoUI;
     private TMP_Text _villagerName;
     [SerializeField] private GameObject inventoryUI;
-    [SerializeField] private GameObject villagerManagementUI;
     [SerializeField] private GameObject villagerSelectUI;
-
-    [SerializeField] private GameObject villagerManagementCell;
-    [SerializeField] private Transform villagerManagementContainer;
-
-    [SerializeField] private Button[] roleButtons;
+    
     [SerializeField] private GameObject roleAssignmentUI;
 
     private static Dictionary<Villager, string> villagerLog;
     [SerializeField] private TMP_Text villagerLogTMP;
-
-    private TMP_Text roleSelectionTMPText;
+    public Transform inventoryMenu;
     
     public bool stockpileMode;
 
@@ -109,10 +102,13 @@ public class Level : MonoBehaviour
     [SerializeField] private GameObject toolbar;
     #endregion
 
+    private Dictionary<StoredItemSO, GameObject> _buildingToolbarButtons;
+
+    public Tutorial tutorialManager;
+
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
-        roleSelectionTMPText = GameObject.Find("RoleText").GetComponent<TMP_Text>();
         _infoUI.SetActive(false);
         CloseAllUI();
         toolbar.SetActive(true);
@@ -131,6 +127,10 @@ public class Level : MonoBehaviour
         {
             VillagerManager.AddVillagerToList(villager);
         }
+
+        _buildingToolbarButtons = new Dictionary<StoredItemSO, GameObject>();
+        
+        tutorialManager.TutorialStage = TutorialStage.StockpileTutorial;
     }
 
     private void Start()
@@ -277,6 +277,22 @@ public class Level : MonoBehaviour
             craftingButtons.Add(buttonRef.recipeReference);
             button.GetComponent<Button>().onClick.AddListener(() =>
                 StartCoroutine(_gameManager.craftingManager.BeginCrafting(buttonRef.recipeReference)));
+        }
+    }
+
+
+    private void AddBuildingsToBuildingToolbar()
+    {
+        foreach (var building in _gameManager.buildingManager.buildings)
+        {
+            if (_buildingToolbarButtons.ContainsKey(building))
+            {
+                continue;
+            }
+            var newButton = Instantiate(buildButtonTemplate, buildContentHolder);
+            newButton.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.currentBuilding = building);
+            newButton.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.PreviewSetup(_gameManager.buildingManager.currentBuilding.prefab));
+            _buildingToolbarButtons.TryAdd(building,newButton);
         }
     }
 }

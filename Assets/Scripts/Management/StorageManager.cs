@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StorageManager : MonoBehaviour
@@ -29,12 +26,22 @@ public class StorageManager : MonoBehaviour
     public static event Action DrawInventoryAction;
     private void Awake()
     {
+        SceneManager.sceneLoaded += GetReferences;
         storageLocations = new HashSet<Vector3>();
         usedSpaces = new HashSet<Vector3>();
         itemList = new List<Item>();
         _gameManager = GameManager.Instance;
         itemsInList = new Dictionary<StoredItemSO, int>();
         inventorySlot = new Dictionary<StoredItemSO, GameObject>();
+    }
+
+    private void GetReferences(Scene scene, LoadSceneMode mode)
+    {
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        {
+
+            inventoryMenu = _gameManager.level.inventoryMenu;
+        }
     }
 
     private void OnEnable()
@@ -46,7 +53,7 @@ public class StorageManager : MonoBehaviour
     private void OnDisable()
     {
         Stockpile.OnCreateStorageCellEvent -= UpdateStorage;
-        DrawInventoryAction += DrawInventory;
+        DrawInventoryAction -= DrawInventory;
     }
     
     // Used To Add An Item To Storage
@@ -59,9 +66,13 @@ public class StorageManager : MonoBehaviour
     // Create the buttons for the inventory
     public void DrawInventory()
     {
+        Debug.Log("Draw Inv");
+        Debug.Log(itemsInList.Count);
         itemsInList.Clear();
+        Debug.Log(itemsInList.Count);
         foreach (var item in itemList)
         {
+            Debug.Log(item.itemSO.objectName);
             if (!itemsInList.ContainsKey(item.itemSO) && !inventorySlot.ContainsKey(item.itemSO))
             {
                 // Create a new slot
