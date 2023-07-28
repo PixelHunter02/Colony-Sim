@@ -78,7 +78,7 @@ public class Tutorial : MonoBehaviour
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Now we have another villager we should give them a role, we dont want them getting bored now do we!");
                     Level.AddToVillagerLog(villager,"");
-                    Level.AddToVillagerLog(villager,"Sadly, we dont have anything we can give them to do, why dont you go ahead and craft an axe in the crafting menu, you can access this by clicking the anvil in your toolbar. This will allow us to assign them the role of lumberjack. We will require 2 sticks and 1 stone to do this, luckily there was some laying on the ground which I went ahead and picked up");
+                    Level.AddToVillagerLog(villager,"Sadly, we dont have anything we can give them to do, why dont you go ahead and craft an axe in the crafting menu, you can access this by clicking the anvil in your toolbar. This will allow us to assign them the role of lumberjack. We will require 2 sticks and 1 stone to craft an axe, luckily there was some laying on the ground which I went ahead and picked up");
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = true;

@@ -26,7 +26,11 @@ public class Interactions : MonoBehaviour
     private GameManager _gameManager;
 
     public LayerMask ground;
-    
+
+    Vector3Int oldMousePosition;
+    RaycastHit rayhit;
+
+
     private void Awake()
     {
         InitializeStockpiles();
@@ -42,7 +46,7 @@ public class Interactions : MonoBehaviour
 
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
             OutlineInteractable();
     }
 
@@ -76,7 +80,7 @@ public class Interactions : MonoBehaviour
         {
             case InputActionPhase.Performed:
                 Interactable();
-                BeginDrawStockpile();
+                StartCoroutine(BeginDrawStockpile());
                 break;
             case InputActionPhase.Canceled:
                 PlaceStockpile();
@@ -108,31 +112,43 @@ public class Interactions : MonoBehaviour
         _triangles = new int[6];
     }
 
-    private void BeginDrawStockpile()
+    private IEnumerator BeginDrawStockpile()
     {
         // Get the information of the object being clicked
         var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 100,ground) || isOverUI ||!_gameManager.level.stockpileMode) 
-            return;
+            yield break;
 
         _drawingStockpile = true;
         var point = new Vector3(Mathf.FloorToInt(hit.point.x), hit.point.y + 0.1f, Mathf.FloorToInt(hit.point.z));
         vertices[0] = point;
-        StartCoroutine(DrawStockpileCR());
+        while (_drawingStockpile)
+        {
+            yield return StartCoroutine(DrawStockpileCR());
+        }
     }
     
     private IEnumerator DrawStockpileCR()
     {
         var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 100,ground)) 
-            yield break;
+            yield return null;
         
         var startingPoint = vertices[0];
         var mousePosition = hit.point;
+
+        if(oldMousePosition == Vector3Int.FloorToInt(mousePosition))
+        {
+            yield break;
+        }
         
+        oldMousePosition = Vector3Int.FloorToInt(hit.point);
+
         if (!_drawingStockpile) 
             yield break;
-        
+
+        Debug.Log("Drawing Stockpile");
+
         var xDistance = startingPoint.x - mousePosition.x;
         if (xDistance > 5)
         {
@@ -160,8 +176,9 @@ public class Interactions : MonoBehaviour
         
         DrawTriangles();
         
-        GetComponent<MeshFilter>().mesh.RecalculateBounds();
-        GetComponent<MeshFilter>().mesh.RecalculateNormals();
+        _stockpileMesh.RecalculateBounds();
+        _stockpileMesh.RecalculateNormals();
+        
         
         //Assign Mesh Information
         _stockpileMesh.vertices = vertices;

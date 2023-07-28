@@ -64,7 +64,7 @@ public class VillagerManager : MonoBehaviour
         {
             if (villagerToReturn)
             {
-                if (villager.CurrentRole == role)
+                if (villager.CurrentRole == role || villager.CurrentRole == Roles.Leader)
                 {
                     if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count)
                     {
@@ -72,7 +72,7 @@ public class VillagerManager : MonoBehaviour
                     }
                 }
             }
-            else if (villager.CurrentRole == role)
+            else if (villager.CurrentRole == role || villager.CurrentRole == Roles.Leader)
             {
                 villagerToReturn = villager;
             }
@@ -89,7 +89,7 @@ public class VillagerManager : MonoBehaviour
             {
                 if (villagerToReturn)
                 {
-                    if (villager.CurrentRole == role)
+                    if (villager.CurrentRole == role || villager.CurrentRole == Roles.Leader)
                     {
                         if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count||
                             villager.CurrentState is VillagerStates.Idle)
@@ -98,7 +98,7 @@ public class VillagerManager : MonoBehaviour
                         }
                     }
                 }
-                else if (villager.CurrentRole == role && villager.CurrentState is VillagerStates.Idle)
+                else if (villager.CurrentRole == role || villager.CurrentRole == Roles.Leader && villager.CurrentState is VillagerStates.Idle)
                 {
                     villagerToReturn = villager;
                 }
@@ -161,10 +161,10 @@ public class VillagerManager : MonoBehaviour
                 "Amanda",
             };
             
-            var gender = Enum.GetValues(typeof(Gender));
+            var gender = Enum.GetValues(typeof(UnityEngine.Analytics.Gender));
             var position = Random.Range(0,gender.Length-1);
             
-            Model newGender = (Model)gender.GetValue(position);
+            Gender newGender = (Gender)gender.GetValue(position);
             villager.Gender = newGender;
     }
 

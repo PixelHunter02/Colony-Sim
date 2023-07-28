@@ -51,7 +51,7 @@ public class MainMenu : MonoBehaviour
     {
         characterCreationCanvas.SetActive(true);
         mainMenuCanvas.SetActive(false);
-        villager.Gender = Model.Woman;
+        villager.Gender = Gender.Woman;
         villager.CurrentRole = Roles.Leader;
         _inputField.text = villager.VillagerName;
     }
@@ -78,13 +78,13 @@ public class MainMenu : MonoBehaviour
     }
     public void ChangeGender()
     {
-        var gender = Enum.GetValues(typeof(Model));
+        var gender = Enum.GetValues(typeof(Gender));
         currentGenderIndex++;
         if (currentGenderIndex > gender.Length-1)
         {
             currentGenderIndex = 0;
         }
-        villager.Gender = (Model)gender.GetValue(currentGenderIndex);
+        villager.Gender = (Gender)gender.GetValue(currentGenderIndex);
         _inputField.text = villager.VillagerName;
     }
     

@@ -125,9 +125,9 @@ public class Villager : MonoBehaviour, IInteractable
     }
 
 
-    private Model _gender;
+    private Gender _gender;
 
-    public Model Gender
+    public Gender Gender
     {
         get => _gender;
         set
@@ -136,7 +136,7 @@ public class Villager : MonoBehaviour, IInteractable
             Debug.Log($"The Gender of The Villager {_villagerName} has changed to {_gender}");
             switch (_gender)
             {
-                case Model.Man:
+                case Gender.Man:
                     femaleHead.SetActive(false);
                     femaleBody.SetActive(false);
                     maleHead.SetActive(true);
@@ -145,7 +145,7 @@ public class Villager : MonoBehaviour, IInteractable
                     VillagerName = VillagerManager.maleNames[randomPositionMale];
                     maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
                     break;
-                case Model.Woman:
+                case Gender.Woman:
                     femaleHead.SetActive(true);
                     femaleBody.SetActive(true);
                     maleHead.SetActive(false);
@@ -311,7 +311,7 @@ public class Villager : MonoBehaviour, IInteractable
             }
             if (objInAwarenessZone[i].GetComponent<Monster>())
             {
-                if (_villagerRole == Roles.Fighter && !finding)
+                if ((_villagerRole == Roles.Fighter || _villagerRole == Roles.Leader) && !finding)
                 {
                     finding = true;
                     StartCoroutine(FindTarget(3));
@@ -519,7 +519,7 @@ public enum VillagerStates
     Pickup,
     Fighting,
 }
-public enum Model
+public enum Gender
 {
     Man,
     Woman,
