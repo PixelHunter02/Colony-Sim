@@ -32,6 +32,10 @@ public class Monster : MonoBehaviour
     public float attackCoolDown;
     private bool attackStarted;
 
+    // AG EXAMPLES
+    TriggerZone triggerZone;
+    AwarenessZone AwarenessZone;
+
     private void Awake()
     {
         attackCoolDown = 2;
@@ -46,13 +50,18 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
+        // AG SET UP REFERENCES
+        triggerZone = gameObject.GetComponentInChildren<TriggerZone>();
+        AwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>();
+
         health = 10;
     }
 
     void Update()
     {
-        objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
-        objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
+        //objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone; AG COMMENTED OUT
+        objInTriggerZone = triggerZone.objInTriggerZone;
+        objInAwarenessZone = AwarenessZone.objInAwarenessZone;
 
         for (int i = 0; i < objInAwarenessZone.Count; i++)
         {
@@ -63,7 +72,7 @@ public class Monster : MonoBehaviour
             }
         }
         //waiting for triggers
-        objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
+        objInTriggerZone = triggerZone.objInTriggerZone;
         for (int i = 0; i < objInTriggerZone.Count; i++)
         {
             //print(gameObject.name + " has come into contact with " + objInTriggerZone[i]);

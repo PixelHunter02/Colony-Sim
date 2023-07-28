@@ -3777,15 +3777,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fbf59a195ca37a44955cb36f272ef73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiManager: {fileID: 128993096}
+  gameScene: New Scene
+  mainMenu: Main Menu
   inputManager: {fileID: 1114297037}
-  cameraMovement: {fileID: 1808602657}
   interactionManager: {fileID: 1851112260}
   settingsManager: {fileID: 1730565756}
   storageManager: {fileID: 1739517382}
   villagerManager: {fileID: 1095073157}
   mainCamera: {fileID: 0}
   buildingManager: {fileID: 1817348799}
+  craftingManager: {fileID: 0}
+  taskHandler: {fileID: 0}
+  monsterWaves: {fileID: 0}
+  level: {fileID: 0}
+  uiManager: {fileID: 128993096}
   grid: {fileID: 1536979215}
 --- !u!4 &287210599 stripped
 Transform:
@@ -4265,6 +4270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   workerReference: {fileID: 0}
+  recipeReference: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -40378,8 +40384,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9217554b75ae03e42b2ad35650494293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: {fileID: 7016351038023154119, guid: 475e9bc77a16a344a8468b3c691938ce, type: 3}
-  _grid: {fileID: 1536979215}
+  craftingRecipes: []
+  pickupLayermask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &779276598
 Transform:
   m_ObjectHideFlags: 0
@@ -42925,6 +42933,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c8de0c0f257c74aa0f14163b7cc4c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hairColours: []
+  villagerPrefab: {fileID: 0}
 --- !u!1001 &1106143593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43079,9 +43089,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220dd8b1e83103a4db9388d247601641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 1124862099}
-  buildCamera: {fileID: 1896196926}
-  itemBeingBuilt: {fileID: 0}
   interactDistance: 25
   _layerMask:
     serializedVersion: 2
@@ -44452,10 +44459,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2be4e51c09343c429c350c8b8140bda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  daySpeed: 0.2
-  nightSpeed: 2
-  speed: 1
-  currentTime: 0
+  dayInterval: 0.2
+  nightInterval: 1
+  speed: 7
   dayCount: 0
   monsterWavesManager: {fileID: 1683140436}
 --- !u!114 &1240863345
@@ -49321,39 +49327,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bae86998c9c96c4d8c94108628e8cc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySlots:
-  - {fileID: 1650886819}
-  - {fileID: 1800034842}
-  - {fileID: 1030313030}
-  - {fileID: 2135546834}
-  - {fileID: 1825269700}
-  - {fileID: 31731347}
-  - {fileID: 83564967}
-  - {fileID: 124685529}
-  - {fileID: 2140340861}
-  - {fileID: 24799851}
-  - {fileID: 1270398525}
-  - {fileID: 833892727}
-  - {fileID: 1736159496}
-  - {fileID: 42413117}
-  - {fileID: 502140306}
-  - {fileID: 678786006}
-  - {fileID: 131158252}
-  - {fileID: 990503574}
-  - {fileID: 2106603841}
-  - {fileID: 1484486211}
-  - {fileID: 1313602689}
-  - {fileID: 233083838}
-  - {fileID: 1690985009}
-  - {fileID: 882547451}
-  - {fileID: 1927851714}
-  - {fileID: 727834157}
-  - {fileID: 1063829229}
-  - {fileID: 1990738385}
-  - {fileID: 277930988}
-  - {fileID: 1449099361}
-  - {fileID: 240407076}
-  - {fileID: 843201027}
+  inventoryTemplate: {fileID: 0}
+  inventoryMenu: {fileID: 0}
 --- !u!1 &1752907831
 GameObject:
   m_ObjectHideFlags: 0
@@ -50615,6 +50590,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentBuilding: {fileID: 1233319081681735965, guid: 25b69f0aa8fa7b44db6dc6a3936446e3,
     type: 3}
+  placmentMaterial: {fileID: 0}
+  buildings: []
 --- !u!1 &1819431034
 GameObject:
   m_ObjectHideFlags: 0

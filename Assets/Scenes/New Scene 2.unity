@@ -1992,8 +1992,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fbf59a195ca37a44955cb36f272ef73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameScene: New Scene
+  mainMenu: Main Menu
   inputManager: {fileID: 1114297037}
-  cameraMovement: {fileID: 1808602657}
   interactionManager: {fileID: 1851112260}
   settingsManager: {fileID: 1730565756}
   storageManager: {fileID: 1739517382}
@@ -2002,29 +2003,10 @@ MonoBehaviour:
   buildingManager: {fileID: 1817348799}
   craftingManager: {fileID: 779276597}
   taskHandler: {fileID: 1095073158}
+  monsterWaves: {fileID: 0}
+  level: {fileID: 0}
+  uiManager: {fileID: 0}
   grid: {fileID: 1536979215}
-  craftingMenu: {fileID: 341476672}
-  mainVCamera: {fileID: 1124862099}
-  buildVCamera: {fileID: 1896196926}
-  _infoUI: {fileID: 913285451}
-  inventoryUI: {fileID: 1193775080}
-  villagerManagementUI: {fileID: 346983238}
-  villagerSelectUI: {fileID: 864075445}
-  villagerManagementCell: {fileID: 1972340139}
-  villagerManagementContainer: {fileID: 264878756}
-  roleButtons:
-  - {fileID: 833641466}
-  - {fileID: 1924877350}
-  - {fileID: 233834364}
-  - {fileID: 718399252}
-  roleAssignmentUI: {fileID: 1031717193}
-  villagerLogTMP: {fileID: 953701118}
-  stockpileMode: 0
-  craftingButtonTemplate: {fileID: 6881741811815660555, guid: 40e2d4c1ad95a18488d4117fa3963b39,
-    type: 3}
-  craftingContainer: {fileID: 1500315155}
-  buildingToolbar: {fileID: 2041756124}
-  toolbar: {fileID: 1113877504}
 --- !u!4 &287210599 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5386681439893192499, guid: ba25351719974f7478500c06196de010,
@@ -2514,7 +2496,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.14521313, y: 0.000000032966827, z: -0.000000004838502, w: 0.98940045}
+  m_LocalRotation: {x: 0.14521313, y: -0.00000003296683, z: 0.0000000048385025, w: 0.98940045}
   m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37587,7 +37569,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9217554b75ae03e42b2ad35650494293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: {fileID: 7016351038023154119, guid: 475e9bc77a16a344a8468b3c691938ce, type: 3}
   craftingRecipes:
   - {fileID: 11400000, guid: 26231ffc77dfa6a4789c94b9df181b1d, type: 2}
   - {fileID: 11400000, guid: 8ecdd272aa8c67843939f7b9753806e2, type: 2}
@@ -39257,6 +39238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c8de0c0f257c74aa0f14163b7cc4c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hairColours: []
+  villagerPrefab: {fileID: 0}
 --- !u!114 &1095073158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39496,7 +39479,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220dd8b1e83103a4db9388d247601641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBeingBuilt: {fileID: 0}
   interactDistance: 25
   _layerMask:
     serializedVersion: 2
@@ -40365,10 +40347,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2be4e51c09343c429c350c8b8140bda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  daySpeed: 0.2
-  nightSpeed: 2
-  speed: 1
-  currentTime: 0
+  dayInterval: 0.2
+  nightInterval: 2
+  speed: 50
   dayCount: 0
   monsterWavesManager: {fileID: 1683140436}
 --- !u!114 &1240863345
@@ -44006,6 +43987,7 @@ MonoBehaviour:
   currentBuilding: {fileID: 1233319081681735965, guid: 25b69f0aa8fa7b44db6dc6a3936446e3,
     type: 3}
   placmentMaterial: {fileID: 2100000, guid: 07fc131a60c5a9149b6ec5c7c5df1d42, type: 2}
+  buildings: []
 --- !u!1001 &1827017812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -44335,7 +44317,6 @@ MonoBehaviour:
   ground:
     serializedVersion: 2
     m_Bits: 8
-  grid: {fileID: 1536979215}
 --- !u!4 &1868416838 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8770720209007328167, guid: 25b69f0aa8fa7b44db6dc6a3936446e3,

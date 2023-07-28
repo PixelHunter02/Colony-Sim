@@ -47,7 +47,7 @@ public class DayCycle : MonoBehaviour
     private IEnumerator NightTime(float timeTicks)
     {
         yield return new WaitForSeconds(timeTicks);
-        transform.Rotate(new Vector3((timeTicks * 2) * speed, 0, 0));
+        transform.Rotate(new Vector3((timeTicks) * speed, 0, 0));
 
         if (gameObject.transform.localEulerAngles.x < 185)
         {
