@@ -234,18 +234,12 @@ public class TaskHandler : MonoBehaviour
         {
             assignedVillager.CurrentState = VillagerStates.Walking;
         }
-
-
-        Ray ray = new Ray(new Vector3(assignedVillager.transform.position.x, assignedVillager.transform.position.y + 3, assignedVillager.transform.position.z), Vector3.down);
-        while (!Physics.Raycast(ray, 3, pickupLayerMask))
+        
+        while (Vector3.Distance(assignedVillager.transform.position, location.transform.position) > distance)
         {
             yield return null;
         }
-        //while (Vector3.Distance(assignedVillager.transform.position, location.transform.position) > distance)
-        //{
-        //    yield return null;
-        //}
-
+        
         Villager.StopVillager(assignedVillager,true);
 
         yield return null;
@@ -261,18 +255,12 @@ public class TaskHandler : MonoBehaviour
         {
             assignedVillager.CurrentState = VillagerStates.Walking;
         }
-
+        
         while (Vector3.Distance(assignedVillager.transform.position, location) > 2f)
         {
             yield return null;
         }
-
-        //Ray ray = new Ray(new Vector3(assignedVillager.transform.position.x, assignedVillager.transform.position.y + 3, assignedVillager.transform.position.z), Vector3.down);
-        //while (!Physics.Raycast(ray,3,pickupLayerMask))
-        //{
-        //    yield return null;
-        //}
-
+        
         Villager.StopVillager(assignedVillager,true);
 
         yield return null;

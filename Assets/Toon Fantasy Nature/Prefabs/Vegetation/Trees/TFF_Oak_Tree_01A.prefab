@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8871182421890572759}
   - component: {fileID: 1425119806344533247}
   - component: {fileID: 8583013744459498340}
-  - component: {fileID: 7354848167744145676}
   m_Layer: 0
   m_Name: TFF_Oak_Tree_01A
   m_TagString: Untagged
@@ -37,7 +36,7 @@ Transform:
   - {fileID: 5852164231830195541}
   - {fileID: 5568138587756230653}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1238538692242263563
 MeshFilter:
@@ -98,17 +97,9 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1238538692241297931}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 2
   m_Size: {x: 1, y: 6.06, z: 1}
   m_Center: {x: -0.04, y: 2.71, z: 0.1773473}
 --- !u!135 &1425119806344533247
@@ -119,17 +110,9 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1238538692241297931}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 2
   m_Radius: 3
   m_Center: {x: 0, y: 7, z: 0}
 --- !u!205 &8583013744459498340
@@ -159,28 +142,11 @@ LODGroup:
     renderers:
     - renderer: {fileID: 5568138587758654749}
   m_Enabled: 1
---- !u!208 &7354848167744145676
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1238538692241297931}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.52, y: 7.202, z: 0.52}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.15, y: 6.12, z: 0.1}
-  m_TimeToStationary: 0.5
 --- !u!1001 &5568138587756359037
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 1238538692240936491}
     m_Modifications:
     - target: {fileID: 100000, guid: 7744475cb6c232446a1f31a7d7d546e2, type: 3}
@@ -236,20 +202,15 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7744475cb6c232446a1f31a7d7d546e2, type: 3}
 --- !u!4 &5568138587756230653 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: 7744475cb6c232446a1f31a7d7d546e2,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 400000, guid: 7744475cb6c232446a1f31a7d7d546e2, type: 3}
   m_PrefabInstance: {fileID: 5568138587756359037}
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &5568138587758654749 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 2300000, guid: 7744475cb6c232446a1f31a7d7d546e2,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 2300000, guid: 7744475cb6c232446a1f31a7d7d546e2, type: 3}
   m_PrefabInstance: {fileID: 5568138587756359037}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5852164231830067157
@@ -257,7 +218,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 1238538692240936491}
     m_Modifications:
     - target: {fileID: 100000, guid: 238788a73439dbb438b0806b82b82daa, type: 3}
@@ -313,19 +273,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 238788a73439dbb438b0806b82b82daa, type: 3}
 --- !u!23 &5852164231827902389 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 2300000, guid: 238788a73439dbb438b0806b82b82daa,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 2300000, guid: 238788a73439dbb438b0806b82b82daa, type: 3}
   m_PrefabInstance: {fileID: 5852164231830067157}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5852164231830195541 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: 238788a73439dbb438b0806b82b82daa,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 400000, guid: 238788a73439dbb438b0806b82b82daa, type: 3}
   m_PrefabInstance: {fileID: 5852164231830067157}
   m_PrefabAsset: {fileID: 0}
