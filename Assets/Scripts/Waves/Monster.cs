@@ -36,6 +36,8 @@ public class Monster : MonoBehaviour
     TriggerZone triggerZone;
     AwarenessZone AwarenessZone;
 
+    private GameManager _gameManager;
+
     private void Awake()
     {
         attackCoolDown = 2;
@@ -46,6 +48,8 @@ public class Monster : MonoBehaviour
 
         GameEvents.current.onNightTimeStart += OnNightTime;
         GameEvents.current.onNightTimeEnd += OnDayTime;
+        
+        _gameManager = GameManager.Instance;
     }
 
     private void Start()
@@ -146,10 +150,12 @@ public class Monster : MonoBehaviour
 
             if (target.GetComponent<Villager>().health <= 0)
             {
-                Debug.Log(target.GetComponent<Villager>());
+                var villagerComponent = target.GetComponent<Villager>();
                 Debug.Log(VillagerManager.villagers.Contains(target.GetComponent<Villager>()));
-                VillagerManager.villagers.Remove(target.GetComponent<Villager>());
+                VillagerManager.villagers.Remove(villagerComponent);
                 villagers.Remove(target.gameObject);
+                Destroy(_gameManager.uiManager.templateDictionary[villagerComponent]);
+                _gameManager.uiManager.templateDictionary.Remove(villagerComponent);
                 Destroy(target.gameObject);
 
             }

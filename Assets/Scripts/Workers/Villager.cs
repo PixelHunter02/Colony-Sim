@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -80,6 +83,7 @@ public class Villager : MonoBehaviour, IInteractable
                 case VillagerStates.Idle:
                     _animator.Play("Idle");
                     StartCoroutine(RandomWalk(4));
+                    // RandomWalkAsync(4);
                     break;
                 case VillagerStates.Working:
                     Debug.Log("Switching");
@@ -246,17 +250,21 @@ public class Villager : MonoBehaviour, IInteractable
 
         TasksToQueue = new List<IEnumerator>();
         _animator = transform.GetChild(0).GetComponent<Animator>();
-        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
             _portraitRenderTexture = new RenderTexture(256, 256, 8);
             portraitCamera.targetTexture = _portraitRenderTexture;
             _gameManager.villagerManager.GenerateNewVillagerStats(this);
         }
+        else if (SceneManager.GetActiveScene().name.Equals("te"))
+        {
+            CurrentState = VillagerStates.Idle;
+        }
     }
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
             transform.Find("FemaleCharacterPBR").Find("PortraitCamera").gameObject.SetActive(false);
             TryGetComponent(out Outline outline);
@@ -271,6 +279,7 @@ public class Villager : MonoBehaviour, IInteractable
             }
             StartCoroutine(RunTasks());
             StartCoroutine(RandomWalk(4));
+            // RandomWalkAsync(4);
         }
     }
 
@@ -286,22 +295,24 @@ public class Villager : MonoBehaviour, IInteractable
     
     private void Update()
     {
-        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Contains("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
             objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
             objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
+            
+            if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
+            {
+                foreach (var task in TasksToQueue)
+                {
+                    _villagerTasks.Add(task);
+                }
+                TasksToQueue.Clear();
+                _runningTasks = true;
+                StartCoroutine(RunTasks());
+            }
         }
         
-        if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
-        {
-            foreach (var task in TasksToQueue)
-            {
-                _villagerTasks.Add(task);
-            }
-            TasksToQueue.Clear();
-            _runningTasks = true;
-            StartCoroutine(RunTasks());
-        }
+        
 
         for (int i = 0; i < objInAwarenessZone.Count; i++)
         {
@@ -311,7 +322,7 @@ public class Villager : MonoBehaviour, IInteractable
             }
             if (objInAwarenessZone[i].GetComponent<Monster>())
             {
-                if (_villagerRole == Roles.Fighter && !finding)
+                if ((_villagerRole == Roles.Fighter|| _villagerRole == Roles.Leader) && !finding)
                 {
                     finding = true;
                     StartCoroutine(FindTarget(3));
@@ -488,14 +499,26 @@ public class Villager : MonoBehaviour, IInteractable
         }
         
         agent.SetDestination(newPosition);
-
+    
         _animator.Play("Walking");
         while (Vector3.Distance(transform.position, newPosition) > 0.5)
         {
             yield return null;
         }
-
+    
         CurrentState = VillagerStates.Idle;
+    }
+}
+
+public struct RandomWalkMT : IJob
+{
+    public NavMeshQuery navMeshQuery;
+    public float3 fromPosition;
+    public float3 toPosition;
+
+    public void Execute()
+    {
+        
     }
 }
 
