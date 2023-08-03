@@ -98,6 +98,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""secondFinger"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""9f418c1f-53df-44e7-b201-65f3b3813743"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -169,6 +178,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""1ee74bd4-1b46-4bc0-9b98-1768a7ba0b15"",
+                    ""path"": ""<Touchscreen>/touch1/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""CameraPanning"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""fc6ffdd4-a0a6-403d-ab94-6a3036ecaeca"",
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
@@ -182,6 +202,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""3ea28d72-b8b8-4958-8c3b-84679f77c180"",
                     ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8b0e0fa6-1a5d-4472-97c2-f88511cd190a"",
+                    ""path"": ""<Touchscreen>/touch0/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -207,6 +238,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""RotateCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7c8e36f9-8b81-425c-be84-f974b70be59c"",
+                    ""path"": ""<Touchscreen>/touch0/press"",
+                    ""interactions"": ""Hold(duration=2)"",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
                     ""action"": ""RotateCamera"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -254,6 +296,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""RotateBuilding"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2afbf8b-b74b-4890-b14b-0fa71830a6d5"",
+                    ""path"": ""<Touchscreen>/touch1/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""secondFinger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""79cc56b5-8d4a-4ea0-a0a6-978b93d218e5"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""secondFinger"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -772,6 +836,74 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Touch"",
+            ""id"": ""01ac3d6b-f76f-476f-b445-400dc69b0217"",
+            ""actions"": [
+                {
+                    ""name"": ""PrimaryTouchPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""fdf01f8c-00b0-4999-9c29-0c41972dbb13"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SecondaryStartPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""5e356f38-2830-4814-afa2-d2ca39d8c5f6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SecondaryTouchPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""c330fa6a-1082-4fbe-bed3-572ea7c4d11f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6ee2b9fa-0552-405d-a0e1-73df194cd97a"",
+                    ""path"": ""<Touchscreen>/touch1/startPosition"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryStartPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d6224d0-9789-4d16-bf49-a2892d577940"",
+                    ""path"": ""<Touchscreen>/touch1/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SecondaryTouchPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""452f92d5-2ef4-4ed7-ae57-121586bbda2a"",
+                    ""path"": ""<Touchscreen>/primaryTouch/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryTouchPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -847,6 +979,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_RotateCamera = m_Player.FindAction("RotateCamera", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_RotateBuilding = m_Player.FindAction("RotateBuilding", throwIfNotFound: true);
+        m_Player_secondFinger = m_Player.FindAction("secondFinger", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -859,6 +992,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // Touch
+        m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
+        m_Touch_PrimaryTouchPosition = m_Touch.FindAction("PrimaryTouchPosition", throwIfNotFound: true);
+        m_Touch_SecondaryStartPosition = m_Touch.FindAction("SecondaryStartPosition", throwIfNotFound: true);
+        m_Touch_SecondaryTouchPosition = m_Touch.FindAction("SecondaryTouchPosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -928,6 +1066,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_RotateCamera;
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_RotateBuilding;
+    private readonly InputAction m_Player_secondFinger;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -940,6 +1079,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @RotateCamera => m_Wrapper.m_Player_RotateCamera;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @RotateBuilding => m_Wrapper.m_Player_RotateBuilding;
+        public InputAction @secondFinger => m_Wrapper.m_Player_secondFinger;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -973,6 +1113,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @RotateBuilding.started += instance.OnRotateBuilding;
             @RotateBuilding.performed += instance.OnRotateBuilding;
             @RotateBuilding.canceled += instance.OnRotateBuilding;
+            @secondFinger.started += instance.OnSecondFinger;
+            @secondFinger.performed += instance.OnSecondFinger;
+            @secondFinger.canceled += instance.OnSecondFinger;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1001,6 +1144,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @RotateBuilding.started -= instance.OnRotateBuilding;
             @RotateBuilding.performed -= instance.OnRotateBuilding;
             @RotateBuilding.canceled -= instance.OnRotateBuilding;
+            @secondFinger.started -= instance.OnSecondFinger;
+            @secondFinger.performed -= instance.OnSecondFinger;
+            @secondFinger.canceled -= instance.OnSecondFinger;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1136,6 +1282,68 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Touch
+    private readonly InputActionMap m_Touch;
+    private List<ITouchActions> m_TouchActionsCallbackInterfaces = new List<ITouchActions>();
+    private readonly InputAction m_Touch_PrimaryTouchPosition;
+    private readonly InputAction m_Touch_SecondaryStartPosition;
+    private readonly InputAction m_Touch_SecondaryTouchPosition;
+    public struct TouchActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public TouchActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PrimaryTouchPosition => m_Wrapper.m_Touch_PrimaryTouchPosition;
+        public InputAction @SecondaryStartPosition => m_Wrapper.m_Touch_SecondaryStartPosition;
+        public InputAction @SecondaryTouchPosition => m_Wrapper.m_Touch_SecondaryTouchPosition;
+        public InputActionMap Get() { return m_Wrapper.m_Touch; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TouchActions set) { return set.Get(); }
+        public void AddCallbacks(ITouchActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TouchActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TouchActionsCallbackInterfaces.Add(instance);
+            @PrimaryTouchPosition.started += instance.OnPrimaryTouchPosition;
+            @PrimaryTouchPosition.performed += instance.OnPrimaryTouchPosition;
+            @PrimaryTouchPosition.canceled += instance.OnPrimaryTouchPosition;
+            @SecondaryStartPosition.started += instance.OnSecondaryStartPosition;
+            @SecondaryStartPosition.performed += instance.OnSecondaryStartPosition;
+            @SecondaryStartPosition.canceled += instance.OnSecondaryStartPosition;
+            @SecondaryTouchPosition.started += instance.OnSecondaryTouchPosition;
+            @SecondaryTouchPosition.performed += instance.OnSecondaryTouchPosition;
+            @SecondaryTouchPosition.canceled += instance.OnSecondaryTouchPosition;
+        }
+
+        private void UnregisterCallbacks(ITouchActions instance)
+        {
+            @PrimaryTouchPosition.started -= instance.OnPrimaryTouchPosition;
+            @PrimaryTouchPosition.performed -= instance.OnPrimaryTouchPosition;
+            @PrimaryTouchPosition.canceled -= instance.OnPrimaryTouchPosition;
+            @SecondaryStartPosition.started -= instance.OnSecondaryStartPosition;
+            @SecondaryStartPosition.performed -= instance.OnSecondaryStartPosition;
+            @SecondaryStartPosition.canceled -= instance.OnSecondaryStartPosition;
+            @SecondaryTouchPosition.started -= instance.OnSecondaryTouchPosition;
+            @SecondaryTouchPosition.performed -= instance.OnSecondaryTouchPosition;
+            @SecondaryTouchPosition.canceled -= instance.OnSecondaryTouchPosition;
+        }
+
+        public void RemoveCallbacks(ITouchActions instance)
+        {
+            if (m_Wrapper.m_TouchActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ITouchActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TouchActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TouchActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public TouchActions @Touch => new TouchActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1191,6 +1399,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnRotateCamera(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnRotateBuilding(InputAction.CallbackContext context);
+        void OnSecondFinger(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1204,5 +1413,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    public interface ITouchActions
+    {
+        void OnPrimaryTouchPosition(InputAction.CallbackContext context);
+        void OnSecondaryStartPosition(InputAction.CallbackContext context);
+        void OnSecondaryTouchPosition(InputAction.CallbackContext context);
     }
 }

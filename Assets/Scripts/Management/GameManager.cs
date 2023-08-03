@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
 
     private void SceneSetup(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name.Equals(gameScene))
+        if(scene.name.Equals(gameScene) || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
             level = GameObject.Find("LocalSettings").GetComponent<Level>();
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();

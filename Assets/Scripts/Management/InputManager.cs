@@ -1,6 +1,12 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.InputSystem.Users;
 
 public class InputManager : MonoBehaviour
 {
@@ -20,6 +26,13 @@ public class InputManager : MonoBehaviour
     [SerializeField] private LayerMask _layerMask;
 
     private bool overUI;
+    
+    private CinemachineCameraOffset _cinemachineCameraOffset;
+    private CinemachineVirtualCamera _cinemachineVCam;
+
+    public PlayerInput currentPLayerInput;
+    
+    
 
     private void Awake()
     {
@@ -27,10 +40,18 @@ public class InputManager : MonoBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable(); 
         playerInputActions.UI.Enable();  
-        
-        
+        playerInputActions.Touch.Enable();
+
+
         // Get reference to Game Manager
         _gameManager = GameManager.Instance;
+
+        
+    }
+
+    private void OnEnable()
+    {
+        InputUser.onChange += DeviceChanged;
     }
 
     private void Update()
@@ -59,9 +80,9 @@ public class InputManager : MonoBehaviour
         return scrollValue;
     }
 
-    public Vector2 GetScaledCursorPositionThisFrame()
+    public Vector2 GetScaledCursorPositionThisFrame(Vector2 position)
     {
-        var position = playerInputActions.UI.Point.ReadValue<Vector2>();
+        // var position = playerInputActions.UI.Point.ReadValue<Vector2>();
         var scaledPosition = new Vector2(position.x / Screen.width * 1920, position.y / Screen.height * 1080);
         return scaledPosition;
     }
@@ -109,6 +130,11 @@ public class InputManager : MonoBehaviour
             return hit.point;
 
         return Vector3.zero;
+    }
+
+    public void DeviceChanged(InputUser user, InputUserChange change, InputDevice device)
+    {
+        Debug.Log(user.controlScheme);
     }
 }
 

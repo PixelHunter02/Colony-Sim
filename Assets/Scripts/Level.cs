@@ -71,6 +71,7 @@ public class Level : MonoBehaviour
                 case GameState.Building:
                     CloseAllUI();
                     buildingToolbar.SetActive(true);
+                    toolbar.SetActive(false);
                     AddBuildingsToBuildingToolbar();
                     mainVCamera.gameObject.SetActive(false);
                     buildVCamera.gameObject.SetActive(true);
@@ -261,15 +262,14 @@ public class Level : MonoBehaviour
         }
     }
 
-    private void CloseAllUI()
+    public void CloseAllUI()
     {
         _infoUI.SetActive(false);
         inventoryUI.SetActive(false);
-        roleAssignmentUI.SetActive(false);
         villagerSelectUI.SetActive(false);
         craftingMenu.SetActive(false);
         buildingToolbar.SetActive(false);
-        toolbar.SetActive(false);
+        // toolbar.SetActive(false);
     }
 
     public void StockpileModeEnabled()

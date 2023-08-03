@@ -1,7 +1,14 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+
 
 public class CameraMovement : MonoBehaviour
 {
@@ -33,11 +40,21 @@ public class CameraMovement : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneLoaded += AssignValues;
+    
+        EnhancedTouchSupport.Enable();
+    }
+
+    private void Start()
+    {
+        _gameManager.inputManager.playerInputActions.Player.CameraPanning.performed += StartCameraPanning;
+        _gameManager.inputManager.playerInputActions.Player.CameraPanning.canceled += _ => EndCameraPanning();    
+        _gameManager.inputManager.playerInputActions.Player.RotateCamera.performed += _ => StartRotateCamera();
+        _gameManager.inputManager.playerInputActions.Player.RotateCamera.canceled += _ => EndRotateCamera(); 
     }
 
     private void Update()
     {
-        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
             if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
@@ -45,8 +62,8 @@ public class CameraMovement : MonoBehaviour
             }
 
             MoveCamera();
-            CameraPanning();
-            RotateCamera();
+            // StartCameraPanning();
+            // StartRotateCamera();
             MoveCursor();
         }
     }
@@ -59,22 +76,49 @@ public class CameraMovement : MonoBehaviour
         followObject.transform.position += movementDirection * (speed * Time.deltaTime);
     }
 
-    private void CameraPanning()
+    private void StartCameraPanning(InputAction.CallbackContext context)
     {
-        if(!_gameManager.inputManager.IsPanning())
+        Debug.Log("Started Panning");
+        if(_lastMousePosition == Vector2.zero )
         {
-            _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
-        }
-
-        if(_gameManager.inputManager.IsPanning())
-        {
-            var mousePosition = followObject.transform.forward * (_gameManager.inputManager.GetScaledCursorPositionThisFrame().y - _lastMousePosition.y) + followObject.transform.right*(_gameManager.inputManager.GetScaledCursorPositionThisFrame().x-_lastMousePosition.x);
-            var movementDirection = new Vector3(mousePosition.x, 0, mousePosition.z);
-            followObject.transform.position += movementDirection * (Time.deltaTime * panningSpeed);
-            _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
+            var position = _gameManager.inputManager.playerInputActions.Player.secondFinger.ReadValue<Vector2>();
+            _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
+            panning = StartCoroutine(OnPanningCR());
         }
     }
-    
+
+    private Coroutine panning;
+    private IEnumerator OnPanningCR()
+    {
+        Debug.Log("Started CR");
+        while (true)
+        {
+            var position = _gameManager.inputManager.playerInputActions.Player.secondFinger.ReadValue<Vector2>();
+
+            Debug.Log("In CR");
+            var mousePosition = followObject.transform.forward * (_gameManager.inputManager.GetScaledCursorPositionThisFrame(position).y - _lastMousePosition.y) + followObject.transform.right*(_gameManager.inputManager.GetScaledCursorPositionThisFrame(position).x-_lastMousePosition.x);
+            var movementDirection = new Vector3(mousePosition.x, 0, mousePosition.z);
+            followObject.transform.position += movementDirection * (Time.deltaTime * panningSpeed);
+            _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
+
+            if (_gameManager.IsOverUI())
+            {
+                yield break;
+            }
+            yield return null;
+        }
+    }
+
+    private void EndCameraPanning()
+    {
+        Debug.Log("Left CR");
+        _lastMousePosition = Vector2.zero;
+        StopCoroutine(panning);
+    }
+
+    /// <summary>
+    /// PC
+    /// </summary>
     private void CameraZoom()
     {
         var zoomValue = _gameManager.inputManager.ZoomValueAsInt();
@@ -88,19 +132,64 @@ public class CameraMovement : MonoBehaviour
         _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(transposerOffset, 3, 15);
     }
 
-    private void RotateCamera()
+    // private void RotateCamera()
+    // {
+    //     var position = _gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>();
+    //
+    //     if(!_gameManager.inputManager.IsRotating())
+    //     {
+    //         _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
+    //         return;
+    //     }
+    //     
+    //     var value = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position) - _lastRightClickPosition;
+    //     var rotation = followObject.transform.rotation.eulerAngles;
+    //     rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;
+    //     followObject.transform.rotation = Quaternion.Euler(rotation);
+    //     _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
+    // }
+
+    private void StartRotateCamera()
     {
-        if(!_gameManager.inputManager.IsRotating())
+        Debug.Log("Started Rotating");
+        if(_lastMousePosition == Vector2.zero )
         {
-            _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
-            return;
+            var position = _gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>();
+            _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
+            rotateCamera = StartCoroutine(OnRotateCamera());
         }
         
-        var value = _gameManager.inputManager.GetScaledCursorPositionThisFrame() - _lastRightClickPosition;
-        var rotation = followObject.transform.rotation.eulerAngles;
-        rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;
-        followObject.transform.rotation = Quaternion.Euler(rotation);
-        _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame();
+    }
+
+    public Coroutine rotateCamera;
+
+    private IEnumerator OnRotateCamera()
+    {
+        Debug.Log("Started Rotate");
+        while (true)
+        {
+            var position = _gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>();
+
+            // Debug.Log("In CR");
+            var value = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position) - _lastMousePosition;
+            var rotation = followObject.transform.rotation.eulerAngles;
+            rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;
+            followObject.transform.rotation = Quaternion.Euler(rotation);
+            _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
+            
+            if (_gameManager.IsOverUI())
+            {
+                yield break;
+            }
+            
+            yield return null;
+        }
+    }
+
+    private void EndRotateCamera()
+    {
+        _lastMousePosition = Vector2.zero;
+        StopCoroutine(rotateCamera);
     }
 
     private void MoveCursor()
@@ -121,7 +210,7 @@ public class CameraMovement : MonoBehaviour
 
     private void AssignValues(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name.Equals("New Scene"))
+        if (scene.name.Equals("New Scene") || scene.name.Equals("Tablet"))
         {
             _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
             _cinemachineVCam = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();  

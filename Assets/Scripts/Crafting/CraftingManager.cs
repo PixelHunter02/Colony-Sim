@@ -63,6 +63,7 @@ public class CraftingManager : MonoBehaviour
             StorageManager.UpdateStorage();
             villager.CurrentState = VillagerStates.Idle;
             villager.StartCoroutine(villager.RandomWalk(4));
+            // villager.RandomWalkAsync(4);
         }
         else
         {

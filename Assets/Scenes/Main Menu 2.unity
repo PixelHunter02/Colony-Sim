@@ -611,6 +611,18 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 519ca4dd-563b-46a1-a28e-456db6dbe5c9
     m_ActionName: Player/RotateBuilding[/Keyboard/q,/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fdf01f8c-00b0-4999-9c29-0c41972dbb13
+    m_ActionName: Touch/PrimaryTouchPosition[/Touchscreen/primaryTouch/position,/Touchscreen1/primaryTouch/position,/Touchscreen2/primaryTouch/position,/Touchscreen3/primaryTouch/position,/Touchscreen4/primaryTouch/position,/Touchscreen5/primaryTouch/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5e356f38-2830-4814-afa2-d2ca39d8c5f6
+    m_ActionName: Touch/SecondaryStartPosition[/Touchscreen/touch1/startPosition,/Touchscreen1/touch1/startPosition,/Touchscreen2/touch1/startPosition,/Touchscreen3/touch1/startPosition,/Touchscreen4/touch1/startPosition,/Touchscreen5/touch1/startPosition]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c330fa6a-1082-4fbe-bed3-572ea7c4d11f
+    m_ActionName: Touch/SecondaryTouchPosition[/Touchscreen/touch1/position,/Touchscreen1/touch1/position,/Touchscreen2/touch1/position,/Touchscreen3/touch1/position,/Touchscreen4/touch1/position,/Touchscreen5/touch1/position]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -3515,6 +3527,7 @@ MonoBehaviour:
   _layerMask:
     serializedVersion: 2
     m_Bits: 8
+  currentPLayerInput: {fileID: 0}
 --- !u!4 &994276745
 Transform:
   m_ObjectHideFlags: 0

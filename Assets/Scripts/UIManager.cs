@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using Cinemachine;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,8 +16,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject villagerManagementUI;
     [SerializeField] private GameObject villagerManagementTemplate;
     [SerializeField] private Transform villagerManagementContainer;
-    private Dictionary<Villager, GameObject> templateDictionary;
-    
+    public Dictionary<Villager, GameObject> templateDictionary;
+
+    public Slider zoomSlider;
+    [SerializeField] private CinemachineCameraOffset _cinemachineCameraOffset;
+    [SerializeField] private CinemachineVirtualCamera _cinemachineVCam;
+
     private void Awake()
     {
         templateDictionary = new Dictionary<Villager, GameObject>();
@@ -83,5 +90,20 @@ public class UIManager : MonoBehaviour
     private void RoleChanged(int value, Villager villager)
     {
         villager.CurrentRole = (Roles)value;
+    }
+    
+    public void Zoom()
+    {
+        var zoomValue = zoomSlider.value;
+        zoomSlider.value = zoomValue;
+        
+        const int minimumZoomValue = -5;
+        const int maximumZoomValue = 0;
+        _cinemachineCameraOffset.m_Offset.z = -zoomValue;
+        _cinemachineCameraOffset.m_Offset.z =
+            Mathf.Clamp(_cinemachineCameraOffset.m_Offset.z, minimumZoomValue, maximumZoomValue);
+        var transposerOffset = _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
+        transposerOffset = zoomValue * 2;
+        _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(transposerOffset, 3, 15);
     }
 }
