@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -82,8 +83,15 @@ public class Villager : MonoBehaviour, IInteractable
             {
                 case VillagerStates.Idle:
                     _animator.Play("Idle");
-                    StartCoroutine(RandomWalk(4));
-                    // RandomWalkAsync(4);
+                    if (RandomWalkCR is null)
+                    {
+                        RandomWalkCR = StartCoroutine(RandomWalk(4));
+                    }
+                    else
+                    {
+                        RandomWalkCR = null;
+                        RandomWalkCR = StartCoroutine(RandomWalk(4));
+                    }
                     break;
                 case VillagerStates.Working:
                     Debug.Log("Switching");
@@ -278,7 +286,15 @@ public class Villager : MonoBehaviour, IInteractable
                 TasksToQueue.Clear();
             }
             StartCoroutine(RunTasks());
-            StartCoroutine(RandomWalk(4));
+            if (RandomWalkCR is null)
+            {
+                RandomWalkCR = StartCoroutine(RandomWalk(4));
+            }
+            else
+            {
+                RandomWalkCR = null;
+                RandomWalkCR = StartCoroutine(RandomWalk(4));
+            }
             // RandomWalkAsync(4);
         }
     }
@@ -479,46 +495,46 @@ public class Villager : MonoBehaviour, IInteractable
         _villagerTasks.Clear();
     }
 
+    public Coroutine RandomWalkCR;
     public IEnumerator RandomWalk(float size)
     {
+        agent.ResetPath();
         agent.isStopped = false;
         yield return new WaitForSeconds(Random.Range(0.1f, 8f));
-        var position = transform.position;
-        var newPosition = new Vector3(position.x + Random.Range(-size, size), position.y,
-            position.z + Random.Range(-size, size));
-        while(!Physics.Raycast(newPosition, Vector3.down * 5, 3,~3))
-        {
-            newPosition = new Vector3(transform.position.x + Random.Range(-size, size), position.y+2,
-                position.z + Random.Range(-size, size));
-            yield return null;
-        }
+        var position = transform.position;  
        
         if (_villagerTasks.Count > 0 || TasksToQueue.Count > 0 || CurrentState is not VillagerStates.Idle) 
         {
             yield break;
         }
-        
+
+        var newPosition = new Vector3(position.x + Random.Range(-size, size), position.y,
+            position.z + Random.Range(-size, size));
+
+
+        if(!NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas)){
+            Debug.Log("reset");
+            if (RandomWalkCR is null)
+            {
+                RandomWalkCR = StartCoroutine(RandomWalk(4));
+            }
+            else
+            {
+                RandomWalkCR = null;
+                RandomWalkCR = StartCoroutine(RandomWalk(4));
+            }
+            yield break;
+        }
+
         agent.SetDestination(newPosition);
-    
+
         _animator.Play("Walking");
-        while (Vector3.Distance(transform.position, newPosition) > 0.5)
+        while (Vector3.Distance(transform.position, newPosition) > 1)
         {
             yield return null;
         }
     
         CurrentState = VillagerStates.Idle;
-    }
-}
-
-public struct RandomWalkMT : IJob
-{
-    public NavMeshQuery navMeshQuery;
-    public float3 fromPosition;
-    public float3 toPosition;
-
-    public void Execute()
-    {
-        
     }
 }
 

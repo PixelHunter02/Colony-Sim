@@ -114,6 +114,8 @@ public class Level : MonoBehaviour
 
     public Camera Camera;
 
+    public GameObject followObject;
+
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();

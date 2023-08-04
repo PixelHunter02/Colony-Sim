@@ -22,9 +22,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CinemachineCameraOffset _cinemachineCameraOffset;
     [SerializeField] private CinemachineVirtualCamera _cinemachineVCam;
 
+    GameManager gameManager;
+
     private void Awake()
     {
         templateDictionary = new Dictionary<Villager, GameObject>();
+        gameManager = GameManager.Instance;
     }
 
     public void SetVillagerStatsUI(Villager villager)
@@ -56,6 +59,8 @@ public class UIManager : MonoBehaviour
                 template.Find("StatsBorder").Find("Craft").GetChild(0).GetComponent<TMP_Text>().text =
                     villager.Craft.ToString();
                 var dropdown = template.Find("Dropdown").GetComponent<TMP_Dropdown>();
+                var goToButton = template.Find("Portrait").GetComponent<Button>();
+                goToButton.onClick.AddListener(delegate { GoToVillager(villager); });
                 dropdown.value = (int)villager.CurrentRole;
                 dropdown.onValueChanged.AddListener(delegate { RoleChanged(dropdown.value,villager); });
             }
@@ -73,6 +78,8 @@ public class UIManager : MonoBehaviour
                 template.Find("StatsBorder").Find("Craft").GetChild(0).GetComponent<TMP_Text>().text =
                     villager.Craft.ToString();
                 var dropdown = template.Find("Dropdown").GetComponent<TMP_Dropdown>();
+                var goToButton = template.Find("Portrait").GetComponent<Button>();
+                goToButton.onClick.AddListener(delegate { GoToVillager(villager); });
                 dropdown.value = (int)villager.CurrentRole;
                 if (dropdown.value != (int)Roles.Leader)
                 {
@@ -90,6 +97,11 @@ public class UIManager : MonoBehaviour
     private void RoleChanged(int value, Villager villager)
     {
         villager.CurrentRole = (Roles)value;
+    }
+
+    private void GoToVillager(Villager villager)
+    {
+        gameManager.level.followObject.transform.position = villager.transform.position;
     }
     
     public void Zoom()
