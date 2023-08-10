@@ -224,6 +224,7 @@ public class Interactions : MonoBehaviour
         _drawingStockpile = false;
         GenerateStockpile();
         _stockpileMesh.Clear();
+        _gameManager.level.gridMaterial.SetFloat("_Alpha", 0);
     }
     
     /// <summary>

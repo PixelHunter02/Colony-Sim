@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Cinemachine;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -24,6 +25,7 @@ public class Level : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera buildVCamera;
 
     private GameState gameState;
+    public Material gridMaterial;
 
     public GameState GameState
     {
@@ -144,6 +146,7 @@ public class Level : MonoBehaviour
 
         _buildingToolbarButtons = new Dictionary<StoredItemSO, GameObject>();
         tutorialManager.TutorialStage = TutorialStage.VillagerStatsTutorial;
+        gridMaterial.SetFloat("_Alpha", 0);
 
     }
 
@@ -231,10 +234,12 @@ public class Level : MonoBehaviour
         if (GameState == GameState.Building)
         {
             GameState = GameState.Playing;
+            gridMaterial.SetFloat("_Alpha", 0);
         }
         else
         {
             GameState = GameState.Building;
+            gridMaterial.SetFloat("_Alpha", 1);
         }
     }
 
@@ -280,6 +285,14 @@ public class Level : MonoBehaviour
     public void StockpileModeEnabled()
     {
         stockpileMode = !stockpileMode;
+        if (stockpileMode)
+        {
+            gridMaterial.SetFloat("_Alpha", 1);
+        }
+        else
+        {
+            gridMaterial.SetFloat("_Alpha", 0);
+        }
     }
 
     // Set Mode to Crafting
