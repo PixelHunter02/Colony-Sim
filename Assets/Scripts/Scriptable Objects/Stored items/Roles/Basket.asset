@@ -21,4 +21,6 @@ MonoBehaviour:
     storageLocation: {x: 0, y: 0, z: 0}
     go: {fileID: 0}
     amount: 1
+  itemDescrition: 'Requirements: 1 wood --- The basket will allow you to assign the
+    roll "Gatherer" a gatherer will automatically collect resources for you'
   assignRole: 2

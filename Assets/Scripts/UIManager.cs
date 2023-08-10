@@ -34,11 +34,19 @@ public class UIManager : MonoBehaviour
 
     public void SetVillagerStatsUI(Villager villager)
     {
-        health.text = villager.health.ToString();
+        health.text = villager.Health.ToString();
         magic.text = villager.Magic.ToString();
         craft.text = villager.Craft.ToString();
         strength.text = villager.Strength.ToString();
     }
+
+    // public void UpdateVillagerStatsUI(Villager villager)
+    // {
+    //     health.text = villager.health.ToString();
+    //     magic.text = villager.Magic.ToString();
+    //     craft.text = villager.Craft.ToString();
+    //     strength.text = villager.Strength.ToString();
+    // }
 
     public void OpenVillagerMenu()
     {
@@ -53,7 +61,7 @@ public class UIManager : MonoBehaviour
                 template.GetChild(0).GetComponent<RawImage>().texture = villager._portraitRenderTexture;
                 template.Find("NameBorder").GetChild(0).GetComponent<TMP_Text>().text = villager.VillagerName;
                 template.Find("StatsBorder").Find("Health").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.health.ToString();
+                    villager.Health.ToString();
                 template.Find("StatsBorder").Find("Strength").GetChild(0).GetComponent<TMP_Text>().text =
                     villager.Strength.ToString();
                 template.Find("StatsBorder").Find("Magic").GetChild(0).GetComponent<TMP_Text>().text =
@@ -72,7 +80,7 @@ public class UIManager : MonoBehaviour
                 template.GetChild(0).GetComponent<RawImage>().texture = villager._portraitRenderTexture;
                 template.Find("NameBorder").GetChild(0).GetComponent<TMP_Text>().text = villager.VillagerName;
                 template.Find("StatsBorder").Find("Health").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.health.ToString();
+                    villager.Health.ToString();
                 template.Find("StatsBorder").Find("Strength").GetChild(0).GetComponent<TMP_Text>().text =
                     villager.Strength.ToString();
                 template.Find("StatsBorder").Find("Magic").GetChild(0).GetComponent<TMP_Text>().text =

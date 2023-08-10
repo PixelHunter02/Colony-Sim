@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VillageHeart : MonoBehaviour,IInteractable
 {
     private GameManager _gameManager;
     private int level = 1;
-    private float experience = 0f;
+    private float experience = 0;
+
+    [SerializeField] private Slider villagerHeartEXPSlider;
 
     public float Experience
     {
@@ -15,10 +18,10 @@ public class VillageHeart : MonoBehaviour,IInteractable
         set
         {
             experience = value;
-            Debug.Log("Experience has been updated");
+            villagerHeartEXPSlider.value = experience / experienceToNextLevel;
         }
     }
-    private float experienceToNextLevel = 20f;
+    [SerializeField]private float experienceToNextLevel = 20;
 
     [SerializeField] private GameObject villagerPrefab;
     private void Awake()
@@ -34,17 +37,27 @@ public class VillageHeart : MonoBehaviour,IInteractable
         {
             _gameManager.level.tutorialManager.TutorialStage = TutorialStage.CraftingTutorial;
         }
-
-        var villagerGO = Instantiate(villagerPrefab);
-        VillagerManager.villagers.Add(villagerGO.GetComponent<Villager>());
+        
+        LevelUp();
+        
     }
 
     public bool CanInteract()
     {
-        if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillageHeartTutorial)
+        if (Experience >= experienceToNextLevel)
         {
             return true;
         }
         return false;
+    }
+
+    public void LevelUp()
+    {
+        level++;
+        experienceToNextLevel += experienceToNextLevel / 10;
+        GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 0f);
+        Experience = 0;
+        var villagerGO = Instantiate(villagerPrefab);
+        VillagerManager.villagers.Add(villagerGO.GetComponent<Villager>());
     }
 }

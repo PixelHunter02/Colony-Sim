@@ -24,27 +24,32 @@ public class CraftingManager : MonoBehaviour
     public Queue<IEnumerator> craftingQueue;
     private List<Roles> craftingRoles;
 
+    public Dictionary<IEnumerator,GameObject> craftingQueueDictionary;
+
     private void Awake()
     {
         craftingQueue = new Queue<IEnumerator>();
+        craftingQueueDictionary = new Dictionary<IEnumerator, GameObject>();
         _gameManager = GameManager.Instance; 
         craftingRoles = new List<Roles>() { Roles.Crafter, Roles.Leader };
         playerInputActions = new PlayerInputActions();
         playerInputActions.Enable();
-        StartCoroutine(CraftingQueue());
+        StartCoroutine(RunCraftingQueue());
     }
 
-    private IEnumerator CraftingQueue()
+    private IEnumerator RunCraftingQueue()
     {
         while (craftingQueue?.Count > 0)
         {
-            Debug.Log("Started");
+            var queueToRemove = craftingQueue.Peek();
             yield return StartCoroutine(craftingQueue.Dequeue());
+            Destroy(craftingQueueDictionary[queueToRemove]);
+            
         }
-        Debug.Log("looping");
+
         yield return new WaitForSeconds(0.2f);
 
-        StartCoroutine(CraftingQueue());
+        StartCoroutine(RunCraftingQueue());
     }
     
     public IEnumerator BeginCrafting(StoredItemSO craftingRecipe)
@@ -83,8 +88,6 @@ public class CraftingManager : MonoBehaviour
             StorageManager.UpdateStorage();
             villager.CurrentState = VillagerStates.Idle;
             villager.StartCoroutine(villager.RandomWalk(4));
-            // villager.RandomWalkAsync(4);
-            craftingQueue.Dequeue();
         }
         else
         {
@@ -159,6 +162,7 @@ public class CraftingManager : MonoBehaviour
         }
         assignedVillager.CurrentState = VillagerStates.Pickup;
         Villager.StopVillager(assignedVillager, true);
+        _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += assignedVillager.Craft;
         yield return new WaitForSeconds(1f);
     }
 }

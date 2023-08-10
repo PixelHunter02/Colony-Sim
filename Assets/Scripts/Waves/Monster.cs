@@ -54,7 +54,6 @@ public class Monster : MonoBehaviour
 
     private void Start()
     {
-        // AG SET UP REFERENCES
         triggerZone = gameObject.GetComponentInChildren<TriggerZone>();
         AwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>();
 
@@ -141,24 +140,10 @@ public class Monster : MonoBehaviour
     private IEnumerator AttackTarget(float timeTicks)
     {//if target unreachable, destroy structure blocking way when collide ig?
         yield return new WaitForSeconds(timeTicks);
-        //Debug.Log("Attacking");
         if (target)
         {
             _animator.Play(_attack);
-            target.GetComponent<Villager>().health -= 1;
-            print(target.GetComponent<Villager>().VillagerName + " Health down to: " + target.GetComponent<Villager>().health);
-
-            if (target.GetComponent<Villager>().health <= 0)
-            {
-                var villagerComponent = target.GetComponent<Villager>();
-                Debug.Log(VillagerManager.villagers.Contains(target.GetComponent<Villager>()));
-                VillagerManager.villagers.Remove(villagerComponent);
-                villagers.Remove(target.gameObject);
-                Destroy(_gameManager.uiManager.templateDictionary[villagerComponent]);
-                _gameManager.uiManager.templateDictionary.Remove(villagerComponent);
-                Destroy(target.gameObject);
-
-            }
+            target.GetComponent<Villager>().Health = target.GetComponent<Villager>().Health-1; 
         }
         attackStarted = false;
         StartCoroutine(FindTarget(1));

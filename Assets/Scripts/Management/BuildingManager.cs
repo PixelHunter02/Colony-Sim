@@ -19,8 +19,6 @@ public class BuildingManager : MonoBehaviour
 
     [SerializeField] private Material placmentMaterial;
 
-    private List<BuildStats> buildQueue;
-
     public StoredItemSO[] buildings;
     
     private void Awake()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Cinemachine;
@@ -121,7 +122,12 @@ public class Level : MonoBehaviour
     [SerializeField] private TMP_Text craftingDescription;
     [SerializeField] private Button addToQueueButton;
     [SerializeField] private Image craftingImage;
+
+    public GameObject queueItemTemplate;
+    public Transform queueItemContainer;
     
+    public GameObject villageHeart;
+
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -214,6 +220,7 @@ public class Level : MonoBehaviour
             villagerLogTMP.text = storedLog;
             GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
             _villagerName.text = villager.VillagerName;
+            _gameManager.uiManager.SetVillagerStatsUI(villager);
         }
     }
 
@@ -324,6 +331,7 @@ public class Level : MonoBehaviour
             var buttonRef = button.GetComponent<ButtonReference>();
             buttonRef.recipeReference = _gameManager.craftingManager.CraftingRecipes[i];
             craftingButtons.Add(buttonRef.recipeReference);
+            button.GetComponent<Button>().onClick.RemoveAllListeners();
             button.GetComponent<Button>().onClick.AddListener(() => ShowCraftingInformation(buttonRef.recipeReference));
         }
     }
@@ -332,10 +340,20 @@ public class Level : MonoBehaviour
     {
         craftingDescription.text = craftingRecipe.itemDescrition;
         craftingImage.sprite = craftingRecipe.uiSprite;
-        // addToQueueButton.onClick.AddListener(() => )
-        _gameManager.craftingManager.craftingQueue.Enqueue(_gameManager.craftingManager.BeginCrafting(craftingRecipe));
+        craftingImage.transform.GetChild(0).GetComponent<TMP_Text>().text = craftingRecipe.objectName;
+        addToQueueButton.onClick.RemoveAllListeners();
+        addToQueueButton.onClick.AddListener(() => AddToCraftingQueue(craftingRecipe));
     }
 
+    private void AddToCraftingQueue(StoredItemSO craftingRecipe)
+    {
+        
+        var queuedItem = Instantiate(queueItemTemplate, queueItemContainer);
+        queuedItem.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = craftingRecipe.uiSprite;
+        var craftingItem = _gameManager.craftingManager.BeginCrafting(craftingRecipe);
+        _gameManager.craftingManager.craftingQueueDictionary.Add(craftingItem,queuedItem);
+        _gameManager.craftingManager.craftingQueue.Enqueue(craftingItem);
+    }
 
     private void AddBuildingsToBuildingToolbar()
     {

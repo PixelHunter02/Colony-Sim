@@ -21,8 +21,7 @@ MonoBehaviour:
     storageLocation: {x: 0, y: 0, z: 0}
     go: {fileID: 0}
     amount: 2
-  - itemSO: {fileID: 11400000, guid: 603f452c9b5c7ef4b91e7eccc414761a, type: 2}
-    storageLocation: {x: 0, y: 0, z: 0}
-    go: {fileID: 0}
-    amount: 2
+  itemDescrition: 'Requirements: 2 wood, 2 stone --- A hammer allows you to assign
+    the role of a crafter, a crafter allows you to build in the build menu and craft
+    resources'
   assignRole: 5

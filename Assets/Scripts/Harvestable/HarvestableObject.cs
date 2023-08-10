@@ -17,7 +17,11 @@ public class HarvestableObject : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        Debug.Log("Hit");
+        if (_gameManager.IsOverUI())
+        {
+            return;
+        }
+        
         Coroutine task = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
         _gameManager.taskHandler.queuedTasks.Enqueue(task);
     }

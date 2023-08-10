@@ -11,8 +11,13 @@ public class Tutorial : MonoBehaviour
     [SerializeField] private Button _building;
     
     private TutorialStage _tutorialStage;
+    private GameManager _gameManager;
 
-    [SerializeField] private GameObject villageHeart;
+    private void Start()
+    {
+        _gameManager = GameManager.Instance;
+    }
+
 
     public TutorialStage TutorialStage
     {
@@ -42,20 +47,18 @@ public class Tutorial : MonoBehaviour
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Create a stockpile now.");
                     villager.agent.isStopped = false;
-                    // villageHeart.GetComponent<VillageHeart>().Experience += 10;
                     _stockpile.interactable = true;
                     _inventory.interactable = false;
                     _crafting.interactable = false;
                     _villagerManagement.interactable = false;
                     _building.interactable = false;
-                    // Add experience to the village heart
                     break;
                 case TutorialStage.InventoryTutorial:
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Good Job! Now you have created a stockpile you are able to access a list of all your village resources, you can do this by pressing the chest icon.");
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Look at your resources now");
-                    // villageHeart.GetComponent<VillageHeart>().Experience += 10;
+                    _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 10;
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = false;
@@ -67,14 +70,17 @@ public class Tutorial : MonoBehaviour
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Nice! You may have noticed after doing these tasks our village heart has started glowing, this is because it is ready to power up. Powering up the village heart will allow you to summon more villagers to our colony.");
                     // Debug.Log("Click on the village heart and upgrade it now.");
-                    villageHeart.GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 10f);
+                    
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = false;
                     _villagerManagement.interactable = false;
                     _building.interactable = false;
+                    _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 10;
+
                     break;
                 case TutorialStage.CraftingTutorial:
+                    _gameManager.level.villageHeart.GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 0f);
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Now we have another villager we should give them a role, we dont want them getting bored now do we!");
                     Level.AddToVillagerLog(villager,"");

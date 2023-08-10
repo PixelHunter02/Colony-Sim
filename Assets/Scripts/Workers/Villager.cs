@@ -202,7 +202,24 @@ public class Villager : MonoBehaviour, IInteractable
 
     #region Stats
     
-    public int health;
+    private int health;
+
+    public int Health
+    {
+        get => health;
+        set
+        {
+            health = value;
+            Debug.Log($"{_villagerName}'s health has changed to {value}");
+            switch (value)
+            {
+                case <= 0:
+                    OnDeath();
+                    Debug.Log("Died");
+                    break;
+            }
+        }
+    }
 
     private string _villagerName;
     public string VillagerName
@@ -222,6 +239,7 @@ public class Villager : MonoBehaviour, IInteractable
         set
         {
             _strength = value;
+            health += _strength;
             Debug.Log($"A New Strength Value Has Been Assigned! The new value is {_strength}");
         }
     }
@@ -426,17 +444,22 @@ public class Villager : MonoBehaviour, IInteractable
                     //transform.LookAt(target.transform);
                     //CurrentState = VillagerStates.Fighting;
                     print("Villager fights Back");
-                    target.GetComponent<Monster>().health -= 1;
+                    target.GetComponent<Monster>().health -= 1 + _strength / 10;
                     print(target.name + " health is down to: " + target.GetComponent<Monster>().health);
                     
                     if (target.GetComponent<Monster>().health <= 0)
                     {
                         monsters.Remove(target.gameObject);
                         Destroy(target.gameObject);
+                        _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 10;
 
                     }
                     CurrentState = VillagerStates.Idle;
                 }
+            }
+            if(!target)
+            {
+                _currentState = VillagerStates.Idle;
             }
         }
         attackStarted = false;
@@ -471,6 +494,11 @@ public class Villager : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
+        if (_gameManager.IsOverUI())
+        {
+            return;
+        }
+        
         _gameManager.level.ShowVillagerInformationOnClick(this);
         _gameManager.uiManager.SetVillagerStatsUI(this);
         if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.VillagerStatsTutorial)
@@ -534,12 +562,22 @@ public class Villager : MonoBehaviour, IInteractable
         agent.SetDestination(newPosition);
 
         _animator.Play("Walking");
-        while (Vector3.Distance(transform.position, newPosition) > 1)
+        while (Vector3.Distance(transform.position, newPosition) > 2)
         {
             yield return null;
         }
     
         CurrentState = VillagerStates.Idle;
+    }
+
+    private void OnDeath()
+    {
+        // Debug.Log(VillagerManager.villagers.Contains(target.GetComponent<Villager>()));
+        VillagerManager.villagers.Remove(this);
+        // villagers/.Remove(target.gameObject);
+        Destroy(_gameManager.uiManager.templateDictionary[this]);
+        _gameManager.uiManager.templateDictionary.Remove(this);
+        Destroy(gameObject);
     }
 }
 
