@@ -64,7 +64,7 @@ public class VillagerManager : MonoBehaviour
         {
             if (villagerToReturn)
             {
-                if (villager.CurrentRole == role)
+                if (villager.CurrentRole == role && !villager.ignoreQueue)
                 {
                     if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count)
                     {
@@ -72,7 +72,7 @@ public class VillagerManager : MonoBehaviour
                     }
                 }
             }
-            else if (villager.CurrentRole == role)
+            else if (villager.CurrentRole == role && !villager.ignoreQueue)
             {
                 villagerToReturn = villager;
             }
@@ -89,7 +89,7 @@ public class VillagerManager : MonoBehaviour
             {
                 if (villagerToReturn)
                 {
-                    if (villager.CurrentRole == role)
+                    if (villager.CurrentRole == role && !villager.ignoreQueue)
                     {
                         if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count||
                             villager.CurrentState is VillagerStates.Idle)
@@ -98,7 +98,7 @@ public class VillagerManager : MonoBehaviour
                         }
                     }
                 }
-                else if (villager.CurrentRole == role && villager.CurrentState is VillagerStates.Idle)
+                else if (villager.CurrentRole == role && villager.CurrentState is VillagerStates.Idle && !villager.ignoreQueue)
                 {
                     villagerToReturn = villager;
                 }
@@ -117,12 +117,12 @@ public class VillagerManager : MonoBehaviour
             if (villagerToReturn)
             {
                 if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count ||
-                    villager.CurrentState is VillagerStates.Idle)
+                    villager.CurrentState is VillagerStates.Idle && !villager.ignoreQueue)
                 {
                     villagerToReturn = villager;
                 }
             }
-            else if (villager.CurrentState is VillagerStates.Idle) 
+            else if (villager.CurrentState is VillagerStates.Idle && !villager.ignoreQueue) 
             {
                 villagerToReturn = villager;
             }

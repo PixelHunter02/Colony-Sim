@@ -166,7 +166,7 @@ public class TaskHandler : MonoBehaviour
     {
             List<Item> resourcesToRemove = new List<Item>();
 
-            foreach (var required in buildStats.craftingRecipe.requiredResource)
+            foreach (var required in buildStats.craftingRecipe.craftingRecipe)
             {
                 if (StorageManager.TryFindItemsInInventory(required, required.amount, out List<Item> resources))
                 {
@@ -249,7 +249,6 @@ public class TaskHandler : MonoBehaviour
     {
         Villager.StopVillager(assignedVillager,false);
         Villager.SetVillagerDestination(assignedVillager, location);
-
         // Set the villagers state to walking if not already.
         if (assignedVillager.CurrentState != VillagerStates.Walking)
         {
@@ -258,6 +257,8 @@ public class TaskHandler : MonoBehaviour
         
         while (Vector3.Distance(assignedVillager.transform.position, location) > 2f)
         {
+            Debug.Log(Vector3.Distance(assignedVillager.transform.position, location));
+
             yield return null;
         }
         

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,29 +13,48 @@ public class CraftingManager : MonoBehaviour
     
     private GameManager _gameManager;
 
-    [SerializeField] private CraftableSO[] craftingRecipes;
-    public CraftableSO[] CraftingRecipes => craftingRecipes;
+    [SerializeField] private StoredItemSO[] craftingRecipes;
+    public StoredItemSO[] CraftingRecipes => craftingRecipes;
     
     /// <summary>
     /// Assigned in the inspector
     /// </summary>
     [SerializeField] private LayerMask pickupLayermask;
 
+    public Queue<IEnumerator> craftingQueue;
+    private List<Roles> craftingRoles;
+
     private void Awake()
     {
-        _gameManager = GameManager.Instance;
+        craftingQueue = new Queue<IEnumerator>();
+        _gameManager = GameManager.Instance; 
+        craftingRoles = new List<Roles>() { Roles.Crafter, Roles.Leader };
         playerInputActions = new PlayerInputActions();
         playerInputActions.Enable();
+        StartCoroutine(CraftingQueue());
+    }
+
+    private IEnumerator CraftingQueue()
+    {
+        while (craftingQueue?.Count > 0)
+        {
+            Debug.Log("Started");
+            yield return StartCoroutine(craftingQueue.Dequeue());
+        }
+        Debug.Log("looping");
+        yield return new WaitForSeconds(0.2f);
+
+        StartCoroutine(CraftingQueue());
     }
     
-    public IEnumerator BeginCrafting(CraftableSO craftingRecipe)
+    public IEnumerator BeginCrafting(StoredItemSO craftingRecipe)
     {
-        List<Roles> roles = new List<Roles>() { Roles.Crafter, Roles.Leader };
-        if (VillagerManager.TryGetVillagerByRole(roles, out Villager villager))
+        if (VillagerManager.TryGetVillagerByRole(craftingRoles, out Villager villager))
         {
+            villager.StopAllCoroutines();
             List<Item> resourcesToRemove = new List<Item>();
 
-            foreach (var required in craftingRecipe.requiredResource)
+            foreach (var required in craftingRecipe.craftingRecipe)
             {
                 if (StorageManager.TryFindItemsInInventory(required, required.amount, out List<Item> resources))
                 {
@@ -64,6 +84,7 @@ public class CraftingManager : MonoBehaviour
             villager.CurrentState = VillagerStates.Idle;
             villager.StartCoroutine(villager.RandomWalk(4));
             // villager.RandomWalkAsync(4);
+            craftingQueue.Dequeue();
         }
         else
         {
@@ -91,7 +112,7 @@ public class CraftingManager : MonoBehaviour
         StorageManager.EmptyStockpileSpace(location);
     }
 
-    private IEnumerator WalkToVillageHeart(Villager assignedVillager, CraftableSO craftingRecipe)
+    private IEnumerator WalkToVillageHeart(Villager assignedVillager, StoredItemSO craftingRecipe)
     {
         var villageHeart = FindAnyObjectByType(typeof(VillageHeart)).GameObject();
         Villager.StopVillager(assignedVillager,false);
@@ -109,11 +130,11 @@ public class CraftingManager : MonoBehaviour
         var location = StorageManager.storageLocations.ElementAt(0);
         StorageManager.UseStorageSpace(location);
 
-        var craftedItem = Instantiate(craftingRecipe.itemToStore.prefab, location, quaternion.identity);
+        var craftedItem = Instantiate(craftingRecipe.prefab, location, quaternion.identity);
         craftedItem.SetActive(false);
         var itemToAdd = new Item()
         {
-            itemSO = craftingRecipe.itemToStore, storageLocation = location, go = craftedItem
+            itemSO = craftingRecipe, storageLocation = location, go = craftedItem
         }; 
         _gameManager.storageManager.AddToStorage(itemToAdd);
         yield return StartCoroutine(PlaceCraftedItem(assignedVillager, itemToAdd));

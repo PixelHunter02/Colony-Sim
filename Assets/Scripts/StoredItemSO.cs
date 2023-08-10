@@ -1,6 +1,5 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Scriptable Objects/StoredResource")]
@@ -8,11 +7,11 @@ public class StoredItemSO : ScriptableObject
 {
     public GameObject prefab;
     public string objectName;
-    public int maxSize;
     public Sprite uiSprite;
-    public AudioClip pickupSound;
-    public AudioClip useSound;
     public bool canBePlaced;
+    public List<Item> craftingRecipe;
+    public string itemDescrition;
+    public Roles assignRole;
 }
 
 [System.Serializable]
@@ -23,3 +22,9 @@ public sealed class Item
     public GameObject go;
     public int amount;
 }
+//
+// [System.Serializable]
+// public class CraftingRecipe
+// {
+//     public  requiredResource;
+// }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class BuildStats : MonoBehaviour
 {
-    public CraftableSO craftingRecipe;
+    public StoredItemSO craftingRecipe;
     private GameManager _gameManager;
     public GameObject building;
     public GameObject built;

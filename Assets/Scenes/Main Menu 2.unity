@@ -3573,7 +3573,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   craftingRecipes:
-  - {fileID: 11400000, guid: 8b2b9cbcc7a750e429d0a6e1f3bcd749, type: 2}
+  - {fileID: 11400000, guid: fc23bcc28528979438d49e3b081f9ba7, type: 2}
+  - {fileID: 11400000, guid: 8be8576cc1f6dc54babc03a9b088acbe, type: 2}
+  - {fileID: 11400000, guid: fc86459b305472a4699eade6da39aae7, type: 2}
+  - {fileID: 11400000, guid: 8546868e1e01f0a448710effa067aadd, type: 2}
+  - {fileID: 11400000, guid: 631bd0dad2e97b941ac66ee672ccc101, type: 2}
+  - {fileID: 11400000, guid: ed705c098825e2a4281f7826c7668b01, type: 2}
   pickupLayermask:
     serializedVersion: 2
     m_Bits: 128

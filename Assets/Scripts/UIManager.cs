@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using TMPro;
+using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -83,7 +85,7 @@ public class UIManager : MonoBehaviour
                 dropdown.value = (int)villager.CurrentRole;
                 if (dropdown.value != (int)Roles.Leader)
                 {
-                    dropdown.onValueChanged.AddListener(delegate { RoleChanged(dropdown.value,villager); });
+                    dropdown.onValueChanged.AddListener(delegate { StartCoroutine(RoleChanged(dropdown.value,villager)); });
                 }
                 else
                 {
@@ -94,14 +96,29 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void RoleChanged(int value, Villager villager)
+    private IEnumerator RoleChanged(int value, Villager villager)
     {
-        villager.CurrentRole = (Roles)value;
+        foreach (var item in StorageManager.itemList)
+        {
+            if ((int)item.itemSO.assignRole == value)
+            {
+                villager.ignoreQueue = true;
+                villager.StopAllCoroutines();
+                yield return gameManager.taskHandler.WalkToLocationCR(villager, item.storageLocation);
+                villager.CurrentRole = (Roles)value;
+                villager.CurrentState = VillagerStates.AssigningRole;
+                StorageManager.EmptyStockpileSpace(item);
+                yield return new WaitForSeconds(villager._animator.GetCurrentAnimatorStateInfo(0).length);
+                villager.CurrentState = VillagerStates.Idle;
+                villager.ignoreQueue = false;
+                yield break;
+            }
+        }
     }
 
     private void GoToVillager(Villager villager)
     {
-        gameManager.level.followObject.transform.position = villager.transform.position;
+        gameManager.level.followObject.transform.position = new Vector3(villager.transform.position.x, 0, villager.transform.position.z);
     }
     
     public void Zoom()

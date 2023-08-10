@@ -20,6 +20,7 @@ public class Villager : MonoBehaviour, IInteractable
     public GameObject target;
     private bool attackStarted;
     private bool finding;
+    public bool ignoreQueue;
     [SerializeField] private float distance;
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
@@ -101,6 +102,7 @@ public class Villager : MonoBehaviour, IInteractable
                     break;
                 case VillagerStates.Walking:
                     agent.isStopped = false;
+                    Debug.Log($"Agent is stopped? {agent.isStopped}");
                     _animator.Play("Walking");
                     break;
                 case VillagerStates.Pickup:
@@ -108,8 +110,11 @@ public class Villager : MonoBehaviour, IInteractable
                     _animator.Play("Pickup");
                     break;
                 case VillagerStates.Fighting:
-                    _animator.Play("Attack03_SwordAndShiled");
+                    _animator.Play("Stab");
                     break;
+                case VillagerStates.AssigningRole:
+                    _animator.Play("Spin");
+                break;
             }
         }
     }
@@ -122,7 +127,7 @@ public class Villager : MonoBehaviour, IInteractable
     /// <summary>
     /// Reference To The Animator Component of the Villager
     /// </summary>
-    [SerializeField]private Animator _animator;
+    public Animator _animator;
 
     private GameManager _gameManager;
     
@@ -557,6 +562,7 @@ public enum VillagerStates
     Walking,
     Pickup,
     Fighting,
+    AssigningRole
 }
 public enum Model
 {

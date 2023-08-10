@@ -100,7 +100,7 @@ public class Level : MonoBehaviour
 
     [SerializeField] private GameObject craftingButtonTemplate;
     [SerializeField] private GameObject craftingContainer;
-    private List<CraftableSO> craftingButtons;
+    private List<StoredItemSO> craftingButtons;
 
     private Villager lastSelected;
 
@@ -116,6 +116,10 @@ public class Level : MonoBehaviour
 
     public GameObject followObject;
 
+    [SerializeField] private TMP_Text craftingDescription;
+    [SerializeField] private Button addToQueueButton;
+    [SerializeField] private Image craftingImage;
+    
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -123,7 +127,7 @@ public class Level : MonoBehaviour
         CloseAllUI();
         toolbar.SetActive(true);
         villagerLog = new Dictionary<Villager, string>();
-        craftingButtons = new List<CraftableSO>();
+        craftingButtons = new List<StoredItemSO>();
 
         List<Villager> tempVillagers = new List<Villager>();
         foreach (var villager in VillagerManager.GetVillagers())
@@ -271,7 +275,6 @@ public class Level : MonoBehaviour
         villagerSelectUI.SetActive(false);
         craftingMenu.SetActive(false);
         buildingToolbar.SetActive(false);
-        // toolbar.SetActive(false);
     }
 
     public void StockpileModeEnabled()
@@ -304,13 +307,20 @@ public class Level : MonoBehaviour
 
             var button = Instantiate(craftingButtonTemplate, craftingContainer.transform);
             var image = button.transform.GetChild(0).GetComponent<Image>();
-            image.sprite = _gameManager.craftingManager.CraftingRecipes[i].sprite;
+            image.sprite = _gameManager.craftingManager.CraftingRecipes[i].uiSprite;
             var buttonRef = button.GetComponent<ButtonReference>();
             buttonRef.recipeReference = _gameManager.craftingManager.CraftingRecipes[i];
             craftingButtons.Add(buttonRef.recipeReference);
-            button.GetComponent<Button>().onClick.AddListener(() =>
-                StartCoroutine(_gameManager.craftingManager.BeginCrafting(buttonRef.recipeReference)));
+            button.GetComponent<Button>().onClick.AddListener(() => ShowCraftingInformation(buttonRef.recipeReference));
         }
+    }
+
+    private void ShowCraftingInformation(StoredItemSO craftingRecipe)
+    {
+        craftingDescription.text = craftingRecipe.itemDescrition;
+        craftingImage.sprite = craftingRecipe.uiSprite;
+        // addToQueueButton.onClick.AddListener(() => )
+        _gameManager.craftingManager.craftingQueue.Enqueue(_gameManager.craftingManager.BeginCrafting(craftingRecipe));
     }
 
 
