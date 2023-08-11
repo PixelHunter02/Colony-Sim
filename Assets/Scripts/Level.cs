@@ -127,7 +127,6 @@ public class Level : MonoBehaviour
     public Transform queueItemContainer;
     
     public GameObject villageHeart;
-
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -323,6 +322,10 @@ public class Level : MonoBehaviour
             if (craftingButtons.Contains(_gameManager.craftingManager.CraftingRecipes[i]))
             {
                 continue;
+            }
+            if(_gameManager.level.villageHeart.GetComponent<VillageHeart>().Level < _gameManager.craftingManager.CraftingRecipes[i].levelUnlocked)
+            {
+                return;
             }
 
             var button = Instantiate(craftingButtonTemplate, craftingContainer.transform);

@@ -24,3 +24,4 @@ MonoBehaviour:
   itemDescrition: 'Requirements: 2 stone, 1 wood --- A sword allows you to assign
     the role fighter, a fighter will fight monsters for you at night time.'
   assignRole: 3
+  levelUnlocked: 3

@@ -12,6 +12,7 @@ public class StoredItemSO : ScriptableObject
     public List<Item> craftingRecipe;
     public string itemDescrition;
     public Roles assignRole;
+    public int levelUnlocked;
 }
 
 [System.Serializable]

@@ -203,6 +203,8 @@ public class Villager : MonoBehaviour, IInteractable
     #region Stats
     
     private int health;
+    private int maxHealth;
+    int modifiedMaxHealth;
 
     public int Health
     {
@@ -239,7 +241,7 @@ public class Villager : MonoBehaviour, IInteractable
         set
         {
             _strength = value;
-            health += _strength;
+            
             Debug.Log($"A New Strength Value Has Been Assigned! The new value is {_strength}");
         }
     }
@@ -274,7 +276,8 @@ public class Villager : MonoBehaviour, IInteractable
     private void Awake()
     {
         monsters = new List<GameObject>();
-        health = 20;
+        
+
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
         _villagerTasks = new List<IEnumerator>();
@@ -297,6 +300,10 @@ public class Villager : MonoBehaviour, IInteractable
     {
         if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
+            maxHealth = 20;
+            modifiedMaxHealth = Mathf.CeilToInt(20 + (0.3f * Strength));
+            Debug.Log(modifiedMaxHealth);
+            Health = modifiedMaxHealth;
             transform.Find("FemaleCharacterPBR").Find("PortraitCamera").gameObject.SetActive(false);
             TryGetComponent(out Outline outline);
             outline.UpdateMaterialProperties();
@@ -531,6 +538,7 @@ public class Villager : MonoBehaviour, IInteractable
     public Coroutine RandomWalkCR;
     public IEnumerator RandomWalk(float size)
     {
+
         agent.ResetPath();
         agent.isStopped = false;
         yield return new WaitForSeconds(Random.Range(0.1f, 8f));

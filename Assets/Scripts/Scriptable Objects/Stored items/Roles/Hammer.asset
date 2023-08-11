@@ -25,3 +25,4 @@ MonoBehaviour:
     the role of a crafter, a crafter allows you to build in the build menu and craft
     resources'
   assignRole: 5
+  levelUnlocked: 3

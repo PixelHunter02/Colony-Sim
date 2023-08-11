@@ -58,39 +58,42 @@ public class Tutorial : MonoBehaviour
                     Level.AddToVillagerLog(villager,"Good Job! Now you have created a stockpile you are able to access a list of all your village resources, you can do this by pressing the chest icon.");
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Look at your resources now");
-                    _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 10;
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = false;
                     _villagerManagement.interactable = false;
                     _building.interactable = false;
-                    // Add experience to the village heart
-                    break;
-                case TutorialStage.VillageHeartTutorial:
-                    Level.AddToVillagerLog(villager,"");
-                    Level.AddToVillagerLog(villager,"Nice! You may have noticed after doing these tasks our village heart has started glowing, this is because it is ready to power up. Powering up the village heart will allow you to summon more villagers to our colony.");
-                    // Debug.Log("Click on the village heart and upgrade it now.");
-                    
-                    _stockpile.interactable = true;
-                    _inventory.interactable = true;
-                    _crafting.interactable = false;
-                    _villagerManagement.interactable = false;
-                    _building.interactable = false;
-                    _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 10;
 
+                    // Add experience to the village heart
+                    _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 10;
                     break;
+
                 case TutorialStage.CraftingTutorial:
                     _gameManager.level.villageHeart.GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 0f);
-                    Level.AddToVillagerLog(villager,"");
-                    Level.AddToVillagerLog(villager,"Now we have another villager we should give them a role, we dont want them getting bored now do we!");
-                    Level.AddToVillagerLog(villager,"");
-                    Level.AddToVillagerLog(villager,"Sadly, we dont have anything we can give them to do, why dont you go ahead and craft an axe in the crafting menu, you can access this by clicking the anvil in your toolbar. This will allow us to assign them the role of lumberjack. We will require 2 sticks and 1 stone to do this, luckily there was some laying on the ground which I went ahead and picked up");
+                    Level.AddToVillagerLog(villager, "");
+                    Level.AddToVillagerLog(villager, "Now we have another villager we should give them a role, we dont want them getting bored now do we!");
+                    Level.AddToVillagerLog(villager, "");
+                    Level.AddToVillagerLog(villager, "Sadly, we dont have anything we can give them to do, why dont you go ahead and craft an axe in the crafting menu, you can access this by clicking the anvil in your toolbar. This will allow us to assign them the role of lumberjack. We will require 2 sticks and 1 stone to do this, luckily there was some laying on the ground which I went ahead and picked up");
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = true;
                     _villagerManagement.interactable = false;
                     _building.interactable = false;
                     break;
+
+                case TutorialStage.VillageHeartTutorial:
+                    Level.AddToVillagerLog(villager,"");
+                    Level.AddToVillagerLog(villager,"Nice! You may have noticed after doing these tasks our village heart has started glowing, this is because it is ready to power up. Powering up the village heart will allow you to summon more villagers to our colony.");                  
+                    _stockpile.interactable = true;
+                    _inventory.interactable = true;
+                    _crafting.interactable = false;
+                    _villagerManagement.interactable = false;
+                    _building.interactable = false;
+
+                    //Add Experience To The Village Heart
+                    _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 10;
+                    break;
+                
                 case TutorialStage.VillagerManagementTutorial:
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Nice! we can access the villager management menu by clicking the scroll in your taskbar.");
@@ -131,8 +134,8 @@ public enum TutorialStage
     VillagerStatsTutorial,
     StockpileTutorial,
     InventoryTutorial,
-    VillageHeartTutorial,
     CraftingTutorial,
+    VillageHeartTutorial,
     VillagerManagementTutorial,
     BuildingTutorial,
     CompletedTutorial,

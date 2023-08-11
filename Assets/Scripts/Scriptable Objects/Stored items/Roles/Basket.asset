@@ -24,3 +24,4 @@ MonoBehaviour:
   itemDescrition: 'Requirements: 1 wood --- The basket will allow you to assign the
     roll "Gatherer" a gatherer will automatically collect resources for you'
   assignRole: 2
+  levelUnlocked: 3

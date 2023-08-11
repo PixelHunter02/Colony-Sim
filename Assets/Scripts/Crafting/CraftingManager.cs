@@ -41,10 +41,12 @@ public class CraftingManager : MonoBehaviour
     {
         while (craftingQueue?.Count > 0)
         {
-            var queueToRemove = craftingQueue.Peek();
-            yield return StartCoroutine(craftingQueue.Dequeue());
-            Destroy(craftingQueueDictionary[queueToRemove]);
-            
+            if (VillagerManager.TryGetVillagerByRole(craftingRoles, out Villager villager)){
+                var queueToRemove = craftingQueue.Peek();
+                yield return StartCoroutine(craftingQueue.Dequeue());
+                Destroy(craftingQueueDictionary[queueToRemove]);
+            }
+            yield return null;
         }
 
         yield return new WaitForSeconds(0.2f);

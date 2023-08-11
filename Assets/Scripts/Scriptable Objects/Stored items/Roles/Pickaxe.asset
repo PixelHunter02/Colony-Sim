@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 878ba3fe7fd5b05498331b73a8f42033, type: 3}
   m_Name: Pickaxe
   m_EditorClassIdentifier: 
-  prefab: {fileID: 100000, guid: 05e4b3c293c93a240add9619ccd42eef, type: 3}
+  prefab: {fileID: 100000, guid: 1c6a9cc786ee51644a0ee0c2dc61befa, type: 3}
   objectName: Pickaxe
   uiSprite: {fileID: 21300000, guid: 1b3fa240110de12469c4fcd732bde71f, type: 3}
   canBePlaced: 0
@@ -24,3 +24,4 @@ MonoBehaviour:
   itemDescrition: 'Requirements: 2 wood 3 stone --- A pickaxe allows you to assign
     the role "Miner" The miner will harvest stone for you'
   assignRole: 4
+  levelUnlocked: 3

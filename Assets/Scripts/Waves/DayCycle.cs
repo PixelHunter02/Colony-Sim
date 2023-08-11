@@ -10,17 +10,39 @@ public class DayCycle : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private int dayCount;
     [SerializeField] GameObject monsterWavesManager;
+    GameEvents gameEvents;
 
     private void Awake()
     {
         transform.localEulerAngles = Vector3.zero;
         monsterWavesManager = GameManager.Instance.monsterWaves.gameObject;
+        gameEvents = GameEvents.current;
+    }
+
+    private void OnEnable()
+    {
+        gameEvents.onNightTimeEnd += StartDay;
+        gameEvents.onNightTimeStart += StartNight;
+    }
+    private void OnDisable()
+    {
+        gameEvents.onNightTimeEnd -= StartDay;
+        gameEvents.onNightTimeStart -= StartNight;
     }
 
     void Start()
     {
         StartCoroutine(DayTime(dayInterval));
         monsterWavesManager.GetComponent<MonsterWaves>().SpawnDayMonsters(3);
+    }
+
+    public void StartDay()
+    {
+        StartCoroutine(DayTime(dayInterval));
+    }
+    public void StartNight()
+    {
+        StartCoroutine(NightTime(nightInterval));
     }
 
     private IEnumerator DayTime(float timeTicks)

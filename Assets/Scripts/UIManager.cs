@@ -25,6 +25,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera _cinemachineVCam;
 
     GameManager gameManager;
+    public Transform roleManagementContainer;
 
     private void Awake()
     {

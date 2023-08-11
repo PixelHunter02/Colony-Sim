@@ -24,3 +24,4 @@ MonoBehaviour:
   itemDescrition: 'Requirements: 5 wood --- A staff allows you to assign a mage,
     mages give off ambient light and can cast magioc spells from a distance.'
   assignRole: 0
+  levelUnlocked: 3

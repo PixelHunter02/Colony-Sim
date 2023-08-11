@@ -8,6 +8,15 @@ public class VillageHeart : MonoBehaviour,IInteractable
 {
     private GameManager _gameManager;
     private int level = 1;
+    public int Level
+    {
+        get => level;
+        private set
+        {
+            level = value;
+
+        }
+    }
     private float experience = 0;
 
     [SerializeField] private Slider villagerHeartEXPSlider;
@@ -53,7 +62,7 @@ public class VillageHeart : MonoBehaviour,IInteractable
 
     public void LevelUp()
     {
-        level++;
+        Level++;
         experienceToNextLevel += experienceToNextLevel / 10;
         GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 0f);
         Experience = 0;
