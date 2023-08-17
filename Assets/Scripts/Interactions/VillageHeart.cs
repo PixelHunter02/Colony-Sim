@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class VillageHeart : MonoBehaviour,IInteractable
@@ -21,6 +24,11 @@ public class VillageHeart : MonoBehaviour,IInteractable
 
     [SerializeField] private Slider villagerHeartEXPSlider;
 
+    public GameObject villagerHeartMenu;
+    public Slider villageHeartMenuSlider;
+    public TMP_Text villageHeartExpText;
+    public TMP_Text villageHeartLevelText;
+
     public float Experience
     {
         get => experience;
@@ -28,8 +36,11 @@ public class VillageHeart : MonoBehaviour,IInteractable
         {
             experience = value;
             villagerHeartEXPSlider.value = experience / experienceToNextLevel;
+            villageHeartMenuSlider.value = experience / experienceToNextLevel;
+            villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
         }
     }
+    
     [SerializeField]private float experienceToNextLevel = 20;
 
     [SerializeField] private GameObject villagerPrefab;
@@ -37,6 +48,10 @@ public class VillageHeart : MonoBehaviour,IInteractable
     {
         _gameManager = GameManager.Instance;
         enabled = false;
+        villagerHeartEXPSlider.value = experience / experienceToNextLevel;
+        villageHeartMenuSlider.value = experience / experienceToNextLevel;
+        villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
+        
     }
 
     public void OnInteraction()
@@ -44,14 +59,20 @@ public class VillageHeart : MonoBehaviour,IInteractable
         Debug.Log("You Interacted with the village heart!");
         if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillageHeartTutorial)
         {
-            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.CraftingTutorial;
+            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.VillagerManagementTutorial;
         }
-        
-        LevelUp();
-        
+
+        villagerHeartMenu.SetActive(true);
+        // LevelUp();
+
     }
 
     public bool CanInteract()
+    {
+        return true;
+    }
+
+    public bool ReadyToLevelUp()
     {
         if (Experience >= experienceToNextLevel)
         {
@@ -59,13 +80,16 @@ public class VillageHeart : MonoBehaviour,IInteractable
         }
         return false;
     }
-
+    
     public void LevelUp()
     {
+        if(!ReadyToLevelUp())
+            return;
         Level++;
+        villageHeartLevelText.text = $"Village Heart Level: {Level}";
+        Experience -= experienceToNextLevel;
         experienceToNextLevel += experienceToNextLevel / 10;
         GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 0f);
-        Experience = 0;
         var villagerGO = Instantiate(villagerPrefab);
         VillagerManager.villagers.Add(villagerGO.GetComponent<Villager>());
     }

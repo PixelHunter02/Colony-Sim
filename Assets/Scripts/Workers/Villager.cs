@@ -205,6 +205,7 @@ public class Villager : MonoBehaviour, IInteractable
     private int health;
     private int maxHealth;
     int modifiedMaxHealth;
+    private int hunger;
 
     public int Health
     {
@@ -265,6 +266,16 @@ public class Villager : MonoBehaviour, IInteractable
         {
             _magic = value;
             Debug.Log($"A New Magic Value Has Been Assigned! The new value is {_magic}");
+        }
+    }
+
+    public int Hunger
+    {
+        get => hunger;
+        set
+        {
+            Debug.Log("Hunger Has Been Modified");
+            hunger = value;
         }
     }
 
@@ -580,9 +591,7 @@ public class Villager : MonoBehaviour, IInteractable
 
     private void OnDeath()
     {
-        // Debug.Log(VillagerManager.villagers.Contains(target.GetComponent<Villager>()));
         VillagerManager.villagers.Remove(this);
-        // villagers/.Remove(target.gameObject);
         Destroy(_gameManager.uiManager.templateDictionary[this]);
         _gameManager.uiManager.templateDictionary.Remove(this);
         Destroy(gameObject);

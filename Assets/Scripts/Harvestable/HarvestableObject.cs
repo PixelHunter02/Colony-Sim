@@ -52,7 +52,9 @@ public class HarvestableObject : MonoBehaviour, IInteractable
             var pushDirection = new Vector3(x, 50, z);
             drop.TryGetComponent(out Rigidbody rb);
             rb.AddForce(pushDirection*pushIntensity);
+            _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += 1 * _gameManager.level.ExpBoostAmount;
             yield return new WaitForSeconds(timeBetweenSpawns);
         }
+        Destroy(gameObject);
     }
 }

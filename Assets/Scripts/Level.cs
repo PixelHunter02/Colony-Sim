@@ -64,7 +64,7 @@ public class Level : MonoBehaviour
                     toolbar.SetActive(true);
                     if (tutorialManager.TutorialStage == TutorialStage.InventoryTutorial)
                     {
-                        tutorialManager.TutorialStage = TutorialStage.VillageHeartTutorial;
+                        tutorialManager.TutorialStage = TutorialStage.CraftingTutorial;
                     }
                     break;
                 case GameState.DoubleSpeed:
@@ -127,6 +127,18 @@ public class Level : MonoBehaviour
     public Transform queueItemContainer;
     
     public GameObject villageHeart;
+
+    private float currentExpBoost = 1f;
+
+    public float ExpBoostAmount
+    {
+        get => currentExpBoost;
+        set
+        {
+            Debug.Log("Modified EXP Boost");
+            currentExpBoost = value;
+        }
+    }
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -281,11 +293,14 @@ public class Level : MonoBehaviour
 
     public void CloseAllUI()
     {
+        GameState = GameState.Playing;
         _infoUI.SetActive(false);
         inventoryUI.SetActive(false);
         villagerSelectUI.SetActive(false);
+        craftingContainer.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(1500, 790);
         craftingMenu.SetActive(false);
         buildingToolbar.SetActive(false);
+        villageHeart.GetComponent<VillageHeart>().villagerHeartMenu.SetActive(false);
     }
 
     public void StockpileModeEnabled()
@@ -343,6 +358,7 @@ public class Level : MonoBehaviour
     {
         craftingDescription.text = craftingRecipe.itemDescrition;
         craftingImage.sprite = craftingRecipe.uiSprite;
+        craftingContainer.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(775, 790);
         craftingImage.transform.GetChild(0).GetComponent<TMP_Text>().text = craftingRecipe.objectName;
         addToQueueButton.onClick.RemoveAllListeners();
         addToQueueButton.onClick.AddListener(() => AddToCraftingQueue(craftingRecipe));

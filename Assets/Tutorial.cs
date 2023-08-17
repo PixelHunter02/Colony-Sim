@@ -45,7 +45,7 @@ public class Tutorial : MonoBehaviour
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"To begin, click on the mine cart in your tool bar, this is how you enable stockpile mode. In stockpile mode you can click and drag on the ground to create a stockpile. this is where villagers will place items they come across");
                     Level.AddToVillagerLog(villager,"");
-                    Level.AddToVillagerLog(villager,"Create a stockpile now.");
+                    Level.AddToVillagerLog(villager,"Go ahead and create a stockpile now.");
                     villager.agent.isStopped = false;
                     _stockpile.interactable = true;
                     _inventory.interactable = false;
@@ -57,7 +57,7 @@ public class Tutorial : MonoBehaviour
                     Level.AddToVillagerLog(villager,"");
                     Level.AddToVillagerLog(villager,"Good Job! Now you have created a stockpile you are able to access a list of all your village resources, you can do this by pressing the chest icon.");
                     Level.AddToVillagerLog(villager,"");
-                    Level.AddToVillagerLog(villager,"Look at your resources now");
+                    Level.AddToVillagerLog(villager,"Have a look as I collect the resources laying on the ground.");
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = false;
@@ -71,9 +71,9 @@ public class Tutorial : MonoBehaviour
                 case TutorialStage.CraftingTutorial:
                     _gameManager.level.villageHeart.GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 0f);
                     Level.AddToVillagerLog(villager, "");
-                    Level.AddToVillagerLog(villager, "Now we have another villager we should give them a role, we dont want them getting bored now do we!");
+                    Level.AddToVillagerLog(villager, "Awesome work! next up is the crafting menu, if you click on the anvil button in your toolbar, your crafting menu will be opened.");
                     Level.AddToVillagerLog(villager, "");
-                    Level.AddToVillagerLog(villager, "Sadly, we dont have anything we can give them to do, why dont you go ahead and craft an axe in the crafting menu, you can access this by clicking the anvil in your toolbar. This will allow us to assign them the role of lumberjack. We will require 2 sticks and 1 stone to do this, luckily there was some laying on the ground which I went ahead and picked up");
+                    Level.AddToVillagerLog(villager, "In the crafting menu you can select an item to be crafted and click the button to add it to the queue, if you have the required resources. Go ahead and craft an axe.");
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = true;
@@ -83,7 +83,7 @@ public class Tutorial : MonoBehaviour
 
                 case TutorialStage.VillageHeartTutorial:
                     Level.AddToVillagerLog(villager,"");
-                    Level.AddToVillagerLog(villager,"Nice! You may have noticed after doing these tasks our village heart has started glowing, this is because it is ready to power up. Powering up the village heart will allow you to summon more villagers to our colony.");                  
+                    Level.AddToVillagerLog(villager,"You're doing great so far! We now have an axe but no one to use it. After doing those tasks your village heart has leveled up! go ahead and click on it to open the upgrade menu, then click the level up button");                  
                     _stockpile.interactable = true;
                     _inventory.interactable = true;
                     _crafting.interactable = false;

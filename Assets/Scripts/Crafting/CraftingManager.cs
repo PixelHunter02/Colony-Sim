@@ -25,7 +25,7 @@ public class CraftingManager : MonoBehaviour
     private List<Roles> craftingRoles;
 
     public Dictionary<IEnumerator,GameObject> craftingQueueDictionary;
-
+    
     private void Awake()
     {
         craftingQueue = new Queue<IEnumerator>();
@@ -147,7 +147,7 @@ public class CraftingManager : MonoBehaviour
 
         if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.CraftingTutorial)
         {
-            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.VillagerManagementTutorial;
+            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.VillageHeartTutorial;
         }
     }
     
@@ -164,6 +164,8 @@ public class CraftingManager : MonoBehaviour
         }
         assignedVillager.CurrentState = VillagerStates.Pickup;
         Villager.StopVillager(assignedVillager, true);
+        
+        
         _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += assignedVillager.Craft;
         yield return new WaitForSeconds(1f);
     }

@@ -66,7 +66,7 @@ Material:
     - _DECALEMISSIONONOFF: 1
     - _DECALSONOFF: 1
     - _DETAILTEXTUREONOFF: 1
-    - _DecalEmissionIntensity: 0
+    - _DecalEmissionIntensity: 9.23
     - _DecalsOnOff: 1
     - _DetailTextureONOFF: 1
     - _DetailTextureONOFF1: 1
@@ -83,9 +83,9 @@ Material:
     - _OREEMISSIONONOFF: 1
     - _OreEmissionIntensity: 7.23
     - _SNOWONOFF: 0
-    - _Smoothness: 0.321
+    - _Smoothness: 0
     - _SnowAmount: 0.215
-    - _SnowCoverage: 0.272
+    - _SnowCoverage: 0.19
     - _SnowFade: 0.736
     - _SnowNoiseContrast: 0.223
     - _SnowNoiseOnOff: 1
