@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec4c05b2d0ee20489743cdc89c22e5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  craftingRecipe: {fileID: 11400000, guid: f77c86ecf092dc840929f5c19f0a4794, type: 2}
+  craftingRecipe: {fileID: 11400000, guid: 1d251a9640f53a147a56f9b1cd7be030, type: 2}
   building: {fileID: 6671804338487449665}
   built: {fileID: 829333884174036585}
 --- !u!208 &6788807712324637477

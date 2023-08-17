@@ -10,10 +10,13 @@ public class TaskHandler : MonoBehaviour
     // public List<IEnumerator> queuedTasks;
     public Queue<Coroutine> queuedTasks;
     public LayerMask pickupLayerMask;
+    public List<Roles> crafters;
+
     private void Awake()
     {
         _gameManager = GameManager.Instance;
         queuedTasks = new Queue<Coroutine>();
+        crafters = new List<Roles>() { Roles.Crafter, Roles.Leader };
     }
 
     #region Assign
@@ -22,6 +25,7 @@ public class TaskHandler : MonoBehaviour
     {
         if (VillagerManager.TryGetVillagerByRole(task.harvestableObject.canInteract, out Villager villager))
         {
+            villager.StopAllCoroutines();
             yield return StartCoroutine(RunTaskCR(villager, task));
             queuedTasks.Dequeue();
         }
@@ -36,6 +40,7 @@ public class TaskHandler : MonoBehaviour
     {
         if (VillagerManager.TryGetVillagerByRole(out Villager villager))
         {
+            villager.StopAllCoroutines();
             yield return StartCoroutine(RunTaskCR(villager, task));
             queuedTasks.Dequeue();
         }
@@ -48,8 +53,9 @@ public class TaskHandler : MonoBehaviour
     
     public IEnumerator TaskToAssign(BuildStats task)
     {
-        if (VillagerManager.TryGetVillagerByRole(Roles.Crafter, out Villager villager))
+        if (VillagerManager.TryGetVillagerByRole(crafters, out Villager villager))
         {
+            villager.StopAllCoroutines();
             yield return StartCoroutine(RunTaskCR(villager, task));
             queuedTasks.Dequeue();
         }
@@ -94,10 +100,13 @@ public class TaskHandler : MonoBehaviour
             slider.value = progress;
             yield return null;
         }
+        
+        
 
         // Show The Task Has Been Completed
         sprite.sprite = task.harvestableObject.taskCompleteSprite;
         StartCoroutine(task.CRSpawnHarvestDrops());
+        Destroy(task.gameObject);
         
         //Set The Villager To Its  Idle State
         Villager.StopVillager(assignedVillager, false);

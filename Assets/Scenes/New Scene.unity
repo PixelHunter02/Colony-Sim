@@ -1693,6 +1693,8 @@ MonoBehaviour:
     type: 3}
   queueItemContainer: {fileID: 1083481532}
   villageHeart: {fileID: 48339488}
+  villagerNavMesh: {fileID: 410029545}
+  monsterNavMesh: {fileID: 410029547}
 --- !u!1001 &151475401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5112,7 +5114,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 0
@@ -39366,6 +39368,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6129817739656269501, guid: 1fbdd99ef1d1e2b4dac24a8d8ef04741,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6671804338487449665, guid: 1fbdd99ef1d1e2b4dac24a8d8ef04741,
         type: 3}
       propertyPath: m_IsActive
@@ -39375,6 +39382,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9076701836210926426, guid: 1fbdd99ef1d1e2b4dac24a8d8ef04741,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9076701836210926426, guid: 1fbdd99ef1d1e2b4dac24a8d8ef04741,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

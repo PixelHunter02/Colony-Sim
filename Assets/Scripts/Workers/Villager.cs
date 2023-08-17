@@ -287,30 +287,27 @@ public class Villager : MonoBehaviour, IInteractable
     private void Awake()
     {
         monsters = new List<GameObject>();
-        
-
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
         _villagerTasks = new List<IEnumerator>();
 
         TasksToQueue = new List<IEnumerator>();
         _animator = transform.GetChild(0).GetComponent<Animator>();
-        if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
         {
             _portraitRenderTexture = new RenderTexture(256, 256, 8);
             portraitCamera.targetTexture = _portraitRenderTexture;
             _gameManager.villagerManager.GenerateNewVillagerStats(this);
         }
-        else if (SceneManager.GetActiveScene().name.Equals("te"))
-        {
-            CurrentState = VillagerStates.Idle;
-        }
     }
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
+        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
         {
+            objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
+            objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
+            
             maxHealth = 20;
             modifiedMaxHealth = Mathf.CeilToInt(20 + (0.3f * Strength));
             Debug.Log(modifiedMaxHealth);
@@ -349,71 +346,78 @@ public class Villager : MonoBehaviour, IInteractable
     {
         VillagerName = text;
     }
-    
+
     private void Update()
     {
-        if (SceneManager.GetActiveScene().name.Contains("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
+        if (SceneManager.GetActiveScene().name.Contains("New Scene"))
         {
-            objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
-            objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
-            
-            if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
-            {
-                foreach (var task in TasksToQueue)
-                {
-                    _villagerTasks.Add(task);
-                }
-                TasksToQueue.Clear();
-                _runningTasks = true;
-                StartCoroutine(RunTasks());
-            }
-        }
-        
-        
+            // objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
+            // objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
 
-        for (int i = 0; i < objInAwarenessZone.Count; i++)
-        {
-            if (!objInAwarenessZone[i])
+            BeginRunningTasks();
+
+            if (objInAwarenessZone.Count == 0)
             {
                 return;
             }
-            if (objInAwarenessZone[i].GetComponent<Monster>())
+            
+            
+            
+            for (int i = 0; i < objInAwarenessZone.Count; i++)
             {
-                if ((_villagerRole == Roles.Fighter|| _villagerRole == Roles.Leader) && !finding)
+                if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
                 {
-                    finding = true;
-                    StartCoroutine(FindTarget(3));
-                }
-                else
-                {
-                    StartCoroutine(FindTarget(10));
-                    //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
-                }
+                    Debug.Log($"{VillagerName} is {CurrentRole}");
+                    if ((CurrentRole == Roles.Fighter || CurrentRole == Roles.Leader) && !finding)
+                    {
+                        Debug.Log($"{VillagerName} is {CurrentRole}");
+                        finding = true;
+                        StartCoroutine(FindTarget(3));
+                    }
+                    else if ((CurrentRole != Roles.Fighter || CurrentRole != Roles.Leader) &&!finding)
+                    {
+                        StartCoroutine(GoToLight(10));
+                        //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
+                    }
 
-                if (!monsters.Contains(objInAwarenessZone[i]))
-                {
-                    monsters.Add(objInAwarenessZone[i]);
+                    if (!monsters.Contains(objInAwarenessZone[i]))
+                    {
+                        monsters.Add(objInAwarenessZone[i]);
+                    }
                 }
             }
-        }
-        if (target)
-        {
-            transform.LookAt(target.transform);
 
-            for (int i = 0; i < objInTriggerZone.Count; i++)
+            if (target)
             {
-                //print(gameObject.name + " has come into contact with " + objInTriggerZone[i]);
-                //print(gameObject.name + " is looking for " + target);
-                if (objInTriggerZone[i] == target && !attackStarted)
+                transform.LookAt(target.transform);
+
+                for (int i = 0; i < objInTriggerZone.Count; i++)
                 {
-                    attackStarted = true;
-                    print(gameObject.name + " has found its target");
-                    StartCoroutine(AttackMonster());
+                    if (objInTriggerZone[i] == target && !attackStarted)
+                    {
+                        attackStarted = true;
+                        print(gameObject.name + " has found its target");
+                        StartCoroutine(AttackMonster());
+                    }
                 }
             }
         }
     }
 
+    public void BeginRunningTasks()
+    {
+        if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
+        {
+            foreach (var task in TasksToQueue)
+            {
+                _villagerTasks.Add(task);
+            }
+            TasksToQueue.Clear();
+            _runningTasks = true;
+            StartCoroutine(RunTasks());
+        }
+    }
+    
     public IEnumerator GoToLight(float timeTicks)
     {
         print("Go to Light");
@@ -425,7 +429,6 @@ public class Villager : MonoBehaviour, IInteractable
             float nearestDistance = 1000;
             if (distance < nearestDistance)
             {
-                print("Going?");
                 nearestObject = lightSource[i];
                 nearestDistance = distance;
                 target = nearestObject;
@@ -433,7 +436,6 @@ public class Villager : MonoBehaviour, IInteractable
             if (target)
             {
                 agent.SetDestination(target.transform.position);
-                print("GOING!");
             }
         }
         yield return new WaitForSeconds(timeTicks);
@@ -448,9 +450,6 @@ public class Villager : MonoBehaviour, IInteractable
         {
             //check for closest villager
             distance = Vector3.Distance(transform.position, monsters[i].transform.position);
-            //print(distance);
-            //print(nearestDistance);
-
             if (distance < nearestDistance)
             {
                 nearestObject = monsters[i];
@@ -481,13 +480,11 @@ public class Villager : MonoBehaviour, IInteractable
             GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
             for (int i = 0; i < objInTriggerZone.Count; i++)
             {
-                print(_villagerName + " has come into contact with " + objInTriggerZone[i]);
-                print(_villagerName + " is looking for " + target);
+                // print(_villagerName + " has come into contact with " + objInTriggerZone[i]);
+                // print(_villagerName + " is looking for " + target);
                 if (objInTriggerZone[i] == target)
                 {
-                    //transform.LookAt(target.transform);
-                    //CurrentState = VillagerStates.Fighting;
-                    print("Villager fights Back");
+                    // print("Villager fights Back");
                     target.GetComponent<Monster>().health -= 1 + _strength / 10;
                     print(target.name + " health is down to: " + target.GetComponent<Monster>().health);
                     
@@ -507,6 +504,7 @@ public class Villager : MonoBehaviour, IInteractable
             }
         }
         attackStarted = false;
+        _currentState = VillagerStates.Idle;
         StartCoroutine(FindTarget(1));
     }
 
@@ -532,7 +530,6 @@ public class Villager : MonoBehaviour, IInteractable
 
     public static void StopVillager(Villager villager, bool value)
     {
-        villager.agent.ResetPath();
         villager.agent.isStopped = value;
     }
 

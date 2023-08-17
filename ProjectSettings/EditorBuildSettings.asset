@@ -11,9 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/New Scene.unity
     guid: d430a415e8a9c2b45828caa2b3708d1e
-  - enabled: 0
-    path: Assets/Scenes/Tablet.unity
-    guid: 8556c2b1ce046fd4388e65de7513ca40
   m_configObjects:
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
       guid: a51cbde24a297cd44b140b9f90900061, type: 2}

@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Cinemachine;
 using TMPro;
-using Unity.VisualScripting;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Level : MonoBehaviour
@@ -139,6 +137,9 @@ public class Level : MonoBehaviour
             currentExpBoost = value;
         }
     }
+
+    public NavMeshSurface villagerNavMesh;
+    public NavMeshSurface monsterNavMesh;
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -383,6 +384,7 @@ public class Level : MonoBehaviour
                 continue;
             }
             var newButton = Instantiate(buildButtonTemplate, buildContentHolder);
+            newButton.GetComponent<Image>().sprite = building.uiSprite;
             newButton.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.currentBuilding = building);
             newButton.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.PreviewSetup(_gameManager.buildingManager.currentBuilding.prefab));
             _buildingToolbarButtons.TryAdd(building,newButton);

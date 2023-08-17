@@ -72,11 +72,17 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneLoaded += SceneSetup;
+
+        HarvestableObject.onHarvestCompletedEvent += level.villagerNavMesh.BuildNavMesh;
+        HarvestableObject.onHarvestCompletedEvent += level.monsterNavMesh.BuildNavMesh;
     }
-    
+
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= SceneSetup;
+        
+        HarvestableObject.onHarvestCompletedEvent -= level.villagerNavMesh.BuildNavMesh;
+        HarvestableObject.onHarvestCompletedEvent -= level.monsterNavMesh.BuildNavMesh;
     }
 
     private void SceneSetup(Scene scene, LoadSceneMode mode)
