@@ -293,7 +293,7 @@ public class Level : MonoBehaviour
 
     public void CloseAllUI()
     {
-        GameState = GameState.Playing;
+        //GameState = GameState.Playing;
         _infoUI.SetActive(false);
         inventoryUI.SetActive(false);
         villagerSelectUI.SetActive(false);

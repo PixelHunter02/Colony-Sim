@@ -52,7 +52,7 @@ public class DayCycle : MonoBehaviour
 
         if (gameObject.transform.localEulerAngles.x > 185)
         {
-            gameObject.transform.GetComponent<Light>().enabled = false;
+            //gameObject.transform.GetComponent<Light>().enabled = false;
             dayCount++;
             monsterWavesManager.GetComponent<MonsterWaves>().SpawnWave(dayCount);
             GameEvents.current.NightTimeStart();
@@ -73,7 +73,7 @@ public class DayCycle : MonoBehaviour
 
         if (gameObject.transform.localEulerAngles.x < 185)
         {
-            gameObject.transform.GetComponent<Light>().enabled = true;
+            //gameObject.transform.GetComponent<Light>().enabled = true;
             StartCoroutine(DayTime(dayInterval));
         }
         else

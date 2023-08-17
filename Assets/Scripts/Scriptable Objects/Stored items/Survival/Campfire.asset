@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1558265980526532, guid: 1fbdd99ef1d1e2b4dac24a8d8ef04741, type: 3}
   objectName: Campfire
-  maxSize: 0
-  uiSprite: {fileID: 21300000, guid: 80a9789b0f78c3341a10984d9cf97005, type: 3}
-  pickupSound: {fileID: 0}
-  useSound: {fileID: 0}
+  uiSprite: {fileID: 21300000, guid: e6284f2e8893e094aa67fda3d9bc743f, type: 3}
   canBePlaced: 0
+  craftingRecipe: []
+  itemDescrition: 
+  assignRole: 0
+  levelUnlocked: 0

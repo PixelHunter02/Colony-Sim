@@ -92,5 +92,6 @@ public class VillageHeart : MonoBehaviour,IInteractable
         GetComponentInChildren<Renderer>().material.SetFloat("_DecalEmissionIntensity", 0f);
         var villagerGO = Instantiate(villagerPrefab);
         VillagerManager.villagers.Add(villagerGO.GetComponent<Villager>());
+        _gameManager.level.CloseAllUI();
     }
 }

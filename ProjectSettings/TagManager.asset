@@ -11,6 +11,7 @@ TagManager:
   - InventorySlot
   - Crops
   - Monster
+  - Light
   layers:
   - Default
   - TransparentFX
@@ -21,7 +22,7 @@ TagManager:
   - Villager Information
   - Pickup
   - Stockpile
-  - 
+  - Light
   - 
   - 
   - 

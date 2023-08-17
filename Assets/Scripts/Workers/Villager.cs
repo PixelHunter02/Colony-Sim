@@ -386,6 +386,7 @@ public class Villager : MonoBehaviour, IInteractable
                 }
                 else
                 {
+                    StartCoroutine(FindTarget(10));
                     //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
                 }
 
@@ -411,6 +412,31 @@ public class Villager : MonoBehaviour, IInteractable
                 }
             }
         }
+    }
+
+    public IEnumerator GoToLight(float timeTicks)
+    {
+        print("Go to Light");
+        GameObject[] lightSource = GameObject.FindGameObjectsWithTag("Light");
+        for (int i = 0; i < monsters.Count; i++)
+        {
+            distance = Vector3.Distance(transform.position, lightSource[i].transform.position);
+
+            float nearestDistance = 1000;
+            if (distance < nearestDistance)
+            {
+                print("Going?");
+                nearestObject = lightSource[i];
+                nearestDistance = distance;
+                target = nearestObject;
+            }
+            if (target)
+            {
+                agent.SetDestination(target.transform.position);
+                print("GOING!");
+            }
+        }
+        yield return new WaitForSeconds(timeTicks);
     }
 
     public IEnumerator FindTarget(float timeTicks)
