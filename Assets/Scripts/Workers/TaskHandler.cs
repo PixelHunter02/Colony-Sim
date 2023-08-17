@@ -9,7 +9,7 @@ public class TaskHandler : MonoBehaviour
     private GameManager _gameManager;
     // public List<IEnumerator> queuedTasks;
     public Queue<Coroutine> queuedTasks;
-    public LayerMask pickupLayerMask;
+    // public LayerMask pickupLayerMask;
     public List<Roles> crafters;
 
     private void Awake()
@@ -217,10 +217,10 @@ public class TaskHandler : MonoBehaviour
         Villager.SetVillagerDestination(assignedVillager, location.storageLocation);
         assignedVillager.CurrentState = VillagerStates.Walking;
        
-        while (!Physics.Raycast(new Vector3(assignedVillager.transform.position.x,assignedVillager.transform.position.y+1.5f,assignedVillager.transform.position.z),Vector3.down*2,10,pickupLayerMask))
-        {
-            yield return null;
-        }
+        // while (!Physics.Raycast(new Vector3(assignedVillager.transform.position.x,assignedVillager.transform.position.y+1.5f,assignedVillager.transform.position.z),Vector3.down*2,10,pickupLayerMask))
+        // {
+        //     yield return null;
+        // }
         assignedVillager.CurrentState = VillagerStates.Pickup;
         Debug.Log("Hit");
         Villager.StopVillager(assignedVillager, true);

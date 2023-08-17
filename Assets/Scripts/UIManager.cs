@@ -41,14 +41,6 @@ public class UIManager : MonoBehaviour
         strength.text = villager.Strength.ToString();
     }
 
-    // public void UpdateVillagerStatsUI(Villager villager)
-    // {
-    //     health.text = villager.health.ToString();
-    //     magic.text = villager.Magic.ToString();
-    //     craft.text = villager.Craft.ToString();
-    //     strength.text = villager.Strength.ToString();
-    // }
-
     public void OpenVillagerMenu()
     {
         villagerManagementUI.SetActive(true);

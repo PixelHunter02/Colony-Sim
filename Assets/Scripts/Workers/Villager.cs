@@ -480,14 +480,9 @@ public class Villager : MonoBehaviour, IInteractable
             GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
             for (int i = 0; i < objInTriggerZone.Count; i++)
             {
-                // print(_villagerName + " has come into contact with " + objInTriggerZone[i]);
-                // print(_villagerName + " is looking for " + target);
                 if (objInTriggerZone[i] == target)
                 {
-                    // print("Villager fights Back");
                     target.GetComponent<Monster>().health -= 1 + _strength / 10;
-                    print(target.name + " health is down to: " + target.GetComponent<Monster>().health);
-                    
                     if (target.GetComponent<Monster>().health <= 0)
                     {
                         monsters.Remove(target.gameObject);
@@ -514,7 +509,6 @@ public class Villager : MonoBehaviour, IInteractable
         switch (_villagerRole)
         {
             case Roles.Lumberjack:
-                Debug.Log("Playing Axe");
                 _animator.Play("Axe");
                 break;
             case Roles.Miner:
@@ -587,28 +581,45 @@ public class Villager : MonoBehaviour, IInteractable
             position.z + Random.Range(-size, size));
 
 
-        if(!NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas)){
-            Debug.Log("reset");
-            if (RandomWalkCR is null)
-            {
-                RandomWalkCR = StartCoroutine(RandomWalk(4));
-            }
-            else
-            {
-                RandomWalkCR = null;
-                RandomWalkCR = StartCoroutine(RandomWalk(4));
-            }
-            yield break;
-        }
+        // NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas);
+        //
+        // if (!hit.hit)
+        // {
+        //     if (RandomWalkCR is null)
+        //     {
+        //         RandomWalkCR = StartCoroutine(RandomWalk(4));
+        //     }
+        //     else
+        //     {
+        //         RandomWalkCR = null;
+        //         RandomWalkCR = StartCoroutine(RandomWalk(4));
+        //     }
+        //
+        //     yield break;
+        // }
 
         agent.SetDestination(newPosition);
 
         _animator.Play("Walking");
         while (Vector3.Distance(transform.position, newPosition) > 2)
         {
+            var startPos = transform.position;
+            yield return new WaitForSeconds(1f);
+            if (Vector3.Distance(startPos, transform.position) <= 0.02)
+            {
+                if (RandomWalkCR is null)
+                {
+                    RandomWalkCR = StartCoroutine(RandomWalk(4));
+                }
+                else
+                {
+                    RandomWalkCR = null;
+                    RandomWalkCR = StartCoroutine(RandomWalk(4));
+                }
+                yield break;
+            }
             yield return null;
         }
-    
         CurrentState = VillagerStates.Idle;
     }
 

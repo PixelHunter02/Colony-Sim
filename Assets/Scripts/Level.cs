@@ -294,7 +294,10 @@ public class Level : MonoBehaviour
 
     public void CloseAllUI()
     {
-        //GameState = GameState.Playing;
+        // if (GameState != GameState.Playing)
+        // {
+        //     GameState = GameState.Playing;
+        // }
         _infoUI.SetActive(false);
         inventoryUI.SetActive(false);
         villagerSelectUI.SetActive(false);
@@ -389,5 +392,10 @@ public class Level : MonoBehaviour
             newButton.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.PreviewSetup(_gameManager.buildingManager.currentBuilding.prefab));
             _buildingToolbarButtons.TryAdd(building,newButton);
         }
+    }
+
+    public void CloseMenu()
+    {
+        GameState = GameState.Playing;
     }
 }

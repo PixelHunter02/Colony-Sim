@@ -37958,7 +37958,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129716487}
         m_TargetAssemblyTypeName: Level, Assembly-CSharp
-        m_MethodName: CloseAllUI
+        m_MethodName: CloseMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -42309,7 +42309,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129716487}
         m_TargetAssemblyTypeName: Level, Assembly-CSharp
-        m_MethodName: CloseAllUI
+        m_MethodName: CloseMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -42580,6 +42580,7 @@ MonoBehaviour:
   pickupLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  crafters: 
 --- !u!1 &1104012345
 GameObject:
   m_ObjectHideFlags: 0
@@ -43019,7 +43020,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124862098}
-  m_LocalRotation: {x: -0, y: 3.5527133e-15, z: -1.3322675e-15, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -48461,7 +48462,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129716487}
         m_TargetAssemblyTypeName: Level, Assembly-CSharp
-        m_MethodName: CloseAllUI
+        m_MethodName: CloseMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -50801,8 +50802,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896196924}
-  m_LocalRotation: {x: 0.4344402, y: 0.000000011889917, z: -0.000000010875613, w: 0.90070075}
-  m_LocalPosition: {x: -1.9539925e-14, y: 21.072178, z: -6.321653}
+  m_LocalRotation: {x: 0.4344402, y: 0.000000011889913, z: -0.0000000108756115, w: 0.90070075}
+  m_LocalPosition: {x: 0, y: 21.072178, z: -6.321653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
