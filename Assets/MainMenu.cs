@@ -53,7 +53,7 @@ public class MainMenu : MonoBehaviour
         mainMenuCanvas.SetActive(false);
         villager.Gender = Model.Woman;
         villager.CurrentRole = Roles.Leader;
-        _inputField.text = villager.VillagerName;
+        _inputField.text = villager.VillagerStats.VillagerName;
     }
 
     public void NextHairColour()
@@ -85,7 +85,7 @@ public class MainMenu : MonoBehaviour
             currentGenderIndex = 0;
         }
         villager.Gender = (Model)gender.GetValue(currentGenderIndex);
-        _inputField.text = villager.VillagerName;
+        _inputField.text = villager.VillagerStats.VillagerName;
     }
     
     public void ContinueToGame()

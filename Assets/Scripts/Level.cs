@@ -209,7 +209,7 @@ public class Level : MonoBehaviour
             villagerLogTMP.text = storedLog;
             _infoUI.SetActive(false);
             GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
-            _villagerName.text = villager.VillagerName;
+            _villagerName.text = villager.VillagerStats.VillagerName;
         }
         else
         {
@@ -218,7 +218,7 @@ public class Level : MonoBehaviour
             villagerLogTMP.text = storedLog;
             _infoUI.SetActive(true);
             GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
-            _villagerName.text = villager.VillagerName;
+            _villagerName.text = villager.VillagerStats.VillagerName;
         }
 
     }
@@ -231,7 +231,7 @@ public class Level : MonoBehaviour
             var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
             villagerLogTMP.text = storedLog;
             GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
-            _villagerName.text = villager.VillagerName;
+            _villagerName.text = villager.VillagerStats.VillagerName;
             _gameManager.uiManager.SetVillagerStatsUI(villager);
         }
     }

@@ -857,6 +857,7 @@ GameObject:
   - component: {fileID: -7626861745308731260}
   - component: {fileID: 6966523878823600022}
   - component: {fileID: 1186300357741817972}
+  - component: {fileID: 5366638074706605767}
   m_Layer: 6
   m_Name: Villager
   m_TagString: Villagers
@@ -922,6 +923,7 @@ MonoBehaviour:
   objInTriggerZone: []
   objInAwarenessZone: []
   target: {fileID: 0}
+  ignoreQueue: 0
   distance: 0
   agent: {fileID: 0}
   _animator: {fileID: 2312240014063291449}
@@ -929,7 +931,6 @@ MonoBehaviour:
   maleHead: {fileID: 442440180155276834}
   femaleBody: {fileID: 3561497691509820874}
   maleBody: {fileID: 8142520453675245368}
-  health: 0
   portraitCamera: {fileID: 8934336798763194755}
   _portraitRenderTexture: {fileID: 0}
 --- !u!136 &6966523878823600022
@@ -973,6 +974,18 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &5366638074706605767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4772233114219575443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d94652f15eef0a34a9ad85abaa4ae32d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4800403719923829444
 GameObject:
   m_ObjectHideFlags: 0

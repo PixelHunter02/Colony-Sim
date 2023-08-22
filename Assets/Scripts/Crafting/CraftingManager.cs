@@ -166,7 +166,7 @@ public class CraftingManager : MonoBehaviour
         Villager.StopVillager(assignedVillager, true);
         
         
-        _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += assignedVillager.Craft;
+        _gameManager.level.villageHeart.GetComponent<VillageHeart>().Experience += assignedVillager.VillagerStats.Craft;
         yield return new WaitForSeconds(1f);
     }
 }

@@ -143,7 +143,7 @@ public class Monster : MonoBehaviour
         if (target)
         {
             _animator.Play(_attack);
-            target.GetComponent<Villager>().Health = target.GetComponent<Villager>().Health-1; 
+            target.GetComponent<Villager>().VillagerStats.Health = target.GetComponent<Villager>().VillagerStats.Health-1; 
         }
         attackStarted = false;
         StartCoroutine(FindTarget(1));

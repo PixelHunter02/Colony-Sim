@@ -133,9 +133,9 @@ public class VillagerManager : MonoBehaviour
 
     public void GenerateNewVillagerStats(Villager villager)
     {
-            villager.Craft = Random.Range(1, 7);
-            villager.Magic = Random.Range(1, 7);
-            villager.Strength = Random.Range(1, 7);
+            villager.VillagerStats.Craft = Random.Range(1, 7);
+            villager.VillagerStats.Magic = Random.Range(1, 7);
+            villager.VillagerStats.Strength = Random.Range(1, 7);
             villager.HairColour = hairColours[Random.Range(0, hairColours.Length)];
 
             maleNames = null;
@@ -171,13 +171,14 @@ public class VillagerManager : MonoBehaviour
     public void SpawnVillager(Villager villagerToSpawn, out Villager villagerToReturn)
     {
         var villager = Instantiate(villagerPrefab, Vector3.zero, quaternion.identity);
-        villager.GetComponent<Villager>().Craft = villagerToSpawn.Craft;
-        villager.GetComponent<Villager>().Magic = villagerToSpawn.Magic;
-        villager.GetComponent<Villager>().Strength = villagerToSpawn.Strength;
-        villager.GetComponent<Villager>().HairColour = villagerToSpawn.HairColour;
-        villager.GetComponent<Villager>().Gender = villagerToSpawn.Gender;
-        villager.GetComponent<Villager>().VillagerName = villagerToSpawn.VillagerName;
-        villager.GetComponent<Villager>().CurrentRole = villagerToSpawn.CurrentRole;
+        var villagerComponent = villager.GetComponent<Villager>();
+        villagerComponent.VillagerStats.Craft = villagerToSpawn.VillagerStats.Craft;
+        villagerComponent.VillagerStats.Magic = villagerToSpawn.VillagerStats.Magic;
+        villagerComponent.VillagerStats.Strength = villagerToSpawn.VillagerStats.Strength;
+        villagerComponent.HairColour = villagerToSpawn.HairColour;
+        villagerComponent.Gender = villagerToSpawn.Gender;
+        villagerComponent.VillagerStats.VillagerName = villagerToSpawn.VillagerStats.VillagerName;
+        villagerComponent.CurrentRole = villagerToSpawn.CurrentRole;
         villagerToReturn = villager.GetComponent<Villager>();
     }
 }

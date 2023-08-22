@@ -808,9 +808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4023008604cf134cbe83284ddf61d9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
+  crafters: 
 --- !u!4 &197457714
 Transform:
   m_ObjectHideFlags: 0
@@ -986,18 +984,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265079383}
   m_CullTransparentMesh: 1
---- !u!114 &312026224 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: -7626861745308731260, guid: a6bdb8c414f1db743a34481c113b6995,
-    type: 3}
-  m_PrefabInstance: {fileID: 1664867877}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c54d87338958a6243857496e0e553bc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &345735934
 GameObject:
   m_ObjectHideFlags: 0
@@ -1289,6 +1275,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 415131301}
   m_CullTransparentMesh: 1
+--- !u!114 &477315954 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -7626861745308731260, guid: a6bdb8c414f1db743a34481c113b6995,
+    type: 3}
+  m_PrefabInstance: {fileID: 1664867877}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c54d87338958a6243857496e0e553bc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &477376007
 GameObject:
   m_ObjectHideFlags: 0
@@ -4755,7 +4753,7 @@ MonoBehaviour:
   settingsManager: {fileID: 841317474}
   storageManager: {fileID: 510948841}
   villagerManager: {fileID: 197457715}
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 899206911}
   buildingManager: {fileID: 600667009}
   craftingManager: {fileID: 1024999329}
   taskHandler: {fileID: 197457713}
@@ -5283,6 +5281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1186300357741817972, guid: a6bdb8c414f1db743a34481c113b6995, type: 3}
+    - {fileID: -7626861745308731260, guid: a6bdb8c414f1db743a34481c113b6995, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -5466,7 +5465,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: ba5be049eb4568a4591c4250009e28d0, type: 2}
   - {fileID: 2100000, guid: afce377f9c620544b944acdbe5ad0a50, type: 2}
   - {fileID: 2100000, guid: 1b1292f41d6c92347828bd5d9a414532, type: 2}
-  villager: {fileID: 312026224}
+  villager: {fileID: 477315954}
   _inputField: {fileID: 916100635}
 --- !u!4 &1719802045
 Transform:
@@ -6437,7 +6436,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 312026224}
+      objectReference: {fileID: 0}
     - target: {fileID: 4530470971534647821, guid: cbd6ffa8b96099947bab44ded11f1be9,
         type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState

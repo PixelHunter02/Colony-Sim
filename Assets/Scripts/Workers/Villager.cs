@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(VillagerStats))]
 public class Villager : MonoBehaviour, IInteractable
 {
     [SerializeField] private List<GameObject> monsters;
@@ -33,12 +34,12 @@ public class Villager : MonoBehaviour, IInteractable
         {
             if (SceneManager.GetActiveScene().name == "New Scene")
             {
-                Level.AddToVillagerLog(this, $"{_villagerName} Changed From {_villagerRole} To {value}");
+                Level.AddToVillagerLog(this, $"{_villagerStats.VillagerName} Changed From {_villagerRole} To {value}");
             }
 
             _villagerRole = value;
 
-            Debug.Log($"{_villagerName} Changed To {_villagerRole}");
+            Debug.Log($"{_villagerStats.VillagerName} Changed To {_villagerRole}");
 
             switch (_villagerRole)
             {
@@ -59,9 +60,9 @@ public class Villager : MonoBehaviour, IInteractable
                 case Roles.Crafter:
                     break;
                 case Roles.Leader:
-                    Strength = 6;
-                    Craft = 6;
-                    Magic = 6;
+                    _villagerStats.Strength = 6;
+                    _villagerStats.Craft = 6;
+                    _villagerStats.Magic = 6;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -150,7 +151,7 @@ public class Villager : MonoBehaviour, IInteractable
         set
         {
             _gender = value;
-            Debug.Log($"The Gender of The Villager {_villagerName} has changed to {_gender}");
+            Debug.Log($"The Gender of The Villager {_villagerStats.VillagerName} has changed to {_gender}");
             switch (_gender)
             {
                 case Model.Man:
@@ -159,7 +160,7 @@ public class Villager : MonoBehaviour, IInteractable
                     maleHead.SetActive(true);
                     maleBody.SetActive(true);
                     var randomPositionMale = Random.Range(0, VillagerManager.maleNames.Count);
-                    VillagerName = VillagerManager.maleNames[randomPositionMale];
+                    _villagerStats.VillagerName = VillagerManager.maleNames[randomPositionMale];
                     maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
                     break;
                 case Model.Woman:
@@ -168,7 +169,7 @@ public class Villager : MonoBehaviour, IInteractable
                     maleHead.SetActive(false);
                     maleBody.SetActive(false);
                     var randomPosition = Random.Range(0, VillagerManager.femaleNames.Count);
-                    VillagerName = VillagerManager.femaleNames[randomPosition];
+                    _villagerStats.VillagerName = VillagerManager.femaleNames[randomPosition];
                     femaleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
                     break;
                 default:
@@ -199,93 +200,18 @@ public class Villager : MonoBehaviour, IInteractable
 
     #endregion
 
-
-    #region Stats
-    
-    private int health;
-    private int maxHealth;
-    int modifiedMaxHealth;
-    private int hunger;
-
-    public int Health
-    {
-        get => health;
-        set
-        {
-            health = value;
-            Debug.Log($"{_villagerName}'s health has changed to {value}");
-            switch (value)
-            {
-                case <= 0:
-                    OnDeath();
-                    Debug.Log("Died");
-                    break;
-            }
-        }
-    }
-
-    private string _villagerName;
-    public string VillagerName
-    {
-        get => _villagerName;
-        set
-        {
-            _villagerName = value;
-            Debug.Log($"A New Name Has Been Assigned! The new value is {_villagerName}");
-        }
-    }
-    
-    private int _strength;
-    public int Strength
-    {
-        get => _strength;
-        set
-        {
-            _strength = value;
-            
-            Debug.Log($"A New Strength Value Has Been Assigned! The new value is {_strength}");
-        }
-    }
-    
-    private int _craft;
-    public int Craft
-    {
-        get => _craft;
-        set
-        {
-            _craft = value;
-            Debug.Log($"A New Craft Value Has Been Assigned! The new value is {_craft}");
-        }
-    }
-    
-    private int _magic;
-    public int Magic
-    {
-        get => _magic;
-        set
-        {
-            _magic = value;
-            Debug.Log($"A New Magic Value Has Been Assigned! The new value is {_magic}");
-        }
-    }
-
-    public int Hunger
-    {
-        get => hunger;
-        set
-        {
-            Debug.Log("Hunger Has Been Modified");
-            hunger = value;
-        }
-    }
-
     [SerializeField] private Camera portraitCamera;
     public RenderTexture _portraitRenderTexture;
-    #endregion
-
+    
+    private VillagerStats _villagerStats;
+    public VillagerStats VillagerStats
+    {
+        get => _villagerStats;
+    }
 
     private void Awake()
     {
+        _villagerStats = GetComponent<VillagerStats>();
         monsters = new List<GameObject>();
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
@@ -308,10 +234,6 @@ public class Villager : MonoBehaviour, IInteractable
             objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
             objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
             
-            maxHealth = 20;
-            modifiedMaxHealth = Mathf.CeilToInt(20 + (0.3f * Strength));
-            Debug.Log(modifiedMaxHealth);
-            Health = modifiedMaxHealth;
             transform.Find("FemaleCharacterPBR").Find("PortraitCamera").gameObject.SetActive(false);
             TryGetComponent(out Outline outline);
             outline.UpdateMaterialProperties();
@@ -333,7 +255,6 @@ public class Villager : MonoBehaviour, IInteractable
                 RandomWalkCR = null;
                 RandomWalkCR = StartCoroutine(RandomWalk(4));
             }
-            // RandomWalkAsync(4);
         }
     }
 
@@ -344,16 +265,13 @@ public class Villager : MonoBehaviour, IInteractable
 
     public void EditName(string text)
     {
-        VillagerName = text;
+        _villagerStats.VillagerName = text;
     }
 
     private void Update()
     {
         if (SceneManager.GetActiveScene().name.Contains("New Scene"))
         {
-            // objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
-            // objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
-
             BeginRunningTasks();
 
             if (objInAwarenessZone.Count == 0)
@@ -367,10 +285,10 @@ public class Villager : MonoBehaviour, IInteractable
             {
                 if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
                 {
-                    Debug.Log($"{VillagerName} is {CurrentRole}");
+                    Debug.Log($"{_villagerStats.VillagerName} is {CurrentRole}");
                     if ((CurrentRole == Roles.Fighter || CurrentRole == Roles.Leader) && !finding)
                     {
-                        Debug.Log($"{VillagerName} is {CurrentRole}");
+                        Debug.Log($"{_villagerStats.VillagerName} is {CurrentRole}");
                         finding = true;
                         StartCoroutine(FindTarget(3));
                     }
@@ -482,7 +400,7 @@ public class Villager : MonoBehaviour, IInteractable
             {
                 if (objInTriggerZone[i] == target)
                 {
-                    target.GetComponent<Monster>().health -= 1 + _strength / 10;
+                    target.GetComponent<Monster>().health -= 1 + _villagerStats.Strength / 10;
                     if (target.GetComponent<Monster>().health <= 0)
                     {
                         monsters.Remove(target.gameObject);
@@ -623,7 +541,7 @@ public class Villager : MonoBehaviour, IInteractable
         CurrentState = VillagerStates.Idle;
     }
 
-    private void OnDeath()
+    public void OnDeath()
     {
         VillagerManager.villagers.Remove(this);
         Destroy(_gameManager.uiManager.templateDictionary[this]);

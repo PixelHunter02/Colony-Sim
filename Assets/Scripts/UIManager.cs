@@ -35,10 +35,10 @@ public class UIManager : MonoBehaviour
 
     public void SetVillagerStatsUI(Villager villager)
     {
-        health.text = villager.Health.ToString();
-        magic.text = villager.Magic.ToString();
-        craft.text = villager.Craft.ToString();
-        strength.text = villager.Strength.ToString();
+        health.text = villager.VillagerStats.Health.ToString();
+        magic.text = villager.VillagerStats.Magic.ToString();
+        craft.text = villager.VillagerStats.Craft.ToString();
+        strength.text = villager.VillagerStats.Strength.ToString();
     }
 
     public void OpenVillagerMenu()
@@ -52,15 +52,15 @@ public class UIManager : MonoBehaviour
                 templateGO.SetActive(true);
                 var template = templateGO.transform;
                 template.GetChild(0).GetComponent<RawImage>().texture = villager._portraitRenderTexture;
-                template.Find("NameBorder").GetChild(0).GetComponent<TMP_Text>().text = villager.VillagerName;
+                template.Find("NameBorder").GetChild(0).GetComponent<TMP_Text>().text = villager.VillagerStats.VillagerName;
                 template.Find("StatsBorder").Find("Health").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Health.ToString();
+                    villager.VillagerStats.Health.ToString();
                 template.Find("StatsBorder").Find("Strength").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Strength.ToString();
+                    villager.VillagerStats.Strength.ToString();
                 template.Find("StatsBorder").Find("Magic").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Magic.ToString();
+                    villager.VillagerStats.Magic.ToString();
                 template.Find("StatsBorder").Find("Craft").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Craft.ToString();
+                    villager.VillagerStats.Craft.ToString();
                 var dropdown = template.Find("Dropdown").GetComponent<TMP_Dropdown>();
                 var goToButton = template.Find("Portrait").GetComponent<Button>();
                 goToButton.onClick.AddListener(delegate { GoToVillager(villager); });
@@ -71,15 +71,15 @@ public class UIManager : MonoBehaviour
             {
                 var template = Instantiate(villagerManagementTemplate, villagerManagementContainer).transform;
                 template.GetChild(0).GetComponent<RawImage>().texture = villager._portraitRenderTexture;
-                template.Find("NameBorder").GetChild(0).GetComponent<TMP_Text>().text = villager.VillagerName;
+                template.Find("NameBorder").GetChild(0).GetComponent<TMP_Text>().text = villager.VillagerStats.VillagerName;
                 template.Find("StatsBorder").Find("Health").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Health.ToString();
+                    villager.VillagerStats.Health.ToString();
                 template.Find("StatsBorder").Find("Strength").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Strength.ToString();
+                    villager.VillagerStats.Strength.ToString();
                 template.Find("StatsBorder").Find("Magic").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Magic.ToString();
+                    villager.VillagerStats.Magic.ToString();
                 template.Find("StatsBorder").Find("Craft").GetChild(0).GetComponent<TMP_Text>().text =
-                    villager.Craft.ToString();
+                    villager.VillagerStats.Craft.ToString();
                 var dropdown = template.Find("Dropdown").GetComponent<TMP_Dropdown>();
                 var goToButton = template.Find("Portrait").GetComponent<Button>();
                 goToButton.onClick.AddListener(delegate { GoToVillager(villager); });
