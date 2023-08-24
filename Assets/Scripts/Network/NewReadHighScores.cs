@@ -15,7 +15,7 @@ namespace Highscores
         public delegate void EntriesLoaded();
         public static event EntriesLoaded EntriesLoadedEvent;
 
-        TMP_InputField _InputField;
+        [SerializeField] TMP_InputField _InputField;
         DayCycle daycycle;
 
 
@@ -27,10 +27,6 @@ namespace Highscores
             {
                 // Get References
                _hsLadderTransforms = new List<Transform>();
-            }
-            else
-            {
-                daycycle = GameObject.Find("DirectionAl Light").GetComponent<DayCycle>();
             }
         }
 
@@ -51,6 +47,18 @@ namespace Highscores
             (onSuccess) => {
                 Debug.Log(onSuccess);
                 Highscores highscores = JsonConvert.DeserializeObject<Highscores>(onSuccess);
+                for(int i = 0; i < highscores.highscoreEntryList.Count; i++)
+                {
+                    for(int j = i+1; j< highscores.highscoreEntryList.Count; j++)
+                    {
+                        if (highscores.highscoreEntryList[j].score > highscores.highscoreEntryList[i].score)
+                        {
+                            HighscoreEntries temp = highscores.highscoreEntryList[i];
+                            highscores.highscoreEntryList[i] = highscores.highscoreEntryList[j];
+                            highscores.highscoreEntryList[j] = temp;
+                        }
+                    }
+                }
                 foreach (var hsEntry in highscores.highscoreEntryList)
                 {
                     HighscoreEntryTransform(hsEntry, _hsContainer, _hsLadderTransforms);        
@@ -63,10 +71,6 @@ namespace Highscores
         {
             //set the positions of the ladders
             Transform hsLadderPosition = Instantiate(_hsTemplate, container);
-
-            //int rank = hsLadderTransformList.Count+1;
-
-            //hsLadderPosition.Find("Rank").GetComponent<TMP_Text>().text = rank.ToString();
 
             hsLadderPosition.Find("Score").GetComponent<TMP_Text>().text = hsEntries.score.ToString();
 
@@ -100,7 +104,15 @@ namespace Highscores
 
         public void OnLeaderboardSubmission()
         {
-            UploadEntry("https://colonysjourneyleaderboard.azurewebsites.net/api/AddScore?code=77uhpqmYMx5Y2Zl8z7bIuiB4FCbYl56WiRgcBNi9kBm_AzFuPvVn-Q==", daycycle.nightsSurvived, _InputField.text);
+            var daycycle = GameObject.Find("Directional Light").GetComponent<DayCycle>();
+            if (this.daycycle.nightsSurvived == -1)
+            {
+                UploadEntry("https://colonysjourneyleaderboard.azurewebsites.net/api/AddScore?code=77uhpqmYMx5Y2Zl8z7bIuiB4FCbYl56WiRgcBNi9kBm_AzFuPvVn-Q==", 0, _InputField.text);
+            }
+            else
+            {
+                UploadEntry("https://colonysjourneyleaderboard.azurewebsites.net/api/AddScore?code=77uhpqmYMx5Y2Zl8z7bIuiB4FCbYl56WiRgcBNi9kBm_AzFuPvVn-Q==", daycycle.nightsSurvived, _InputField.text);
+            }
         }
        
         private class Highscores

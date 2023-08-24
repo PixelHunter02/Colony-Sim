@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour
     GameManager gameManager;
     public Transform roleManagementContainer;
 
+    public TMP_Text nightsSurvivedText;
+
     private void Awake()
     {
         templateDictionary = new Dictionary<Villager, GameObject>();
@@ -135,5 +137,17 @@ public class UIManager : MonoBehaviour
         var transposerOffset = _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         transposerOffset = zoomValue * 2;
         _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(transposerOffset, 3, 15);
+    }
+
+    public void NightsSurvivedUpdate()
+    {
+        var _dayCycle = GameObject.Find("Directional Light").GetComponent<DayCycle>();
+
+        if (_dayCycle.nightsSurvived == -1)
+        {
+            _dayCycle.nightsSurvived = 0;
+        }
+        
+        nightsSurvivedText.text = _dayCycle.nightsSurvived.ToString();
     }
 }

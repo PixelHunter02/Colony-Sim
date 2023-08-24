@@ -5087,8 +5087,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1565089222}
-  m_RootOrder: -1
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1458819094
 MonoBehaviour:
@@ -5105,6 +5105,7 @@ MonoBehaviour:
   _hsContainer: {fileID: 1444736481}
   _hsTemplate: {fileID: 2076774490989920604, guid: 2337ad145da53d9429a621db746de991,
     type: 3}
+  _InputField: {fileID: 0}
 --- !u!1 &1498310690
 GameObject:
   m_ObjectHideFlags: 0
@@ -5569,7 +5570,6 @@ Transform:
   - {fileID: 1024999330}
   - {fileID: 580698363}
   - {fileID: 600667010}
-  - {fileID: 1458819093}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

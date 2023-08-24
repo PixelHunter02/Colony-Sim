@@ -6,6 +6,7 @@ using TMPro;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Level : MonoBehaviour
@@ -25,6 +26,9 @@ public class Level : MonoBehaviour
 
     private GameState gameState;
     public Material gridMaterial;
+    
+    [SerializeField] private GameObject pauseMenu;
+
 
     public GameState GameState
     {
@@ -37,12 +41,16 @@ public class Level : MonoBehaviour
                 case GameState.Playing:
                     Time.timeScale = 1;
                     CloseAllUI();
+                    _gameManager.inputManager.playerInputActions.Player.Enable(); 
                     toolbar.SetActive(true);
                     mainVCamera.gameObject.SetActive(true);
                     buildVCamera.gameObject.SetActive(false);
                     break;
                 case GameState.Paused:
                     CloseAllUI();
+                    pauseMenu.SetActive(true);
+                    _gameManager.uiManager.NightsSurvivedUpdate();
+                    _gameManager.inputManager.playerInputActions.Player.Disable(); 
                     Time.timeScale = 0;
                     toolbar.SetActive(true);
                     break;
@@ -262,6 +270,11 @@ public class Level : MonoBehaviour
         }
     }
 
+    public void PlayMode()
+    {
+        GameState = GameState.Playing;
+    }
+
 
     public static event Action<Villager> AddToVillagerLogAction;
     public static void AddToVillagerLog(Villager villager, string newLog)
@@ -305,6 +318,7 @@ public class Level : MonoBehaviour
         craftingMenu.SetActive(false);
         buildingToolbar.SetActive(false);
         villageHeart.GetComponent<VillageHeart>().villagerHeartMenu.SetActive(false);
+        pauseMenu.SetActive(false);
     }
 
     public void StockpileModeEnabled()
@@ -397,5 +411,10 @@ public class Level : MonoBehaviour
     public void CloseMenu()
     {
         GameState = GameState.Playing;
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu 2");
     }
 }
