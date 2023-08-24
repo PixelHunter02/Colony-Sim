@@ -33,17 +33,17 @@ namespace Highscores
             }
         }
 
-        private void OnEnable() {
-            UIHandler.ClearHighscoresEvent += ClearHighscoreList;
-        }
-
-        private void OnDisable() {
-            UIHandler.ClearHighscoresEvent -= ClearHighscoreList;
-        }
+        // private void OnEnable() {
+        //     UIHandler.ClearHighscoresEvent += ClearHighscoreList;
+        // }
+        //
+        // private void OnDisable() {
+        //     UIHandler.ClearHighscoresEvent -= ClearHighscoreList;
+        // }
 
         public void LoadEntriesMain()
         {
-            string url = ;
+            string url = "https://colonysjourneyleaderboard.azurewebsites.net/api/GetLeaderboard?code=QXtsrH_T5LYjAR1XZLd1DU4nd1uEXgzX6ZlPi28MgzBxAzFuboLrxA==" ;
             WebRequest.GetText(url, (error) =>{
                 Debug.Log(error);
             },
@@ -56,23 +56,6 @@ namespace Highscores
                 }
                 EntriesLoadedEvent?.Invoke();
             });
-        }
-
-        public void LoadEntriesQuickPlay()
-        {
-            string url = ;
-            WebRequest.GetText(url, (error) =>{
-                    Debug.Log(error);
-                },
-                (onSuccess) => {
-                    Debug.Log(onSuccess);
-                    QuickPlayHighscores highscores = JsonConvert.DeserializeObject<QuickPlayHighscores>(onSuccess);
-                    foreach (var hsEntry in highscores.qpHighscoreEntryList)
-                    {
-                        QuickPlayHighscoreEntryTransform(hsEntry, _hsContainer, _hsLadderTransforms);        
-                    }
-                    EntriesLoadedEvent?.Invoke();
-                });
         }
         
         private void HighscoreEntryTransform(HighscoreEntries hsEntries, Transform container, List<Transform> hsLadderTransformList)
@@ -93,24 +76,6 @@ namespace Highscores
             hsLadderPosition.gameObject.SetActive(true);
         }
         
-        private void QuickPlayHighscoreEntryTransform(QuickPlayHighscoreEntries hsEntries, Transform container, List<Transform> hsLadderTransformList)
-        {
-            //set the positions of the ladders
-            Transform hsLadderPosition = Instantiate(_hsTemplate, container);
-
-            int rank = hsLadderTransformList.Count+1;
-
-            hsLadderPosition.Find("Rank").GetComponent<TMP_Text>().text = rank.ToString();
-
-            hsLadderPosition.Find("Score").GetComponent<TMP_Text>().text = hsEntries.score.ToString("f2");
-
-            hsLadderPosition.Find("Name").GetComponent<TMP_Text>().text = hsEntries.name;
-
-
-            hsLadderTransformList.Add(hsLadderPosition);
-            hsLadderPosition.gameObject.SetActive(true);
-        }
-
         private void ClearHighscoreList()
         {
             _hsLadderTransforms.Clear();
@@ -120,7 +85,7 @@ namespace Highscores
             }
         }
 
-        public static void UploadEntry(string uri, float score, string name)
+        public static void UploadEntry(string uri, int score, string name)
         {
             HighscoreEntries hsEntry = new HighscoreEntries{name = name, score = score};
             string jsonString = JsonConvert.SerializeObject(hsEntry);
@@ -139,19 +104,9 @@ namespace Highscores
         [System.Serializable]
         private class HighscoreEntries
         {
-            public float score;
+            public int score;
             public string name;
         }
-        public class QuickPlayHighscores
-        {
-            public List<QuickPlayHighscoreEntries> qpHighscoreEntryList;
-        }
-
-        public class QuickPlayHighscoreEntries
-        {
-            public float score;
-            public string name;
-        }
-}
+    }
     
 }
