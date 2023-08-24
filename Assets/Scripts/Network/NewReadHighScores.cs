@@ -8,8 +8,8 @@ namespace Highscores
 {
     public class NewReadHighScores : MonoBehaviour
     {
-        private Transform _hsContainer;
-        private Transform _hsTemplate;
+        [SerializeField] private Transform _hsContainer;
+        [SerializeField] private Transform _hsTemplate;
         private List<Transform> _hsLadderTransforms;
 
         public delegate void EntriesLoaded();
@@ -23,16 +23,10 @@ namespace Highscores
         private void Awake()
         {
             
-            if(SceneManager.GetActiveScene().name == "MainMenu")
+            if(SceneManager.GetActiveScene().name == "Main Menu 2")
             {
                 // Get References
-                _hsContainer = GameObject.Find("HighScoreContainer").GetComponent<Transform>();
-                _hsTemplate = GameObject.Find("HighScoreTemplate").GetComponent<Transform>();
-            
-                // GameObject.Find("Leader Board").SetActive(false);
-                _hsTemplate.gameObject.SetActive(false);
-
-                _hsLadderTransforms = new List<Transform>();
+               _hsLadderTransforms = new List<Transform>();
             }
             else
             {
@@ -50,7 +44,7 @@ namespace Highscores
 
         public void LoadEntriesMain()
         {
-            string url = "https://colonysjourneyleaderboard.azurewebsites.net/api/GetLeaderboard?code=QXtsrH_T5LYjAR1XZLd1DU4nd1uEXgzX6ZlPi28MgzBxAzFuboLrxA==" ;
+            string url = "https://colonysjourneyleaderboard.azurewebsites.net/api/GetLeaderboard?code=Pz1mcPKr_U217u5PRMgxaMIPvGVmesHo92G3ux4EfgkTAzFuCgvGbw==";
             WebRequest.GetText(url, (error) =>{
                 Debug.Log(error);
             },
@@ -70,15 +64,16 @@ namespace Highscores
             //set the positions of the ladders
             Transform hsLadderPosition = Instantiate(_hsTemplate, container);
 
-            int rank = hsLadderTransformList.Count+1;
+            //int rank = hsLadderTransformList.Count+1;
 
-            hsLadderPosition.Find("Rank").GetComponent<TMP_Text>().text = rank.ToString();
+            //hsLadderPosition.Find("Rank").GetComponent<TMP_Text>().text = rank.ToString();
 
-            hsLadderPosition.Find("Score").GetComponent<TMP_Text>().text = hsEntries.score.ToString("f2");
+            hsLadderPosition.Find("Score").GetComponent<TMP_Text>().text = hsEntries.score.ToString();
 
             hsLadderPosition.Find("Name").GetComponent<TMP_Text>().text = hsEntries.name;
 
-
+            Debug.Log(hsLadderTransformList);
+            Debug.Log(hsLadderPosition);
             hsLadderTransformList.Add(hsLadderPosition);
             hsLadderPosition.gameObject.SetActive(true);
         }
