@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DayCycle : MonoBehaviour
@@ -9,11 +10,14 @@ public class DayCycle : MonoBehaviour
     [SerializeField] private float nightInterval;
     [SerializeField] private float speed;
     [SerializeField] private int dayCount;
+    public int nightsSurvived;
+    [SerializeField] private GameObject nightScore;
     [SerializeField] GameObject monsterWavesManager;
     GameEvents gameEvents;
 
     private void Awake()
     {
+        nightsSurvived = -1;
         transform.localEulerAngles = Vector3.zero;
         monsterWavesManager = GameManager.Instance.monsterWaves.gameObject;
         gameEvents = GameEvents.current;
@@ -54,6 +58,8 @@ public class DayCycle : MonoBehaviour
         {
             //gameObject.transform.GetComponent<Light>().enabled = false;
             dayCount++;
+            nightsSurvived++;
+            nightScore.GetComponent<TextMeshPro>().text = nightsSurvived.ToString();
             monsterWavesManager.GetComponent<MonsterWaves>().SpawnWave(dayCount);
             GameEvents.current.NightTimeStart();
             StartCoroutine(NightTime(nightInterval));

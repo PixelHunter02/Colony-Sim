@@ -15,6 +15,9 @@ namespace Highscores
         public delegate void EntriesLoaded();
         public static event EntriesLoaded EntriesLoadedEvent;
 
+        TMP_InputField _InputField;
+        DayCycle daycycle;
+
 
 
         private void Awake()
@@ -30,6 +33,10 @@ namespace Highscores
                 _hsTemplate.gameObject.SetActive(false);
 
                 _hsLadderTransforms = new List<Transform>();
+            }
+            else
+            {
+                daycycle = GameObject.Find("DirectionAl Light").GetComponent<DayCycle>();
             }
         }
 
@@ -94,6 +101,11 @@ namespace Highscores
                 },(onSuccess) => {
                     Debug.Log(onSuccess);
                 });
+        }
+
+        public void OnLeaderboardSubmission()
+        {
+            UploadEntry("https://colonysjourneyleaderboard.azurewebsites.net/api/AddScore?code=77uhpqmYMx5Y2Zl8z7bIuiB4FCbYl56WiRgcBNi9kBm_AzFuPvVn-Q==", daycycle.nightsSurvived, _InputField.text);
         }
        
         private class Highscores
