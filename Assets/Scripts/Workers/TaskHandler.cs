@@ -73,7 +73,7 @@ public class TaskHandler : MonoBehaviour
     public IEnumerator RunTaskCR(Villager assignedVillager, HarvestableObject task)
     {
         
-        yield return StartCoroutine(WalkToLocationCR(assignedVillager, task,3f));
+        yield return StartCoroutine(WalkToLocationCR(assignedVillager, task,4f));
         yield return StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
     }
     
@@ -124,7 +124,7 @@ public class TaskHandler : MonoBehaviour
 
     public IEnumerator RunTaskCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
-        yield return StartCoroutine(WalkToLocationCR(assignedVillager, resourceToPickUp,2f));
+        yield return StartCoroutine(WalkToLocationCR(assignedVillager, resourceToPickUp,4f));
         yield return StartCoroutine(VillagerPicksUpItemCR(assignedVillager, resourceToPickUp));
         yield return StartCoroutine(VillagerWalksToStockpilePointCR(assignedVillager, resourceToPickUp));
     }

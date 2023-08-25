@@ -56,6 +56,11 @@ public class VillageHeart : MonoBehaviour,IInteractable
 
     public void OnInteraction()
     {
+        if(_gameManager.IsOverUI())
+        {
+            return;
+        }
+
         Debug.Log("You Interacted with the village heart!");
         if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillageHeartTutorial)
         {
