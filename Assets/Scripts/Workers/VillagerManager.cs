@@ -66,10 +66,8 @@ public class VillagerManager : MonoBehaviour
             {
                 if (villager.CurrentRole == role && !villager.ignoreQueue)
                 {
-                    if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count)
-                    {
+
                         villagerToReturn = villager;
-                    }
                 }
             }
             else if (villager.CurrentRole == role && !villager.ignoreQueue)
@@ -80,6 +78,7 @@ public class VillagerManager : MonoBehaviour
         value = villagerToReturn;
         return villagerToReturn;
     }
+
     public static bool TryGetVillagerByRole(List<Roles> roles, out Villager value)
     {
         Villager villagerToReturn = null;
@@ -91,8 +90,7 @@ public class VillagerManager : MonoBehaviour
                 {
                     if (villager.CurrentRole == role && !villager.ignoreQueue)
                     {
-                        if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count||
-                            villager.CurrentState is VillagerStates.Idle)
+                        if (villager.CurrentState is VillagerStates.Idle)
                         {
                             villagerToReturn = villager;
                         }
@@ -116,8 +114,7 @@ public class VillagerManager : MonoBehaviour
         {
             if (villagerToReturn)
             {
-                if (villagerToReturn.TasksToQueue.Count > villager.TasksToQueue.Count ||
-                    villager.CurrentState is VillagerStates.Idle && !villager.ignoreQueue)
+                if (villager.CurrentState is VillagerStates.Idle && !villager.ignoreQueue)
                 {
                     villagerToReturn = villager;
                 }

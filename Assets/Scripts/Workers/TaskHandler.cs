@@ -130,7 +130,7 @@ public class TaskHandler : MonoBehaviour
     }
     
     //Worker Picks Up Item
-    private IEnumerator VillagerPicksUpItemCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
+    public IEnumerator VillagerPicksUpItemCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
         // assignedVillager.currentlyHolding = resourceToPickUp.Item;
         resourceToPickUp._isHeld = true;
@@ -141,7 +141,7 @@ public class TaskHandler : MonoBehaviour
     }
     
     //Worker walks to Stockpile Point
-    private IEnumerator VillagerWalksToStockpilePointCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
+    public IEnumerator VillagerWalksToStockpilePointCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
     {
         var storageLocation = resourceToPickUp.storageLocation;
 

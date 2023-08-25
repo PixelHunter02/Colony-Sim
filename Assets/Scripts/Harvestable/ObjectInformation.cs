@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -38,8 +39,13 @@ public class ObjectInformation : MonoBehaviour, IStorable
     {
         AssignStorage();
         _isHeld = true;
-        Coroutine cr = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
-        _gameManager.taskHandler.queuedTasks.Enqueue(cr);
+
+        var villager = VillagerManager.villagers[0];
+        IEnumerator cr = _gameManager.taskHandler.RunTaskCR(villager, this);
+        villager.villagerQueue.Enqueue(cr);
+
+        //Coroutine cr = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
+        //_gameManager.taskHandler.queuedTasks.Enqueue(cr);
 
     }
     

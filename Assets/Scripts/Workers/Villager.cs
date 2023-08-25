@@ -23,6 +23,7 @@ public class Villager : MonoBehaviour, IInteractable
     private bool finding;
     public bool ignoreQueue;
     [SerializeField] private float distance;
+
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
@@ -131,16 +132,6 @@ public class Villager : MonoBehaviour, IInteractable
     public Animator _animator;
 
     private GameManager _gameManager;
-    
-    private bool _runningTasks;
-
-    private List<IEnumerator> _villagerTasks;
-
-    public List<IEnumerator> TasksToQueue 
-    { 
-        get; 
-        private set;
-    }
 
 
     private Model _gender;
@@ -209,15 +200,15 @@ public class Villager : MonoBehaviour, IInteractable
         get => _villagerStats;
     }
 
+    public Queue<IEnumerator> villagerQueue = new Queue<IEnumerator>();
+
     private void Awake()
     {
         _villagerStats = GetComponent<VillagerStats>();
         monsters = new List<GameObject>();
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
-        _villagerTasks = new List<IEnumerator>();
 
-        TasksToQueue = new List<IEnumerator>();
         _animator = transform.GetChild(0).GetComponent<Animator>();
         if (SceneManager.GetActiveScene().name.Equals("New Scene"))
         {
@@ -237,15 +228,9 @@ public class Villager : MonoBehaviour, IInteractable
             transform.Find("FemaleCharacterPBR").Find("PortraitCamera").gameObject.SetActive(false);
             TryGetComponent(out Outline outline);
             outline.UpdateMaterialProperties();
-            if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
-            {
-                foreach (var task in TasksToQueue)
-                {
-                    _villagerTasks.Add(task);
-                }
-                TasksToQueue.Clear();
-            }
-            StartCoroutine(RunTasks());
+
+            StartCoroutine(RunTasksCR());
+
             if (RandomWalkCR is null)
             {
                 RandomWalkCR = StartCoroutine(RandomWalk(4));
@@ -272,15 +257,12 @@ public class Villager : MonoBehaviour, IInteractable
     {
         if (SceneManager.GetActiveScene().name.Contains("New Scene"))
         {
-            BeginRunningTasks();
 
             if (objInAwarenessZone.Count == 0)
             {
                 return;
             }
-            
-            
-            
+
             for (int i = 0; i < objInAwarenessZone.Count; i++)
             {
                 if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
@@ -322,19 +304,18 @@ public class Villager : MonoBehaviour, IInteractable
         }
     }
 
-    public void BeginRunningTasks()
+    public IEnumerator RunTasksCR()
     {
-        if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
+        while (true)
         {
-            foreach (var task in TasksToQueue)
+            while(villagerQueue.Count > 0)
             {
-                _villagerTasks.Add(task);
+                yield return StartCoroutine(villagerQueue.Dequeue());
             }
-            TasksToQueue.Clear();
-            _runningTasks = true;
-            StartCoroutine(RunTasks());
+            yield return null;
         }
     }
+
     
     public IEnumerator GoToLight(float timeTicks)
     {
@@ -471,15 +452,6 @@ public class Villager : MonoBehaviour, IInteractable
     }
 
 
-    private IEnumerator RunTasks()
-    {
-        foreach (var task in _villagerTasks)
-        {
-            yield return task;
-        }
-        _runningTasks = false;
-        _villagerTasks.Clear();
-    }
 
     public Coroutine RandomWalkCR;
     public IEnumerator RandomWalk(float size)
@@ -490,31 +462,13 @@ public class Villager : MonoBehaviour, IInteractable
         yield return new WaitForSeconds(Random.Range(0.1f, 8f));
         var position = transform.position;  
        
-        if (_villagerTasks.Count > 0 || TasksToQueue.Count > 0 || CurrentState is not VillagerStates.Idle) 
+        if (CurrentState is not VillagerStates.Idle) 
         {
             yield break;
         }
 
         var newPosition = new Vector3(position.x + Random.Range(-size, size), position.y,
             position.z + Random.Range(-size, size));
-
-
-        // NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas);
-        //
-        // if (!hit.hit)
-        // {
-        //     if (RandomWalkCR is null)
-        //     {
-        //         RandomWalkCR = StartCoroutine(RandomWalk(4));
-        //     }
-        //     else
-        //     {
-        //         RandomWalkCR = null;
-        //         RandomWalkCR = StartCoroutine(RandomWalk(4));
-        //     }
-        //
-        //     yield break;
-        // }
 
         agent.SetDestination(newPosition);
 
