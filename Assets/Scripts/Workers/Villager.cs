@@ -304,7 +304,7 @@ public class Villager : MonoBehaviour, IInteractable
         }
     }
 
-    public IEnumerator RunTasksCR()
+    private IEnumerator RunTasksCR()
     {
         while (true)
         {
