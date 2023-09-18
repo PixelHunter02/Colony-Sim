@@ -21,41 +21,10 @@ public class TaskHandler : MonoBehaviour
 
     #region Assign
 
-    public IEnumerator TaskToAssign(HarvestableObject task)
-    {
-        if (VillagerManager.TryGetVillagerByRole(task.harvestableObject.canInteract, out Villager villager))
-        {
-            villager.StopAllCoroutines();
-            yield return StartCoroutine(RunTaskCR(villager, task));
-            queuedTasks.Dequeue();
-        }
-        else
-        {
-            yield return new WaitForSeconds(3f);
-            StartCoroutine(TaskToAssign(task));
-        }
-    }
-    
-    public IEnumerator TaskToAssign(ObjectInformation task)
-    {
-        if (VillagerManager.TryGetVillagerByRole(out Villager villager))
-        {
-            villager.StopAllCoroutines();
-            yield return StartCoroutine(RunTaskCR(villager, task));
-            queuedTasks.Dequeue();
-        }
-        else
-        {
-            yield return new WaitForSeconds(3f);
-            StartCoroutine(TaskToAssign(task));
-        }
-    }
-    
     public IEnumerator TaskToAssign(BuildStats task)
     {
         if (VillagerManager.TryGetVillagerByRole(crafters, out Villager villager))
         {
-            villager.StopAllCoroutines();
             yield return StartCoroutine(RunTaskCR(villager, task));
             queuedTasks.Dequeue();
         }
@@ -105,7 +74,7 @@ public class TaskHandler : MonoBehaviour
 
         // Show The Task Has Been Completed
         sprite.sprite = task.harvestableObject.taskCompleteSprite;
-        StartCoroutine(task.CRSpawnHarvestDrops());
+        yield return StartCoroutine(task.CRSpawnHarvestDrops());
         Destroy(task.gameObject);
         
         //Set The Villager To Its  Idle State
@@ -114,7 +83,6 @@ public class TaskHandler : MonoBehaviour
         
         // Disable The Canvas And Un-Assign Tasks
         yield return new WaitForSeconds(1.5f);
-        // assignedVillager.interactingWith = null;
         sliderGo.SetActive(false);
     }
 
@@ -217,10 +185,6 @@ public class TaskHandler : MonoBehaviour
         Villager.SetVillagerDestination(assignedVillager, location.storageLocation);
         assignedVillager.CurrentState = VillagerStates.Walking;
        
-        // while (!Physics.Raycast(new Vector3(assignedVillager.transform.position.x,assignedVillager.transform.position.y+1.5f,assignedVillager.transform.position.z),Vector3.down*2,10,pickupLayerMask))
-        // {
-        //     yield return null;
-        // }
         assignedVillager.CurrentState = VillagerStates.Pickup;
         Debug.Log("Hit");
         Villager.StopVillager(assignedVillager, true);
@@ -228,8 +192,6 @@ public class TaskHandler : MonoBehaviour
         
         StorageManager.EmptyStockpileSpace(location);
     }
-
-
     #endregion
 
     

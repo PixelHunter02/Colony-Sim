@@ -1,12 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using Unity.Jobs;
-using Unity.Mathematics;
+
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Experimental.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -308,12 +305,16 @@ public class Villager : MonoBehaviour, IInteractable
     {
         while (true)
         {
+            Debug.Log("Running");
+            Debug.Log($"RunningThroughQueue, Current Taks; {villagerQueue.Count}");
             while(villagerQueue.Count > 0)
             {
                 yield return StartCoroutine(villagerQueue.Dequeue());
             }
             yield return null;
         }
+
+        yield return null;  
     }
 
     

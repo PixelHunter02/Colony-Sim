@@ -43,10 +43,6 @@ public class ObjectInformation : MonoBehaviour, IStorable
         var villager = VillagerManager.villagers[0];
         IEnumerator cr = _gameManager.taskHandler.RunTaskCR(villager, this);
         villager.villagerQueue.Enqueue(cr);
-
-        //Coroutine cr = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
-        //_gameManager.taskHandler.queuedTasks.Enqueue(cr);
-
     }
     
     private bool CanBeStored() => StorageManager.HasStorageSpace() && !_isHeld && !_isStored;

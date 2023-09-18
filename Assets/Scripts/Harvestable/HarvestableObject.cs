@@ -25,9 +25,11 @@ public class HarvestableObject : MonoBehaviour, IInteractable
         {
             return;
         }
+
+        VillagerManager.TryGetVillagerByRole(harvestableObject.canInteract, out Villager villager);
         
-        Coroutine task = StartCoroutine(_gameManager.taskHandler.TaskToAssign(this));
-        _gameManager.taskHandler.queuedTasks.Enqueue(task);
+        IEnumerator cr = _gameManager.taskHandler.RunTaskCR(villager, this);
+        villager.villagerQueue.Enqueue(cr);
     }
 
     public bool CanInteract()

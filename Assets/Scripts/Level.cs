@@ -148,6 +148,9 @@ public class Level : MonoBehaviour
 
     public NavMeshSurface villagerNavMesh;
     public NavMeshSurface monsterNavMesh;
+    
+    private List<Roles> craftingRoles;
+
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -156,6 +159,8 @@ public class Level : MonoBehaviour
         toolbar.SetActive(true);
         villagerLog = new Dictionary<Villager, string>();
         craftingButtons = new List<StoredItemSO>();
+
+        craftingRoles = new List<Roles>() { Roles.Crafter, Roles.Leader };
 
         List<Villager> tempVillagers = new List<Villager>();
         foreach (var villager in VillagerManager.GetVillagers())
@@ -384,12 +389,13 @@ public class Level : MonoBehaviour
 
     private void AddToCraftingQueue(StoredItemSO craftingRecipe)
     {
-        
         var queuedItem = Instantiate(queueItemTemplate, queueItemContainer);
         queuedItem.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = craftingRecipe.uiSprite;
-        var craftingItem = _gameManager.craftingManager.BeginCrafting(craftingRecipe);
+        VillagerManager.TryGetVillagerByRole(craftingRoles, out Villager villager);
+        var craftingItem = _gameManager.craftingManager.BeginCrafting(villager, craftingRecipe);
         _gameManager.craftingManager.craftingQueueDictionary.Add(craftingItem,queuedItem);
-        _gameManager.craftingManager.craftingQueue.Enqueue(craftingItem);
+        // _gameManager.craftingManager.craftingQueue.Enqueue(craftingItem);
+        villager.villagerQueue.Enqueue(craftingItem);
     }
 
     private void AddBuildingsToBuildingToolbar()
