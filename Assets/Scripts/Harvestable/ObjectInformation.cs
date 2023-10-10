@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using SG_Tasks;
 using UnityEngine;
 
 public class ObjectInformation : MonoBehaviour, IStorable
@@ -10,15 +11,8 @@ public class ObjectInformation : MonoBehaviour, IStorable
         get => _itemSO;
     }
     public bool _isStored;
-    public bool _isHeld;
     public Vector3 storageLocation;
-    public Villager assignedVillager;
-    private GameManager _gameManager;
-
-    private void Awake()
-    {
-        _gameManager = GameManager.Instance;
-    }
+    public bool _storageAssigned;
 
     private void Update()
     {
@@ -30,6 +24,7 @@ public class ObjectInformation : MonoBehaviour, IStorable
 
     public void AssignStorage()
     {
+        _storageAssigned = true;
         var location = StorageManager.storageLocations.ElementAt(0);
         storageLocation = location;
         StorageManager.UseStorageSpace(location);
@@ -38,12 +33,12 @@ public class ObjectInformation : MonoBehaviour, IStorable
     private void FindAvailableVillager()
     {
         AssignStorage();
-        _isHeld = true;
 
-        var villager = VillagerManager.villagers[0];
-        IEnumerator cr = _gameManager.taskHandler.RunTaskCR(villager, this);
+        VillagerManager.TryGetVillagerByRole(out Villager villager);
+        IEnumerator cr = Tasks.StoreItem(villager, this);
+        Debug.Log(villager);
         villager.villagerQueue.Enqueue(cr);
     }
     
-    private bool CanBeStored() => StorageManager.HasStorageSpace() && !_isHeld && !_isStored;
+    private bool CanBeStored() => StorageManager.HasStorageSpace() && !_isStored && !_storageAssigned;
 }

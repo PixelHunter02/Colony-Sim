@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -46,10 +47,21 @@ public class Monster : MonoBehaviour
         _animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
 
-        GameEvents.current.onNightTimeStart += OnNightTime;
-        GameEvents.current.onNightTimeEnd += OnDayTime;
+        
         
         _gameManager = GameManager.Instance;
+    }
+
+    private void OnEnable()
+    {
+        GameEvents.current.onNightTimeStart += OnNightTime;
+        GameEvents.current.onNightTimeEnd += OnDayTime;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.current.onNightTimeStart -= OnNightTime;
+        GameEvents.current.onNightTimeEnd -= OnDayTime;
     }
 
     private void Start()

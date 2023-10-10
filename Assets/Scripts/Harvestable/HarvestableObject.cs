@@ -13,8 +13,10 @@ public class HarvestableObject : MonoBehaviour, IInteractable
 
     public delegate void OnHarvestCompleted();
     public static event OnHarvestCompleted onHarvestCompletedEvent;
+
+    public Transform standPoint;
     
-    private void OnEnable()
+    private void Start()
     {
         _gameManager = GameManager.Instance;
     }
@@ -28,6 +30,7 @@ public class HarvestableObject : MonoBehaviour, IInteractable
 
         VillagerManager.TryGetVillagerByRole(harvestableObject.canInteract, out Villager villager);
         
+        Debug.Log(villager.VillagerStats.VillagerName);
         IEnumerator cr = _gameManager.taskHandler.RunTaskCR(villager, this);
         villager.villagerQueue.Enqueue(cr);
     }

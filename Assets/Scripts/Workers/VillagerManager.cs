@@ -1,11 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Analytics;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class VillagerManager : MonoBehaviour
@@ -123,6 +120,10 @@ public class VillagerManager : MonoBehaviour
             {
                 villagerToReturn = villager;
             }
+            else
+            {
+                villagerToReturn = villager;
+            }
         }
         value = villagerToReturn;
         return villagerToReturn;
@@ -133,7 +134,7 @@ public class VillagerManager : MonoBehaviour
             villager.VillagerStats.Craft = Random.Range(1, 7);
             villager.VillagerStats.Magic = Random.Range(1, 7);
             villager.VillagerStats.Strength = Random.Range(1, 7);
-            villager.HairColour = hairColours[Random.Range(0, hairColours.Length)];
+            villager.VillagerCustomisation.HairColour = hairColours[Random.Range(0, hairColours.Length)];
 
             maleNames = null;
             femaleNames = null;
@@ -162,7 +163,7 @@ public class VillagerManager : MonoBehaviour
             var position = Random.Range(0,gender.Length-1);
             
             Model newGender = (Model)gender.GetValue(position);
-            villager.Gender = newGender;
+            villager.VillagerCustomisation.Gender = newGender;
     }
 
     public void SpawnVillager(Villager villagerToSpawn, out Villager villagerToReturn)
@@ -172,8 +173,8 @@ public class VillagerManager : MonoBehaviour
         villagerComponent.VillagerStats.Craft = villagerToSpawn.VillagerStats.Craft;
         villagerComponent.VillagerStats.Magic = villagerToSpawn.VillagerStats.Magic;
         villagerComponent.VillagerStats.Strength = villagerToSpawn.VillagerStats.Strength;
-        villagerComponent.HairColour = villagerToSpawn.HairColour;
-        villagerComponent.Gender = villagerToSpawn.Gender;
+        villagerComponent.VillagerCustomisation.HairColour = villagerToSpawn.VillagerCustomisation.HairColour;
+        villagerComponent.VillagerCustomisation.Gender = villagerToSpawn.VillagerCustomisation.Gender;
         villagerComponent.VillagerStats.VillagerName = villagerToSpawn.VillagerStats.VillagerName;
         villagerComponent.CurrentRole = villagerToSpawn.CurrentRole;
         villagerToReturn = villager.GetComponent<Villager>();

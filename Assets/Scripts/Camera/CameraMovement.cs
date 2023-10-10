@@ -62,8 +62,6 @@ public class CameraMovement : MonoBehaviour
             }
 
             MoveCamera();
-            // StartCameraPanning();
-            // StartRotateCamera();
             MoveCursor();
         }
     }
@@ -78,7 +76,6 @@ public class CameraMovement : MonoBehaviour
 
     private void StartCameraPanning(InputAction.CallbackContext context)
     {
-        Debug.Log("Started Panning");
         if(_lastMousePosition == Vector2.zero )
         {
             var position = _gameManager.inputManager.playerInputActions.Player.secondFinger.ReadValue<Vector2>();
@@ -90,12 +87,10 @@ public class CameraMovement : MonoBehaviour
     private Coroutine panning;
     private IEnumerator OnPanningCR()
     {
-        Debug.Log("Started CR");
         while (true)
         {
             var position = _gameManager.inputManager.playerInputActions.Player.secondFinger.ReadValue<Vector2>();
 
-            Debug.Log("In CR");
             var mousePosition = followObject.transform.forward * (_gameManager.inputManager.GetScaledCursorPositionThisFrame(position).y - _lastMousePosition.y) + followObject.transform.right*(_gameManager.inputManager.GetScaledCursorPositionThisFrame(position).x-_lastMousePosition.x);
             var movementDirection = new Vector3(mousePosition.x, 0, mousePosition.z);
             followObject.transform.position += movementDirection * (Time.deltaTime * panningSpeed);
@@ -111,7 +106,6 @@ public class CameraMovement : MonoBehaviour
 
     private void EndCameraPanning()
     {
-        Debug.Log("Left CR");
         _lastMousePosition = Vector2.zero;
         StopCoroutine(panning);
     }
@@ -131,23 +125,6 @@ public class CameraMovement : MonoBehaviour
         transposerOffset += zoomValue * -2;
         _cinemachineVCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = Mathf.Clamp(transposerOffset, 3, 15);
     }
-
-    // private void RotateCamera()
-    // {
-    //     var position = _gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>();
-    //
-    //     if(!_gameManager.inputManager.IsRotating())
-    //     {
-    //         _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
-    //         return;
-    //     }
-    //     
-    //     var value = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position) - _lastRightClickPosition;
-    //     var rotation = followObject.transform.rotation.eulerAngles;
-    //     rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;
-    //     followObject.transform.rotation = Quaternion.Euler(rotation);
-    //     _lastRightClickPosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
-    // }
 
     private void StartRotateCamera()
     {
@@ -170,7 +147,6 @@ public class CameraMovement : MonoBehaviour
         {
             var position = _gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>();
 
-            // Debug.Log("In CR");
             var value = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position) - _lastMousePosition;
             var rotation = followObject.transform.rotation.eulerAngles;
             rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;

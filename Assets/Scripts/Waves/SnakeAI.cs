@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,10 +52,20 @@ public class SnakeAI : MonoBehaviour
 
         den = gameObject.transform.localPosition;
 
+        
+    }
+
+    private void OnEnable()
+    {
         GameEvents.current.onNightTimeStart += OnNightTime;
         GameEvents.current.onNightTimeEnd += OnDayTime;
     }
 
+    private void OnDisable()
+    {
+        GameEvents.current.onNightTimeStart -= OnNightTime;
+        GameEvents.current.onNightTimeEnd -= OnDayTime;
+    }
 
     // Update is called once per frame
     void Update()

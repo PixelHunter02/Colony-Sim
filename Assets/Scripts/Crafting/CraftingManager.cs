@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class CraftingManager : MonoBehaviour
@@ -16,11 +14,6 @@ public class CraftingManager : MonoBehaviour
     [SerializeField] private StoredItemSO[] craftingRecipes;
     public StoredItemSO[] CraftingRecipes => craftingRecipes;
     
-    /// <summary>
-    /// Assigned in the inspector
-    /// </summary>
-    [SerializeField] private LayerMask pickupLayermask;
-
     public Queue<IEnumerator> craftingQueue;
     private List<Roles> craftingRoles;
 
@@ -42,6 +35,7 @@ public class CraftingManager : MonoBehaviour
         while (craftingQueue?.Count > 0)
         {
             if (VillagerManager.TryGetVillagerByRole(craftingRoles, out Villager villager)){
+                // villager.villagerQueue.Enqueue();
                 var queueToRemove = craftingQueue.Peek();
                 yield return StartCoroutine(craftingQueue.Dequeue());
                 Destroy(craftingQueueDictionary[queueToRemove]);
@@ -83,8 +77,6 @@ public class CraftingManager : MonoBehaviour
         Debug.Log("PlacedItem");
         StorageManager.UpdateStorage();
         villager.CurrentState = VillagerStates.Idle;
-        villager.StartCoroutine(villager.RandomWalk(4));
-    
     }
 
     private IEnumerator PickUpItems(Villager assignedVillager, Item location)
