@@ -111,7 +111,6 @@ public class UIManager : MonoBehaviour
                 villager.CurrentState = VillagerStates.AssigningRole;
                 StorageManager.EmptyStockpileSpace(item);
                 yield return new WaitForSeconds(villager._animator.GetCurrentAnimatorStateInfo(0).length);
-                villager.CurrentState = VillagerStates.Idle;
                 villager.ignoreQueue = false;
                 yield break;
             }
