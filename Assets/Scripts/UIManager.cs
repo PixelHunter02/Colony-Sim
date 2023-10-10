@@ -88,7 +88,11 @@ public class UIManager : MonoBehaviour
                 dropdown.value = (int)villager.CurrentRole;
                 if (dropdown.value != (int)Roles.Leader)
                 {
-                    dropdown.onValueChanged.AddListener(delegate { StartCoroutine(RoleChanged(dropdown.value,villager)); });
+                    dropdown.onValueChanged.AddListener(delegate
+                    {
+                        var cr = RoleChanged(dropdown.value,villager);
+                        villager.villagerQueue.Enqueue(cr);
+                    });
                 }
                 else
                 {
@@ -107,9 +111,9 @@ public class UIManager : MonoBehaviour
             {
                 villager.ignoreQueue = true;
                 yield return gameManager.taskHandler.WalkToLocationCR(villager, item.storageLocation);
-                villager.CurrentRole = (Roles)value;
                 villager.CurrentState = VillagerStates.AssigningRole;
                 StorageManager.EmptyStockpileSpace(item);
+                villager.CurrentRole = (Roles)value;
                 yield return new WaitForSeconds(villager._animator.GetCurrentAnimatorStateInfo(0).length);
                 villager.ignoreQueue = false;
                 yield break;

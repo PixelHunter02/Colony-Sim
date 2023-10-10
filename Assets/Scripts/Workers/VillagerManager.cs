@@ -93,7 +93,7 @@ public class VillagerManager : MonoBehaviour
                         }
                     }
                 }
-                else if (villager.CurrentRole == role && villager.CurrentState is VillagerStates.Idle && !villager.ignoreQueue || villager.CurrentRole == Roles.Leader)
+                else if (villager.CurrentRole == role && !villager.ignoreQueue || villager.CurrentRole == Roles.Leader)
                 {
                     villagerToReturn = villager;
                 }
