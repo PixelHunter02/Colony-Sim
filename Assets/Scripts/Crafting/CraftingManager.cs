@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class CraftingManager : MonoBehaviour
@@ -16,11 +14,6 @@ public class CraftingManager : MonoBehaviour
     [SerializeField] private StoredItemSO[] craftingRecipes;
     public StoredItemSO[] CraftingRecipes => craftingRecipes;
     
-    /// <summary>
-    /// Assigned in the inspector
-    /// </summary>
-    [SerializeField] private LayerMask pickupLayermask;
-
     public Queue<IEnumerator> craftingQueue;
     private List<Roles> craftingRoles;
 
@@ -42,6 +35,7 @@ public class CraftingManager : MonoBehaviour
         while (craftingQueue?.Count > 0)
         {
             if (VillagerManager.TryGetVillagerByRole(craftingRoles, out Villager villager)){
+                // villager.villagerQueue.Enqueue();
                 var queueToRemove = craftingQueue.Peek();
                 yield return StartCoroutine(craftingQueue.Dequeue());
                 Destroy(craftingQueueDictionary[queueToRemove]);
@@ -54,47 +48,35 @@ public class CraftingManager : MonoBehaviour
         StartCoroutine(RunCraftingQueue());
     }
     
-    public IEnumerator BeginCrafting(StoredItemSO craftingRecipe)
+    public IEnumerator BeginCrafting(Villager villager, StoredItemSO craftingRecipe)
     {
-        if (VillagerManager.TryGetVillagerByRole(craftingRoles, out Villager villager))
-        {
-            villager.StopAllCoroutines();
-            List<Item> resourcesToRemove = new List<Item>();
+        Debug.Log("Crafting");
+        List<Item> resourcesToRemove = new List<Item>();
 
-            foreach (var required in craftingRecipe.craftingRecipe)
+        foreach (var required in craftingRecipe.craftingRecipe)
+        {
+            if (StorageManager.TryFindItemsInInventory(required, required.amount, out List<Item> resources))
             {
-                if (StorageManager.TryFindItemsInInventory(required, required.amount, out List<Item> resources))
+                foreach (var resource in resources)
                 {
-                    foreach (var resource in resources)
-                    {
-                        Debug.Log(resource.itemSO.objectName);
-                        resourcesToRemove.Add(resource);
-                    }
-                }
-                else
-                {
-                    Debug.Log("You dont have required resources");
-                    yield break;
+                    resourcesToRemove.Add(resource);
                 }
             }
-            
-            Debug.Log("Has Resources");
-
-            foreach (var item in resourcesToRemove)
+            else
             {
-                yield return StartCoroutine(PickUpItems(villager, item));
+                yield break;
             }
-
-            yield return StartCoroutine(WalkToVillageHeart(villager,craftingRecipe));
-            
-            StorageManager.UpdateStorage();
-            villager.CurrentState = VillagerStates.Idle;
-            villager.StartCoroutine(villager.RandomWalk(4));
         }
-        else
+        
+        foreach (var item in resourcesToRemove)
         {
-            Debug.Log("Cant find anyone");
+            yield return StartCoroutine(PickUpItems(villager, item));
         }
+
+        yield return StartCoroutine(WalkToVillageHeart(villager,craftingRecipe));
+        Debug.Log("PlacedItem");
+        StorageManager.UpdateStorage();
+        villager.CurrentState = VillagerStates.Idle;
     }
 
     private IEnumerator PickUpItems(Villager assignedVillager, Item location)

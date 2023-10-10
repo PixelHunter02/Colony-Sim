@@ -49,8 +49,10 @@ public class Interactions : MonoBehaviour
     private void OutlineInteractable()
     {
         var ray = _gameManager.mainCamera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
+        Debug.Log(ray.GetPoint(10));
         if (!Physics.Raycast(ray, out var hit))
             return;
+        Debug.Log(hit.transform.name);
 
         // Clear the reference to the previous outline if not highlighting.
         if (_lastHitOutline)
@@ -90,9 +92,10 @@ public class Interactions : MonoBehaviour
         var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 1000))
             return;
-
-        if (hit.transform.TryGetComponent(out IInteractable interactable) && !isOverUI && interactable.CanInteract())
+        Debug.Log(hit.transform.name);
+        if (hit.transform.TryGetComponent(out IInteractable interactable) && !isOverUI)
         {
+            // Debug.Log(hit.transform.name);
             interactable.OnInteraction();
         }
     }

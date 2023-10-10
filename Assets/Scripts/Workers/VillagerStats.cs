@@ -8,13 +8,6 @@ public class VillagerStats : MonoBehaviour
 {
     private Villager _villager;
 
-    private void Start()
-    {
-        _villager = GetComponent<Villager>();
-        modifiedMaxHealth = Mathf.CeilToInt(20 + (0.3f * Strength));
-        Health = modifiedMaxHealth;
-    }
-
     private int health;
     private int maxHealth;
     int modifiedMaxHealth;
@@ -90,4 +83,54 @@ public class VillagerStats : MonoBehaviour
             hunger = value;
         }
     }
+
+    public List<GameObject> emojis;
+    [SerializeField] private GameObject emojiCanvas;
+    [SerializeField] private Transform emojiContainer;
+
+    private Emotion currentEmotion;
+
+    public Emotion CurrentEmotion
+    {
+        get => currentEmotion;
+        set
+        {
+            currentEmotion = value;
+            switch (value)
+            {
+                case Emotion.Instruction:
+                    emojiCanvas.SetActive(true);
+                    Instantiate(emojis[0], emojiContainer);
+                    break;
+                case Emotion.None:
+                    for(int i = 0; i < emojiContainer.childCount;i++)
+                    {
+                        Destroy(emojiContainer.transform.GetChild(i).gameObject);
+                    }
+                    emojiCanvas.SetActive(false);
+                    break;
+
+            }
+        }
+    }
+
+
+    private void Start()
+    {
+        _villager = GetComponent<Villager>();
+        modifiedMaxHealth = Mathf.CeilToInt(20 + (0.3f * Strength));
+        Health = modifiedMaxHealth;
+    }
+}
+
+public enum Emotion
+{
+    Instruction,
+    Tired,
+    Happy,
+    Angry,
+    Hungry,
+    Sick,
+    Cold,
+    None,
 }

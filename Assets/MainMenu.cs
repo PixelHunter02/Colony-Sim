@@ -38,7 +38,7 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        villager.HairColour = hairColours[0];
+        villager.VillagerCustomisation.HairColour = hairColours[0];
         mainMenuCanvas.SetActive(true);
         characterCreationCanvas.SetActive(false);
 
@@ -51,7 +51,7 @@ public class MainMenu : MonoBehaviour
     {
         characterCreationCanvas.SetActive(true);
         mainMenuCanvas.SetActive(false);
-        villager.Gender = Model.Woman;
+        villager.VillagerCustomisation.Gender = Model.Woman;
         villager.CurrentRole = Roles.Leader;
         _inputField.text = villager.VillagerStats.VillagerName;
     }
@@ -64,7 +64,7 @@ public class MainMenu : MonoBehaviour
             currentHairColourIndex = 0;
         }
 
-        villager.HairColour = hairColours[currentHairColourIndex];
+        villager.VillagerCustomisation.HairColour = hairColours[currentHairColourIndex];
     }
     public void PreviousHairColour()
     {
@@ -74,7 +74,7 @@ public class MainMenu : MonoBehaviour
             currentHairColourIndex = hairColours.Length-1;
         }
 
-        villager.HairColour = hairColours[currentHairColourIndex];
+        villager.VillagerCustomisation.HairColour = hairColours[currentHairColourIndex];
     }
     public void ChangeGender()
     {
@@ -84,7 +84,7 @@ public class MainMenu : MonoBehaviour
         {
             currentGenderIndex = 0;
         }
-        villager.Gender = (Model)gender.GetValue(currentGenderIndex);
+        villager.VillagerCustomisation.Gender = (Model)gender.GetValue(currentGenderIndex);
         _inputField.text = villager.VillagerStats.VillagerName;
     }
     

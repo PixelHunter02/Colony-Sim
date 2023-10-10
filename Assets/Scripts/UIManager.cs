@@ -106,7 +106,6 @@ public class UIManager : MonoBehaviour
             if ((int)item.itemSO.assignRole == value)
             {
                 villager.ignoreQueue = true;
-                villager.StopAllCoroutines();
                 yield return gameManager.taskHandler.WalkToLocationCR(villager, item.storageLocation);
                 villager.CurrentRole = (Roles)value;
                 villager.CurrentState = VillagerStates.AssigningRole;

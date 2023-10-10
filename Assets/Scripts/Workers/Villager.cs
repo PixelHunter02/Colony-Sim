@@ -1,15 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using Unity.Jobs;
-using Unity.Mathematics;
+using DG.Tweening;
+using SG_Tasks;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Experimental.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 [RequireComponent(typeof(VillagerStats))]
 public class Villager : MonoBehaviour, IInteractable
@@ -23,6 +21,7 @@ public class Villager : MonoBehaviour, IInteractable
     private bool finding;
     public bool ignoreQueue;
     [SerializeField] private float distance;
+
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
@@ -85,15 +84,6 @@ public class Villager : MonoBehaviour, IInteractable
             {
                 case VillagerStates.Idle:
                     _animator.Play("Idle");
-                    if (RandomWalkCR is null)
-                    {
-                        RandomWalkCR = StartCoroutine(RandomWalk(4));
-                    }
-                    else
-                    {
-                        RandomWalkCR = null;
-                        RandomWalkCR = StartCoroutine(RandomWalk(4));
-                    }
                     break;
                 case VillagerStates.Working:
                     Debug.Log("Switching");
@@ -132,92 +122,34 @@ public class Villager : MonoBehaviour, IInteractable
 
     private GameManager _gameManager;
     
-    private bool _runningTasks;
-
-    private List<IEnumerator> _villagerTasks;
-
-    public List<IEnumerator> TasksToQueue 
-    { 
-        get; 
-        private set;
-    }
-
-
-    private Model _gender;
-
-    public Model Gender
-    {
-        get => _gender;
-        set
-        {
-            _gender = value;
-            Debug.Log($"The Gender of The Villager {_villagerStats.VillagerName} has changed to {_gender}");
-            switch (_gender)
-            {
-                case Model.Man:
-                    femaleHead.SetActive(false);
-                    femaleBody.SetActive(false);
-                    maleHead.SetActive(true);
-                    maleBody.SetActive(true);
-                    var randomPositionMale = Random.Range(0, VillagerManager.maleNames.Count);
-                    _villagerStats.VillagerName = VillagerManager.maleNames[randomPositionMale];
-                    maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
-                    break;
-                case Model.Woman:
-                    femaleHead.SetActive(true);
-                    femaleBody.SetActive(true);
-                    maleHead.SetActive(false);
-                    maleBody.SetActive(false);
-                    var randomPosition = Random.Range(0, VillagerManager.femaleNames.Count);
-                    _villagerStats.VillagerName = VillagerManager.femaleNames[randomPosition];
-                    femaleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-    }
-    
-    #region BodyParts
-
-    [SerializeField] private GameObject femaleHead;
-    [SerializeField] private GameObject maleHead;
-    [SerializeField] private GameObject femaleBody;
-    [SerializeField] private GameObject maleBody;
-    private Material _hairColour;
-
-    public Material HairColour
-    {
-        get => _hairColour;
-        set
-        {
-            _hairColour = value;
-            
-            maleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
-            femaleHead.transform.GetChild(3).GetComponent<MeshRenderer>().material = HairColour;
-        }
-    }
-
-    #endregion
-
     [SerializeField] private Camera portraitCamera;
     public RenderTexture _portraitRenderTexture;
     
-    private VillagerStats _villagerStats;
+    
+    [SerializeField] private VillagerStats _villagerStats;
     public VillagerStats VillagerStats
     {
         get => _villagerStats;
     }
+    
+    
+    
+    [SerializeField] private VillagerCustomisation _villagerCustomisation;
+    public VillagerCustomisation VillagerCustomisation
+    {
+        get => _villagerCustomisation;
+    }
+    
+    
+
+    public Queue<IEnumerator> villagerQueue = new Queue<IEnumerator>();
 
     private void Awake()
     {
-        _villagerStats = GetComponent<VillagerStats>();
         monsters = new List<GameObject>();
         _gameManager = GameManager.Instance;
         agent = GetComponent<NavMeshAgent>();
-        _villagerTasks = new List<IEnumerator>();
 
-        TasksToQueue = new List<IEnumerator>();
         _animator = transform.GetChild(0).GetComponent<Animator>();
         if (SceneManager.GetActiveScene().name.Equals("New Scene"))
         {
@@ -237,24 +169,8 @@ public class Villager : MonoBehaviour, IInteractable
             transform.Find("FemaleCharacterPBR").Find("PortraitCamera").gameObject.SetActive(false);
             TryGetComponent(out Outline outline);
             outline.UpdateMaterialProperties();
-            if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
-            {
-                foreach (var task in TasksToQueue)
-                {
-                    _villagerTasks.Add(task);
-                }
-                TasksToQueue.Clear();
-            }
-            StartCoroutine(RunTasks());
-            if (RandomWalkCR is null)
-            {
-                RandomWalkCR = StartCoroutine(RandomWalk(4));
-            }
-            else
-            {
-                RandomWalkCR = null;
-                RandomWalkCR = StartCoroutine(RandomWalk(4));
-            }
+
+            StartCoroutine(RunTasksCR());
         }
     }
 
@@ -272,15 +188,12 @@ public class Villager : MonoBehaviour, IInteractable
     {
         if (SceneManager.GetActiveScene().name.Contains("New Scene"))
         {
-            BeginRunningTasks();
 
             if (objInAwarenessZone.Count == 0)
             {
                 return;
             }
-            
-            
-            
+
             for (int i = 0; i < objInAwarenessZone.Count; i++)
             {
                 if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
@@ -322,19 +235,26 @@ public class Villager : MonoBehaviour, IInteractable
         }
     }
 
-    public void BeginRunningTasks()
+    private IEnumerator RunTasksCR()
     {
-        if (_villagerTasks.Count == 0 && !_runningTasks && TasksToQueue.Count > 0)
+        while (true)
         {
-            foreach (var task in TasksToQueue)
+            while(villagerQueue.Count > 0)
             {
-                _villagerTasks.Add(task);
+                yield return StartCoroutine(villagerQueue.Dequeue());
+                Debug.Log($"Taks {villagerQueue.Count} Completed");
             }
-            TasksToQueue.Clear();
-            _runningTasks = true;
-            StartCoroutine(RunTasks());
+
+            if (villagerQueue.Count == 0)
+            {
+                Debug.Log(_villagerStats.VillagerName);
+                villagerQueue.Enqueue(RandomWalk(3));
+            }
+            yield return null;
         }
+        yield return null;  
     }
+
     
     public IEnumerator GoToLight(float timeTicks)
     {
@@ -454,9 +374,15 @@ public class Villager : MonoBehaviour, IInteractable
         
         _gameManager.level.ShowVillagerInformationOnClick(this);
         _gameManager.uiManager.SetVillagerStatsUI(this);
-        if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.VillagerStatsTutorial)
+        
+        VillagerStats.CurrentEmotion = Emotion.None;
+        var tutorialManager = _gameManager.level.tutorialManager;
+        if (tutorialManager.TutorialStage == TutorialStage.KeyboardMovementTutorial)
         {
-            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.StockpileTutorial;
+            tutorialManager.wKey.transform.DOScale(Vector3.one,0.5f);
+            tutorialManager.sKey.transform.DOScale(Vector3.one, 0.5f);
+            tutorialManager.aKey.transform.DOScale(Vector3.one, 0.5f);
+            tutorialManager.dKey.transform.DOScale(Vector3.one, 0.5f);
         }
     }
 
@@ -469,76 +395,25 @@ public class Villager : MonoBehaviour, IInteractable
 
         return true;
     }
-
-
-    private IEnumerator RunTasks()
-    {
-        foreach (var task in _villagerTasks)
-        {
-            yield return task;
-        }
-        _runningTasks = false;
-        _villagerTasks.Clear();
-    }
-
-    public Coroutine RandomWalkCR;
+    
     public IEnumerator RandomWalk(float size)
     {
-
-        agent.ResetPath();
-        agent.isStopped = false;
-        yield return new WaitForSeconds(Random.Range(0.1f, 8f));
         var position = transform.position;  
-       
-        if (_villagerTasks.Count > 0 || TasksToQueue.Count > 0 || CurrentState is not VillagerStates.Idle) 
+    
+        var newPosition = new Vector3(position.x + UnityEngine.Random.Range(-size, size), position.y,
+            position.z + UnityEngine.Random.Range(-size, size));
+
+        while (!NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 0, 3))
         {
-            yield break;
+            newPosition = new Vector3(position.x + UnityEngine.Random.Range(-size, size), position.y,
+                position.z + UnityEngine.Random.Range(-size, size));
         }
 
-        var newPosition = new Vector3(position.x + Random.Range(-size, size), position.y,
-            position.z + Random.Range(-size, size));
+        yield return StartCoroutine(Tasks.WalkToLocation(this, newPosition));
 
-
-        // NavMesh.SamplePosition(newPosition, out NavMeshHit hit, 1f, NavMesh.AllAreas);
-        //
-        // if (!hit.hit)
-        // {
-        //     if (RandomWalkCR is null)
-        //     {
-        //         RandomWalkCR = StartCoroutine(RandomWalk(4));
-        //     }
-        //     else
-        //     {
-        //         RandomWalkCR = null;
-        //         RandomWalkCR = StartCoroutine(RandomWalk(4));
-        //     }
-        //
-        //     yield break;
-        // }
-
-        agent.SetDestination(newPosition);
-
-        _animator.Play("Walking");
-        while (Vector3.Distance(transform.position, newPosition) > 2)
-        {
-            var startPos = transform.position;
-            yield return new WaitForSeconds(1f);
-            if (Vector3.Distance(startPos, transform.position) <= 0.02)
-            {
-                if (RandomWalkCR is null)
-                {
-                    RandomWalkCR = StartCoroutine(RandomWalk(4));
-                }
-                else
-                {
-                    RandomWalkCR = null;
-                    RandomWalkCR = StartCoroutine(RandomWalk(4));
-                }
-                yield break;
-            }
-            yield return null;
-        }
         CurrentState = VillagerStates.Idle;
+        yield return new WaitForSeconds(UnityEngine.Random.Range(0.1f, 1f));
+
     }
 
     public void OnDeath()

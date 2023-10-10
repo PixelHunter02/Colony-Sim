@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using SG_Tasks;
 
 public class TaskHandler : MonoBehaviour
 {
     private GameManager _gameManager;
-    // public List<IEnumerator> queuedTasks;
     public Queue<Coroutine> queuedTasks;
-    // public LayerMask pickupLayerMask;
     public List<Roles> crafters;
 
     private void Awake()
@@ -21,41 +20,10 @@ public class TaskHandler : MonoBehaviour
 
     #region Assign
 
-    public IEnumerator TaskToAssign(HarvestableObject task)
-    {
-        if (VillagerManager.TryGetVillagerByRole(task.harvestableObject.canInteract, out Villager villager))
-        {
-            villager.StopAllCoroutines();
-            yield return StartCoroutine(RunTaskCR(villager, task));
-            queuedTasks.Dequeue();
-        }
-        else
-        {
-            yield return new WaitForSeconds(3f);
-            StartCoroutine(TaskToAssign(task));
-        }
-    }
-    
-    public IEnumerator TaskToAssign(ObjectInformation task)
-    {
-        if (VillagerManager.TryGetVillagerByRole(out Villager villager))
-        {
-            villager.StopAllCoroutines();
-            yield return StartCoroutine(RunTaskCR(villager, task));
-            queuedTasks.Dequeue();
-        }
-        else
-        {
-            yield return new WaitForSeconds(3f);
-            StartCoroutine(TaskToAssign(task));
-        }
-    }
-    
     public IEnumerator TaskToAssign(BuildStats task)
     {
         if (VillagerManager.TryGetVillagerByRole(crafters, out Villager villager))
         {
-            villager.StopAllCoroutines();
             yield return StartCoroutine(RunTaskCR(villager, task));
             queuedTasks.Dequeue();
         }
@@ -73,7 +41,7 @@ public class TaskHandler : MonoBehaviour
     public IEnumerator RunTaskCR(Villager assignedVillager, HarvestableObject task)
     {
         
-        yield return StartCoroutine(WalkToLocationCR(assignedVillager, task,4f));
+        yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position));
         yield return StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
     }
     
@@ -100,12 +68,10 @@ public class TaskHandler : MonoBehaviour
             slider.value = progress;
             yield return null;
         }
-        
-        
 
         // Show The Task Has Been Completed
         sprite.sprite = task.harvestableObject.taskCompleteSprite;
-        StartCoroutine(task.CRSpawnHarvestDrops());
+        yield return StartCoroutine(task.CRSpawnHarvestDrops());
         Destroy(task.gameObject);
         
         //Set The Villager To Its  Idle State
@@ -114,57 +80,7 @@ public class TaskHandler : MonoBehaviour
         
         // Disable The Canvas And Un-Assign Tasks
         yield return new WaitForSeconds(1.5f);
-        // assignedVillager.interactingWith = null;
         sliderGo.SetActive(false);
-    }
-
-    #endregion
-
-    #region Pickup Resources
-
-    public IEnumerator RunTaskCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
-    {
-        yield return StartCoroutine(WalkToLocationCR(assignedVillager, resourceToPickUp,4f));
-        yield return StartCoroutine(VillagerPicksUpItemCR(assignedVillager, resourceToPickUp));
-        yield return StartCoroutine(VillagerWalksToStockpilePointCR(assignedVillager, resourceToPickUp));
-    }
-    
-    //Worker Picks Up Item
-    private IEnumerator VillagerPicksUpItemCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
-    {
-        // assignedVillager.currentlyHolding = resourceToPickUp.Item;
-        resourceToPickUp._isHeld = true;
-        assignedVillager.CurrentState = VillagerStates.Pickup;
-        yield return new WaitForSeconds(1f);
-        resourceToPickUp.gameObject.SetActive(false);
-        yield return null;
-    }
-    
-    //Worker walks to Stockpile Point
-    private IEnumerator VillagerWalksToStockpilePointCR(Villager assignedVillager, ObjectInformation resourceToPickUp)
-    {
-        var storageLocation = resourceToPickUp.storageLocation;
-
-        yield return WalkToLocationCR(assignedVillager, storageLocation);
-        
-        assignedVillager.CurrentState = VillagerStates.Pickup;
-        
-        yield return new WaitForSeconds(0.5f);
-        
-        MoveObjectToStorage(assignedVillager, resourceToPickUp);
-    }
-    
-    //Worker puts down Item
-    private void MoveObjectToStorage(Villager assignedVillager, ObjectInformation objectInformation)
-    {
-        objectInformation.transform.position = objectInformation.storageLocation;
-        objectInformation.gameObject.SetActive(true);
-        objectInformation.transform.rotation = Quaternion.Euler(0,0,0);
-        objectInformation._isHeld = false;
-        // assignedVillager.currentlyHolding = null;
-        objectInformation._isStored = true;
-        _gameManager.storageManager.AddToStorage(new Item{itemSO = objectInformation.Item, amount = 1, storageLocation = objectInformation.storageLocation, go = objectInformation.gameObject});
-        assignedVillager.CurrentState = VillagerStates.Idle;
     }
 
     #endregion
@@ -203,7 +119,7 @@ public class TaskHandler : MonoBehaviour
                 yield return StartCoroutine(PickUpItems(assignedVillager, item));
             }
 
-            yield return WalkToLocationCR(assignedVillager, buildStats,2);
+            yield return Tasks.WalkToLocation(assignedVillager, buildStats.transform.position);
             yield return new WaitForSeconds(3);
             assignedVillager.CurrentState = VillagerStates.Idle;
             buildStats.building.SetActive(false);
@@ -217,10 +133,6 @@ public class TaskHandler : MonoBehaviour
         Villager.SetVillagerDestination(assignedVillager, location.storageLocation);
         assignedVillager.CurrentState = VillagerStates.Walking;
        
-        // while (!Physics.Raycast(new Vector3(assignedVillager.transform.position.x,assignedVillager.transform.position.y+1.5f,assignedVillager.transform.position.z),Vector3.down*2,10,pickupLayerMask))
-        // {
-        //     yield return null;
-        // }
         assignedVillager.CurrentState = VillagerStates.Pickup;
         Debug.Log("Hit");
         Villager.StopVillager(assignedVillager, true);
@@ -228,31 +140,29 @@ public class TaskHandler : MonoBehaviour
         
         StorageManager.EmptyStockpileSpace(location);
     }
-
-
     #endregion
 
     
-    public IEnumerator WalkToLocationCR(Villager assignedVillager, Component location, float distance)
-    {
-        Villager.StopVillager(assignedVillager,false);
-        Villager.SetVillagerDestination(assignedVillager, location.transform.position);
-
-        // Set the villagers state to walking if not already.
-        if (assignedVillager.CurrentState != VillagerStates.Walking)
-        {
-            assignedVillager.CurrentState = VillagerStates.Walking;
-        }
-        
-        while (Vector3.Distance(assignedVillager.transform.position, location.transform.position) > distance)
-        {
-            yield return null;
-        }
-        
-        Villager.StopVillager(assignedVillager,true);
-
-        yield return null;
-    }
+    // public IEnumerator WalkToLocationCR(Villager assignedVillager, Component location, float distance)
+    // {
+    //     Villager.StopVillager(assignedVillager,false);
+    //     Villager.SetVillagerDestination(assignedVillager, location.transform.position);
+    //
+    //     // Set the villagers state to walking if not already.
+    //     if (assignedVillager.CurrentState != VillagerStates.Walking)
+    //     {
+    //         assignedVillager.CurrentState = VillagerStates.Walking;
+    //     }
+    //     
+    //     while (Vector3.Distance(assignedVillager.transform.position, location.transform.position) > distance)
+    //     {
+    //         yield return null;
+    //     }
+    //     
+    //     Villager.StopVillager(assignedVillager,true);
+    //
+    //     yield return null;
+    // }
     
     public IEnumerator WalkToLocationCR(Villager assignedVillager, Vector3 location)
     {
@@ -276,6 +186,28 @@ public class TaskHandler : MonoBehaviour
         yield return null;
     }
     
+    public IEnumerator WalkToLocationCR(Villager assignedVillager, Vector3 location, Action onArrivedAtPosition = null)
+    {
+        Villager.StopVillager(assignedVillager,false);
+        Villager.SetVillagerDestination(assignedVillager, location);
+        // Set the villagers state to walking if not already.
+        if (assignedVillager.CurrentState != VillagerStates.Walking)
+        {
+            assignedVillager.CurrentState = VillagerStates.Walking;
+        }
+        
+        while (Vector3.Distance(assignedVillager.transform.position, location) > 2f)
+        {
+            Debug.Log(Vector3.Distance(assignedVillager.transform.position, location));
+
+            yield return null;
+        }
+        
+        Villager.StopVillager(assignedVillager,true);
+
+        onArrivedAtPosition?.Invoke();
+        yield return null;
+    }
     
 }
 

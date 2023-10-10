@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Cinemachine;
@@ -148,6 +149,9 @@ public class Level : MonoBehaviour
 
     public NavMeshSurface villagerNavMesh;
     public NavMeshSurface monsterNavMesh;
+    
+    private List<Roles> craftingRoles;
+
     private void Awake()
     {
         _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
@@ -156,6 +160,8 @@ public class Level : MonoBehaviour
         toolbar.SetActive(true);
         villagerLog = new Dictionary<Villager, string>();
         craftingButtons = new List<StoredItemSO>();
+
+        craftingRoles = new List<Roles>() { Roles.Crafter, Roles.Leader };
 
         List<Villager> tempVillagers = new List<Villager>();
         foreach (var villager in VillagerManager.GetVillagers())
@@ -171,7 +177,7 @@ public class Level : MonoBehaviour
         }
 
         _buildingToolbarButtons = new Dictionary<StoredItemSO, GameObject>();
-        tutorialManager.TutorialStage = TutorialStage.VillagerStatsTutorial;
+        tutorialManager.TutorialStage = TutorialStage.KeyboardMovementTutorial;
         gridMaterial.SetFloat("_Alpha", 0);
 
     }
@@ -230,11 +236,13 @@ public class Level : MonoBehaviour
         }
 
     }
+    
 
     public void ShowVillagerInformationOnUpdate(Villager villager)
     {
         if (lastSelected == villager && _infoUI.activeSelf)
         {
+            villager.VillagerStats.CurrentEmotion = Emotion.None;
             lastSelected = villager;
             var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
             villagerLogTMP.text = storedLog;
@@ -277,13 +285,14 @@ public class Level : MonoBehaviour
 
 
     public static event Action<Villager> AddToVillagerLogAction;
-    public static void AddToVillagerLog(Villager villager, string newLog)
+    public static void AddToVillagerLog(Villager villager, string newLog, Emotion emotion = Emotion.None)
     {
         var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
         StringBuilder log = new StringBuilder(storedLog);
         log.Append(newLog);
         log.Append(Environment.NewLine);
         villagerLog[villager] = log.ToString();
+        villager.VillagerStats.CurrentEmotion = emotion;
         AddToVillagerLogAction?.Invoke(villager);
     }
 
@@ -384,12 +393,13 @@ public class Level : MonoBehaviour
 
     private void AddToCraftingQueue(StoredItemSO craftingRecipe)
     {
-        
         var queuedItem = Instantiate(queueItemTemplate, queueItemContainer);
         queuedItem.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = craftingRecipe.uiSprite;
-        var craftingItem = _gameManager.craftingManager.BeginCrafting(craftingRecipe);
+        VillagerManager.TryGetVillagerByRole(craftingRoles, out Villager villager);
+        var craftingItem = _gameManager.craftingManager.BeginCrafting(villager, craftingRecipe);
         _gameManager.craftingManager.craftingQueueDictionary.Add(craftingItem,queuedItem);
-        _gameManager.craftingManager.craftingQueue.Enqueue(craftingItem);
+        // _gameManager.craftingManager.craftingQueue.Enqueue(craftingItem);
+        villager.villagerQueue.Enqueue(craftingItem);
     }
 
     private void AddBuildingsToBuildingToolbar()

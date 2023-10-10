@@ -104,14 +104,14 @@ namespace Highscores
 
         public void OnLeaderboardSubmission()
         {
-            var daycycletest = GameObject.Find("Directional Light").GetComponent<DayCycle>();
-            if (daycycletest.nightsSurvived == -1)
+            var daycycletemp = GameObject.Find("Directional Light").GetComponent<DayCycle>();
+            if (daycycletemp.nightsSurvived == -1)
             {
                 UploadEntry("https://colonysjourneyleaderboard.azurewebsites.net/api/AddScore?code=77uhpqmYMx5Y2Zl8z7bIuiB4FCbYl56WiRgcBNi9kBm_AzFuPvVn-Q==", 0, _InputField.text);
             }
             else
             {
-                UploadEntry("https://colonysjourneyleaderboard.azurewebsites.net/api/AddScore?code=77uhpqmYMx5Y2Zl8z7bIuiB4FCbYl56WiRgcBNi9kBm_AzFuPvVn-Q==", daycycletest.nightsSurvived, _InputField.text);
+                UploadEntry("https://colonysjourneyleaderboard.azurewebsites.net/api/AddScore?code=77uhpqmYMx5Y2Zl8z7bIuiB4FCbYl56WiRgcBNi9kBm_AzFuPvVn-Q==", daycycletemp.nightsSurvived, _InputField.text);
             }
         }
        
