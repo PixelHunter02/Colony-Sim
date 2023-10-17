@@ -41,7 +41,7 @@ public class TaskHandler : MonoBehaviour
     public IEnumerator RunTaskCR(Villager assignedVillager, HarvestableObject task)
     {
         
-        yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position));
+        yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position, () => {task.harvestParticle.Play();}));
         yield return StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
     }
     

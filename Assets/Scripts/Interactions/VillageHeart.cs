@@ -11,6 +11,10 @@ public class VillageHeart : MonoBehaviour,IInteractable
 {
     private GameManager _gameManager;
     private int level = 1;
+
+    [SerializeField] private ParticleSystem particleBurst;
+    [SerializeField] private ParticleSystem readyParticle;
+
     public int Level
     {
         get => level;
@@ -35,6 +39,16 @@ public class VillageHeart : MonoBehaviour,IInteractable
         set
         {
             experience = value;
+            if (ReadyToLevelUp())
+            {
+                print("ready to lvl up");
+                readyParticle.Play();
+            }
+            else
+            {
+                readyParticle.Stop();
+            }
+            
             villagerHeartEXPSlider.value = experience / experienceToNextLevel;
             villageHeartMenuSlider.value = experience / experienceToNextLevel;
             villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
@@ -98,5 +112,6 @@ public class VillageHeart : MonoBehaviour,IInteractable
         var villagerGO = Instantiate(villagerPrefab);
         VillagerManager.villagers.Add(villagerGO.GetComponent<Villager>());
         _gameManager.level.CloseAllUI();
+        particleBurst.Emit(100);
     }
 }

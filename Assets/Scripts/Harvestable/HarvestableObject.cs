@@ -8,6 +8,7 @@ public class HarvestableObject : MonoBehaviour, IInteractable
     public HarvestableObjectSO harvestableObject;
 
     private GameManager _gameManager;
+    public ParticleSystem harvestParticle;
     
     Villager villagerToAssign;
 
@@ -48,6 +49,7 @@ public class HarvestableObject : MonoBehaviour, IInteractable
     
     public IEnumerator CRSpawnHarvestDrops()
     {
+        harvestParticle.Stop();
         const float pushIntensity = 0.5f;
         const float timeBetweenSpawns = 0.3f;
         var min = harvestableObject.minDropAmount;
