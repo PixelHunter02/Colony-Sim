@@ -14,6 +14,7 @@ public class VillageHeart : MonoBehaviour,IInteractable
 
     [SerializeField] private ParticleSystem particleBurst;
     [SerializeField] private ParticleSystem readyParticle;
+    [SerializeField] private AudioSource levelUpAudio;
 
     public int Level
     {
@@ -118,5 +119,6 @@ public class VillageHeart : MonoBehaviour,IInteractable
         VillagerManager.villagers.Add(villagerGO.GetComponent<Villager>());
         _gameManager.level.CloseAllUI();
         particleBurst.Emit(100);
+        levelUpAudio.Play();
     }
 }
