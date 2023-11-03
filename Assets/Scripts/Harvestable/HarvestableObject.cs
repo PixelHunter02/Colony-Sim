@@ -24,10 +24,10 @@ public class HarvestableObject : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        if (_gameManager.IsOverUI())
-        {
-            return;
-        }
+        // if (_gameManager.IsOverUI())
+        // {
+        //     return;
+        // }
 
         VillagerManager.TryGetVillagerByRole(harvestableObject.canInteract, out Villager villager);
         

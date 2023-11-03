@@ -23,7 +23,6 @@ public class StorageManager : MonoBehaviour
     
     Dictionary<StoredItemSO, int> itemsInList;
 
-    public static event Action DrawInventoryAction;
     private void Awake()
     {
         SceneManager.sceneLoaded += GetReferences;
@@ -47,89 +46,85 @@ public class StorageManager : MonoBehaviour
     private void OnEnable()
     {
         Stockpile.OnCreateStorageCellEvent += UpdateStorage;
-        DrawInventoryAction += DrawInventory;
+        // DrawInventoryAction += DrawInventory;
     }
     
     private void OnDisable()
     {
         Stockpile.OnCreateStorageCellEvent -= UpdateStorage;
-        DrawInventoryAction -= DrawInventory;
     }
     
     // Used To Add An Item To Storage
     public void AddToStorage(Item itemToAdd)
     {
         itemList.Add(itemToAdd);
-        DrawInventory();
+        UIToolkitManager.DrawInventoryAction();
     }
 
-    // Create the buttons for the inventory
-    public void DrawInventory()
-    {
-        Debug.Log("Draw Inv");
-        Debug.Log(itemsInList.Count);
-        itemsInList.Clear();
-        Debug.Log(itemsInList.Count);
-        foreach (var item in itemList)
-        {
-            Debug.Log(item.itemSO.objectName);
-            if (!itemsInList.ContainsKey(item.itemSO) && !inventorySlot.ContainsKey(item.itemSO))
-            {
-                // Create a new slot
-                GameObject slot = Instantiate(inventoryTemplate, inventoryMenu);
-                if (item.itemSO.canBePlaced)
-                {
-                    slot.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.currentBuilding = item.itemSO);
-                    slot.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.PreviewSetup(item.itemSO.prefab));
-                }
-                inventorySlot.TryAdd(item.itemSO,slot);
-                var image = slot.transform.GetChild(0);
-                var count = image.GetChild(0);
-
-                // Add item to slot
-                itemsInList.Add(item.itemSO, 1);
-                image.gameObject.SetActive(true);
-                count.gameObject.SetActive(true);
-                
-                // Assign Image and count
-                image.GetComponent<Image>().sprite = item.itemSO.uiSprite;
-                count.GetComponent<TMP_Text>().text = itemsInList[item.itemSO].ToString();
-            }
-            else if(!itemsInList.ContainsKey(item.itemSO))
-            {
-                itemsInList.Add(item.itemSO, 1);
-                var slot = inventorySlot[item.itemSO];
-                var image = slot.transform.GetChild(0);
-                var count = image.GetChild(0);
-                
-                count.GetComponent<TMP_Text>().text = itemsInList[item.itemSO].ToString();
-            }
-            else 
-            {
-                var slot = inventorySlot[item.itemSO];
-                var image = slot.transform.GetChild(0);
-                var count = image.GetChild(0);
-                
-                itemsInList[item.itemSO]++;
-                count.GetComponent<TMP_Text>().text = itemsInList[item.itemSO].ToString();
-            }
-        }
-
-        List<StoredItemSO> itemsToBeRemoved = new List<StoredItemSO>();
-        foreach (var item in inventorySlot)
-        {
-            if (!itemsInList.ContainsKey(item.Key))
-            {
-                Destroy(item.Value);
-                itemsToBeRemoved.Add(item.Key);
-            }
-        }
-
-        foreach (var itemSo in itemsToBeRemoved)
-        {
-            inventorySlot.Remove(itemSo);
-        }   
-    }
+    // // Create the buttons for the inventory
+    // public void DrawInventory()
+    // {
+    //     itemsInList.Clear();
+    //     foreach (var item in itemList)
+    //     {
+    //         Debug.Log(item.itemSO.objectName);
+    //         if (!itemsInList.ContainsKey(item.itemSO) && !inventorySlot.ContainsKey(item.itemSO))
+    //         {
+    //             // Create a new slot
+    //             GameObject slot = Instantiate(inventoryTemplate, inventoryMenu);
+    //             if (item.itemSO.canBePlaced)
+    //             {
+    //                 slot.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.currentBuilding = item.itemSO);
+    //                 slot.GetComponent<Button>().onClick.AddListener(() => _gameManager.buildingManager.PreviewSetup(item.itemSO.prefab));
+    //             }
+    //             inventorySlot.TryAdd(item.itemSO,slot);
+    //             var image = slot.transform.GetChild(0);
+    //             var count = image.GetChild(0);
+    //
+    //             // Add item to slot
+    //             itemsInList.Add(item.itemSO, 1);
+    //             image.gameObject.SetActive(true);
+    //             count.gameObject.SetActive(true);
+    //             
+    //             // Assign Image and count
+    //             image.GetComponent<Image>().sprite = item.itemSO.uiSprite;
+    //             count.GetComponent<TMP_Text>().text = itemsInList[item.itemSO].ToString();
+    //         }
+    //         else if(!itemsInList.ContainsKey(item.itemSO))
+    //         {
+    //             itemsInList.Add(item.itemSO, 1);
+    //             var slot = inventorySlot[item.itemSO];
+    //             var image = slot.transform.GetChild(0);
+    //             var count = image.GetChild(0);
+    //             
+    //             count.GetComponent<TMP_Text>().text = itemsInList[item.itemSO].ToString();
+    //         }
+    //         else 
+    //         {
+    //             var slot = inventorySlot[item.itemSO];
+    //             var image = slot.transform.GetChild(0);
+    //             var count = image.GetChild(0);
+    //             
+    //             itemsInList[item.itemSO]++;
+    //             count.GetComponent<TMP_Text>().text = itemsInList[item.itemSO].ToString();
+    //         }
+    //     }
+    //
+    //     List<StoredItemSO> itemsToBeRemoved = new List<StoredItemSO>();
+    //     foreach (var item in inventorySlot)
+    //     {
+    //         if (!itemsInList.ContainsKey(item.Key))
+    //         {
+    //             Destroy(item.Value);
+    //             itemsToBeRemoved.Add(item.Key);
+    //         }
+    //     }
+    //
+    //     foreach (var itemSo in itemsToBeRemoved)
+    //     {
+    //         inventorySlot.Remove(itemSo);
+    //     }   
+    // }
 
     public static bool TryFindItemInInventory(Item itemType, out Item itemToReturn)
     {
@@ -193,7 +188,8 @@ public class StorageManager : MonoBehaviour
         itemList.Remove(resourceToRemove);
         DestroyImmediate(resourceToRemove.go);
         UpdateStorage();
-        DrawInventoryAction?.Invoke();
+        UIToolkitManager.DrawInventoryAction();
+        // DrawInventoryAction?.Invoke();
     }
     
     public static void UseStorageSpace(Vector3 location)

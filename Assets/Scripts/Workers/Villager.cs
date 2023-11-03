@@ -367,14 +367,17 @@ public class Villager : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        if (_gameManager.IsOverUI())
-        {
-            return;
-        }
+        // if (_gameManager.IsOverUI())
+        // {
+        //     return;
+        // }
         
-        _gameManager.level.ShowVillagerInformationOnClick(this);
-        _gameManager.uiManager.SetVillagerStatsUI(this);
-        
+        // _gameManager.level.ShowVillagerInformationOnClick(this);
+        // _gameManager.uiManager.SetVillagerStatsUI(this);
+
+        var uIToolkitManager = GameObject.Find("UIToolkit").GetComponent<UIToolkitManager>();
+        uIToolkitManager.ShowVillagerInformation(this);
+
         VillagerStats.CurrentEmotion = Emotion.None;
         var tutorialManager = _gameManager.level.tutorialManager;
         if (tutorialManager.TutorialStage == TutorialStage.KeyboardMovementTutorial)

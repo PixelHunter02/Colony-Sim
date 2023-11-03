@@ -1,0 +1,7 @@
+.align-horizontal{
+    flex-direction: row;
+}
+.flex-grow{
+    flex-grow: 1;
+    flex-shrink: 0;
+}

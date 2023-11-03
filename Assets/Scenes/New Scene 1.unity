@@ -1965,7 +1965,6 @@ MonoBehaviour:
   villageHeart: {fileID: 48339488}
   villagerNavMesh: {fileID: 410029545}
   monsterNavMesh: {fileID: 410029547}
-  emojiGO: []
 --- !u!1 &129915264
 GameObject:
   m_ObjectHideFlags: 0
@@ -3497,6 +3496,20 @@ MonoBehaviour:
   _crafting: {fileID: 1460142138}
   _villagerManagement: {fileID: 1706617387}
   _building: {fileID: 1213148137}
+  tutorialPrompt: {fileID: 0}
+  wasdGO: {fileID: 0}
+  wKey: {fileID: 0}
+  aKey: {fileID: 0}
+  sKey: {fileID: 0}
+  dKey: {fileID: 0}
+  wSpriteLight: {fileID: 0}
+  aSpriteLight: {fileID: 0}
+  sSpriteLight: {fileID: 0}
+  dSpriteLight: {fileID: 0}
+  mouse: {fileID: 0}
+  middleMouseClick: {fileID: 0}
+  rightMouseClick: {fileID: 0}
+  mouseBlank: {fileID: 0}
 --- !u!4 &259851043
 Transform:
   m_ObjectHideFlags: 0
@@ -4844,7 +4857,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.14521313, y: -0.000000032966827, z: 0.000000004838502, w: 0.98940045}
+  m_LocalRotation: {x: 0.14521313, y: -0.00000003296683, z: 0.0000000048385025, w: 0.98940045}
   m_LocalPosition: {x: 0, y: 3, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5528,6 +5541,70 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 354084839}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &358157602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 358157604}
+  - component: {fileID: 358157603}
+  - component: {fileID: 358157605}
+  m_Layer: 5
+  m_Name: GameUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &358157603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358157602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: b2de38c19f026e144b8d9dce5a74b299, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: d14118d70502dfc4b879293f063ac9b7,
+    type: 3}
+  m_SortingOrder: 0
+--- !u!4 &358157604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358157602}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &358157605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 358157602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1345a4d56b20e6345b1eeb18e823956e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VillagerManagementTemplate: {fileID: 9197481963319205126, guid: 3fcb5c826f1547d468de032f08ebd86c,
+    type: 3}
 --- !u!1001 &364757111
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45481,7 +45558,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124862098}
-  m_LocalRotation: {x: -0, y: 3.5527133e-15, z: -1.3322675e-15, w: 1}
+  m_LocalRotation: {x: -0, y: -3.5527133e-15, z: 1.3322675e-15, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -54878,8 +54955,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896196924}
-  m_LocalRotation: {x: 0.4344402, y: 0.000000011889917, z: -0.000000010875613, w: 0.90070075}
-  m_LocalPosition: {x: -1.9539925e-14, y: 21.072178, z: -6.321653}
+  m_LocalRotation: {x: 0.4344402, y: 0.00000003728238, z: -0.000000034101905, w: 0.90070075}
+  m_LocalPosition: {x: 0, y: 21.072178, z: -6.321653}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

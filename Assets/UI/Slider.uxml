@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/UI%20Toolkit/Styles/Slider.uss?fileID=7433441132597879392&amp;guid=2afee9d4cf8c6dd4e86ce1af95d11ec2&amp;type=3#Slider" />
+    <ui:VisualElement class="align-horizontal" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:Slider picking-mode="Ignore" label="Slider" value="42" high-value="100" name="slider" class="flex-grow" style="height: 35px;" />
+        <ui:FloatField value="0" name="input" style="width: 35px; height: 35px; min-width: 35px; min-height: 35px;" />
+    </ui:VisualElement>
+</ui:UXML>

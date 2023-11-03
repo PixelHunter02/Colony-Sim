@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="VillagerInformation" src="project://database/Assets/UI/VillagerInformation.uxml?fileID=9197481963319205126&amp;guid=3fcb5c826f1547d468de032f08ebd86c&amp;type=3#VillagerInformation" />
+    <Style src="project://database/Assets/UI/scroll.uss?fileID=7433441132597879392&amp;guid=e25370ee2f0f78c4da0f838baf13d42e&amp;type=3#scroll" />
+    <ui:VisualElement name="Background" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&amp;guid=17ffd138921d55b4386a068c711508d3&amp;type=3#uipack_rpg_vector&apos;); -unity-slice-left: 343; -unity-slice-top: 343; -unity-slice-right: 343; -unity-slice-bottom: 343; -unity-slice-scale: 0.6px; width: 80%; height: 80px; max-height: 80%; align-items: center; justify-content: center; align-self: center;">
+        <ui:ScrollView name="ScrollView" tabindex="0" mode="VerticalAndHorizontal" focusable="false" style="width: 100%; height: 100%;">
+            <ui:Instance template="VillagerInformation" name="VillagerInformation" style="width: 512px; height: 512px; scale: 0.5 0.5;" />
+            <ui:Instance template="VillagerInformation" name="VillagerInformation" style="width: 512px; height: 512px; scale: 0.5 0.5;" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

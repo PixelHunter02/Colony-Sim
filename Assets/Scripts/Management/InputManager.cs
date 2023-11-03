@@ -56,7 +56,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        overUI = _gameManager.IsOverUI();
+        // overUI = _gameManager.IsOverUI();
     }
 
     public Vector2 GetNormalizedMovement()  

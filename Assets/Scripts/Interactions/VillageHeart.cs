@@ -51,6 +51,9 @@ public class VillageHeart : MonoBehaviour,IInteractable
             
             villagerHeartEXPSlider.value = experience / experienceToNextLevel;
             villageHeartMenuSlider.value = experience / experienceToNextLevel;
+
+            GameObject.Find("UIToolkit").GetComponent<UIToolkitManager>().villageHeartExp.value =
+                experience / experienceToNextLevel;
             villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
         }
     }
@@ -64,16 +67,18 @@ public class VillageHeart : MonoBehaviour,IInteractable
         enabled = false;
         villagerHeartEXPSlider.value = experience / experienceToNextLevel;
         villageHeartMenuSlider.value = experience / experienceToNextLevel;
+        GameObject.Find("UIToolkit").GetComponent<UIToolkitManager>().villageHeartExp.value =
+            experience / experienceToNextLevel;
         villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
         
     }
 
     public void OnInteraction()
     {
-        if(_gameManager.IsOverUI())
-        {
-            return;
-        }
+        // if(_gameManager.IsOverUI())
+        // {
+        //     return;
+        // }
 
         Debug.Log("You Interacted with the village heart!");
         if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillageHeartTutorial)

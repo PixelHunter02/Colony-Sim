@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/GameUI/CraftingIcon.uss?fileID=7433441132597879392&amp;guid=3cd4c24ad6210564cbbc95201a1953d2&amp;type=3#CraftingIcon" />
+    <ui:VisualElement style="flex-shrink: 0; width: 100px; height: 100px; max-height: 100px; min-height: 100px; min-width: 100px; max-width: 100px;">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&amp;guid=17ffd138921d55b4386a068c711508d3&amp;type=3#uipack_rpg_vector&apos;); -unity-slice-left: 420; -unity-slice-top: 420; -unity-slice-right: 420; -unity-slice-bottom: 420;">
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vectorLight.png?fileID=2800000&amp;guid=a860cb54d4596fe4ba46c921262efc8d&amp;type=3#uipack_rpg_vectorLight&apos;); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-slice-left: 420; -unity-slice-top: 420; -unity-slice-right: 420; -unity-slice-bottom: 420;">
+                <ui:VisualElement name="CraftingIcon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="LabelBox" class="LabelDown" style="transition-duration: 0.25s;">
+            <ui:VisualElement name="LabelInner" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vectorLight.png?fileID=2800000&amp;guid=a860cb54d4596fe4ba46c921262efc8d&amp;type=3#uipack_rpg_vectorLight&apos;); width: 254px; height: 34px; bottom: 4px; left: 13px; -unity-slice-left: 420; -unity-slice-top: 420; -unity-slice-right: 420; -unity-slice-bottom: 420; -unity-slice-scale: 1.9px;">
+                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="LabelText" style="-unity-text-align: middle-center; font-size: 36px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -56,10 +56,10 @@ public class CameraMovement : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
-            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-            {
-                CameraZoom();
-            }
+            // if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            // {
+            // }
+            CameraZoom();
 
             MoveCamera();
             MoveCursor();
@@ -96,10 +96,10 @@ public class CameraMovement : MonoBehaviour
             followObject.transform.position += movementDirection * (Time.deltaTime * panningSpeed);
             _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
 
-            if (_gameManager.IsOverUI())
-            {
-                yield break;
-            }
+            // if (_gameManager.IsOverUI())
+            // {
+            //     yield break;
+            // }
             yield return null;
         }
     }
@@ -153,11 +153,11 @@ public class CameraMovement : MonoBehaviour
             followObject.transform.rotation = Quaternion.Euler(rotation);
             _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
             
-            if (_gameManager.IsOverUI())
-            {
-                yield break;
-            }
-            
+            // if (_gameManager.IsOverUI())
+            // {
+            //     yield break;
+            // }
+            //
             yield return null;
         }
     }

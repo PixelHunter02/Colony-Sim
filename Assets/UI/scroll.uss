@@ -1,0 +1,10 @@
+.unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
+
+.scroll-view-padding{
+    padding: 20px;
+}

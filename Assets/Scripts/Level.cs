@@ -69,10 +69,7 @@ public class Level : MonoBehaviour
                     CloseAllUI();
                     ShowInventory();
                     toolbar.SetActive(true);
-                    if (tutorialManager.TutorialStage == TutorialStage.InventoryTutorial)
-                    {
-                        tutorialManager.TutorialStage = TutorialStage.CraftingTutorial;
-                    }
+                    
                     break;
                 case GameState.DoubleSpeed:
                     break;
@@ -154,7 +151,7 @@ public class Level : MonoBehaviour
 
     private void Awake()
     {
-        _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
+        // _villagerName = GameObject.Find("SelectedVillagerName").GetComponent<TMP_Text>();
         _infoUI.SetActive(false);
         CloseAllUI();
         toolbar.SetActive(true);
@@ -240,15 +237,15 @@ public class Level : MonoBehaviour
 
     public void ShowVillagerInformationOnUpdate(Villager villager)
     {
-        if (lastSelected == villager && _infoUI.activeSelf)
+        if (lastSelected == villager)
         {
             villager.VillagerStats.CurrentEmotion = Emotion.None;
             lastSelected = villager;
             var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
             villagerLogTMP.text = storedLog;
-            GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
-            _villagerName.text = villager.VillagerStats.VillagerName;
-            _gameManager.uiManager.SetVillagerStatsUI(villager);
+            // GameObject.Find("VillagerPortrait").GetComponent<RawImage>().texture = villager._portraitRenderTexture;
+            // _villagerName.text = villager.VillagerStats.VillagerName;
+            // _gameManager.uiManager.SetVillagerStatsUI(villager);
         }
     }
 
@@ -367,7 +364,7 @@ public class Level : MonoBehaviour
             }
             if(_gameManager.level.villageHeart.GetComponent<VillageHeart>().Level < _gameManager.craftingManager.CraftingRecipes[i].levelUnlocked)
             {
-                return;
+                continue;
             }
 
             var button = Instantiate(craftingButtonTemplate, craftingContainer.transform);
@@ -426,5 +423,10 @@ public class Level : MonoBehaviour
     public void GoToMainMenu()
     {
         SceneManager.LoadScene("Main Menu 2");
+    }
+
+    public static  string GetVillagerLog(Villager villager)
+    {
+        return villagerLog[villager];
     }
 }

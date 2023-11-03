@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     
     public Grid grid;
     
-    public bool IsOverUI() => EventSystem.current.IsPointerOverGameObject();
+    // public bool IsOverUI() => EventSystem.current.IsPointerOverGameObject();
     #endregion
 
 

@@ -1,0 +1,29 @@
+.TopBarUp {
+    flex-grow: 1;
+    background-color: rgb(151, 113, 74);
+    position: absolute;
+    width: 100%;
+    height: 30%;
+    top: 0;
+    background-image: none;
+    -unity-slice-scale: 0;
+    -unity-slice-bottom: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-left: 0;
+    -unity-text-outline-color: rgb(151, 113, 74);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+    translate: 0 -80%;
+    transition-duration: 1s;
+}
+
+.TopBarDown {
+    translate: 0 0;
+    width: 100%;
+    height: 30%;
+    background-color: rgb(151, 113, 74);
+    position: absolute;
+    top: 0;
+}

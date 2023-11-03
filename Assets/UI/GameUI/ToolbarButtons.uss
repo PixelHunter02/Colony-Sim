@@ -1,0 +1,157 @@
+.Button {
+    background-image: url('project://database/Assets/Sprites/ui/Role.png?fileID=2800000&guid=8e0c547248675cb43a99c072d4f2a5ce&type=3#Role');
+    background-color: rgba(56, 56, 56, 0);
+    width: 8%;
+    align-self: center;
+    align-items: center;
+    height: 144%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    justify-content: space-between;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    transition-duration: 0.15s;
+    translate: 0 -10%;
+}
+
+.Button:hover {
+    scale: 1.3 1.3;
+    translate: 0 -37%;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    transition-duration: 0.15s;
+    transition-timing-function: linear;
+}
+
+.PanelBase {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url('project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&guid=17ffd138921d55b4386a068c711508d3&type=3#uipack_rpg_vector');
+    -unity-slice-left: 343;
+    -unity-slice-top: 343;
+    -unity-slice-right: 343;
+    -unity-slice-bottom: 343;
+    -unity-slice-scale: 0.6px;
+    width: 80%;
+    height: 80px;
+    max-height: 80%;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    flex-direction: column-reverse;
+}
+
+#RoleSelector VisualElement {
+    background-color: rgba(255, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#VillageHeartExpSlider Label {
+    -unity-text-align: upper-center;
+    font-size: 46px;
+    color: rgb(0, 0, 0);
+}
+
+#VillageHeartExpSlider #unity-drag-container {
+    -unity-text-outline-color: rgba(255, 0, 0, 0);
+    background-color: rgba(255, 255, 255, 0);
+    align-items: auto;
+    align-self: auto;
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    color: rgb(255, 255, 255);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#VillageHeartExpSlider #unity-tracker {
+    -unity-text-outline-color: rgba(255, 0, 0, 0);
+    background-color: rgba(255, 255, 255, 0);
+    background-image: url('project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&guid=17ffd138921d55b4386a068c711508d3&type=3#uipack_rpg_vector');
+    height: 100%;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-grow: 1;
+    top: 0;
+    -unity-slice-left: 440;
+    -unity-slice-top: 440;
+    -unity-slice-right: 440;
+    -unity-slice-bottom: 440;
+    -unity-slice-scale: 0.2px;
+    align-items: auto;
+    align-self: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.VillageHeartBar {
+    background-image: none;
+    height: 100%;
+    width: 20000px;
+    overflow: hidden;
+    align-self: flex-end;
+    -unity-slice-left: 425;
+    -unity-slice-top: 425;
+    -unity-slice-right: 425;
+    -unity-slice-bottom: 425;
+    -unity-slice-scale: -0.9px;
+    -unity-background-image-tint-color: rgb(211, 192, 143);
+    background-color: rgb(211, 192, 143);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#VillageHeartExpSlider #unity-dragger {
+    height: 95%;
+    top: 2.5%;
+    position: absolute;
+    flex-grow: 1;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    align-self: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}

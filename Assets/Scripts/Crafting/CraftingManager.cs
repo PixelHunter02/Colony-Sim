@@ -74,9 +74,9 @@ public class CraftingManager : MonoBehaviour
         }
 
         yield return StartCoroutine(WalkToVillageHeart(villager,craftingRecipe));
-        Debug.Log("PlacedItem");
-        StorageManager.UpdateStorage();
-        villager.CurrentState = VillagerStates.Idle;
+        // Debug.Log("PlacedItem");
+        // StorageManager.UpdateStorage();
+        // villager.CurrentState = VillagerStates.Idle;
     }
 
     private IEnumerator PickUpItems(Villager assignedVillager, Item location)
