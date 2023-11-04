@@ -155,3 +155,7 @@
     margin-top: 0;
     margin-bottom: 0;
 }
+
+#TopBar ScrollView {
+    flex-grow: 0;
+}

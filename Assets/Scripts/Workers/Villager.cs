@@ -22,6 +22,7 @@ public class Villager : MonoBehaviour, IInteractable
     public bool ignoreQueue;
     [SerializeField] private float distance;
 
+
     /// <summary>
     /// The Villagers Role will give the Villager boosted stats in a specific craft as well as more abilities linked to that craft.
     /// </summary>
@@ -247,7 +248,7 @@ public class Villager : MonoBehaviour, IInteractable
 
             if (villagerQueue.Count == 0)
             {
-                Debug.Log(_villagerStats.VillagerName);
+                Debug.Log(_villagerStats.VillagerName + "Started Walking Randomly");
                 villagerQueue.Enqueue(RandomWalk(3));
             }
             yield return null;
@@ -374,10 +375,17 @@ public class Villager : MonoBehaviour, IInteractable
         
         // _gameManager.level.ShowVillagerInformationOnClick(this);
         // _gameManager.uiManager.SetVillagerStatsUI(this);
+        
+        
 
         var uIToolkitManager = GameObject.Find("UIToolkit").GetComponent<UIToolkitManager>();
         uIToolkitManager.ShowVillagerInformation(this);
 
+        if (uIToolkitManager.IsPointerOverUI(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>()))
+        {
+            return; 
+        }
+        
         VillagerStats.CurrentEmotion = Emotion.None;
         var tutorialManager = _gameManager.level.tutorialManager;
         if (tutorialManager.TutorialStage == TutorialStage.KeyboardMovementTutorial)

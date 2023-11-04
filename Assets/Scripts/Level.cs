@@ -189,22 +189,22 @@ public class Level : MonoBehaviour
             AddToVillagerLogAction -= ShowVillagerInformationOnUpdate;
     }
 
-    private void Start()
-    {
-        _gameManager.inputManager.playerInputActions.Player.Escape.started += Pause;
-    }
-    
-    private void Pause(InputAction.CallbackContext context)
-    {
-        if (_gameManager.inputManager.EscapePressed() && GameState != GameState.Playing)
-        {
-            GameState = GameState.Playing;
-        }
-        else if (_gameManager.inputManager.EscapePressed())
-        {
-            GameState = GameState.Paused;
-        }
-    }
+    // private void Start()
+    // {
+    //     _gameManager.inputManager.playerInputActions.Player.Escape.started += Pause;
+    // }
+    //
+    // private void Pause(InputAction.CallbackContext context)
+    // {
+    //     if (_gameManager.inputManager.EscapePressed() && GameState != GameState.Playing)
+    //     {
+    //         GameState = GameState.Playing;
+    //     }
+    //     else if (_gameManager.inputManager.EscapePressed())
+    //     {
+    //         GameState = GameState.Paused;
+    //     }
+    // }
 
     // On Villager Click
     public void ShowVillagerInformationOnClick(Villager villager)

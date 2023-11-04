@@ -16,10 +16,12 @@ public class HarvestableObject : MonoBehaviour, IInteractable
     public static event OnHarvestCompleted onHarvestCompletedEvent;
 
     public Transform standPoint;
-    
+    private UIToolkitManager uIToolkitManager;
+
     private void Start()
     {
         _gameManager = GameManager.Instance;
+        uIToolkitManager = GameObject.Find("UIToolkit").GetComponent<UIToolkitManager>();
     }
 
     public void OnInteraction()
@@ -29,6 +31,11 @@ public class HarvestableObject : MonoBehaviour, IInteractable
         //     return;
         // }
 
+        if (uIToolkitManager.IsPointerOverUI(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>()))
+        {
+            return; 
+        }
+        
         VillagerManager.TryGetVillagerByRole(harvestableObject.canInteract, out Villager villager);
         
         Debug.Log(villager.VillagerStats.VillagerName);

@@ -46,15 +46,6 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="VillageHeart" class="WindowDown WindowUp" style="position: absolute; width: 100%; height: 100%; flex-direction: column; justify-content: flex-start; align-items: auto; align-self: flex-end; bottom: 0; left: auto; top: auto; flex-grow: 0; display: none;">
-            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); -unity-background-scale-mode: stretch-to-fill; width: 100%; height: 100%; justify-content: space-around; align-self: flex-end; align-items: center;">
-                <ui:VisualElement name="Background" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&amp;guid=17ffd138921d55b4386a068c711508d3&amp;type=3#uipack_rpg_vector&apos;); margin-left: 0; margin-top: 0; margin-bottom: 0; margin-right: 0; align-items: center; justify-content: center; left: auto; width: 80%; height: 80%; flex-direction: row; position: relative; top: auto; transform-origin: center; -unity-slice-left: 70; -unity-slice-top: 70; -unity-slice-right: 70; -unity-slice-bottom: 70; -unity-background-scale-mode: stretch-to-fill; -unity-slice-scale: 0.7px; max-height: 80%; align-self: center;">
-                    <ui:Slider picking-mode="Ignore" label="Village Heart" value="42" high-value="1" name="VillageHeartExpSlider" style="width: 90%; height: 10%; flex-direction: column; align-self: flex-start; margin-top: 77px;" />
-                    <ui:Button text="Level Up" display-tooltip-when-elided="true" name="LevelUpButton" style="align-self: center; justify-content: flex-start; align-items: auto; position: absolute; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 20%; height: 10%; top: 43%; left: 41%; font-size: 48px; flex-grow: 1;" />
-                </ui:VisualElement>
-            </ui:VisualElement>
-            <ui:Button display-tooltip-when-elided="true" tooltip="Close Menu" name="Button" class="Button" style="position: absolute; top: 143px; left: 3308px; height: 180px; width: 180px; margin-right: 2px; margin-left: 2px; padding-left: 10px; padding-right: 10px; background-image: url(&apos;project://database/Assets/90%20Animated%20emojis%202D/Art/Sprites/Eyes/Eye%20cross/Eye%20cross%2007.psd?fileID=2800000&amp;guid=346b4f93047ea4f91a7da9664f0ebdb4&amp;type=3#Eye cross 07&apos;); background-color: rgba(188, 188, 188, 0); -unity-background-scale-mode: stretch-to-fill;" />
-        </ui:VisualElement>
         <ui:VisualElement name="TopBar" class="TopBarUp">
             <ui:VisualElement name="VillagerInformationPanel" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); width: 100%; height: 80%; flex-direction: row;">
                 <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); height: 100%; width: 15%; align-items: center;">
@@ -82,7 +73,7 @@
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); height: 95%; width: 85%; background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vectorLight.png?fileID=2800000&amp;guid=a860cb54d4596fe4ba46c921262efc8d&amp;type=3#uipack_rpg_vectorLight&apos;); -unity-slice-scale: 0.4px; -unity-slice-left: 85; -unity-slice-top: 85; -unity-slice-right: 85; -unity-slice-bottom: 85; margin-top: 0.4%; padding-left: 1%; padding-right: 1%; padding-top: 1%; padding-bottom: 1%;">
-                    <ui:ScrollView style="width: 100%; height: 100%;">
+                    <ui:ScrollView horizontal-scroller-visibility="Hidden" style="width: 100%; height: 100%; justify-content: flex-end; align-self: auto; align-items: stretch;">
                         <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="VillagerLog" style="font-size: 26px; white-space: normal;" />
                     </ui:ScrollView>
                 </ui:VisualElement>
@@ -94,12 +85,26 @@
                         <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" style="background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&amp;guid=17ffd138921d55b4386a068c711508d3&amp;type=3#uipack_rpg_vector&apos;); width: 8%; height: 90%; position: relative; top: auto; left: 0; border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0); background-color: rgba(188, 188, 188, 0);" />
                     </ui:VisualElement>
                     <ui:VisualElement name="Centre" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 33%; height: 100%; flex-direction: column; align-self: flex-end; justify-content: center;">
-                        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Time" style="-unity-text-align: middle-center; font-size: 60px; margin-top: 0; color: rgb(255, 255, 255); align-items: center; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+                        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="Time" style="-unity-text-align: middle-center; font-size: 52px; margin-top: 0; color: rgb(255, 255, 255); align-items: center; margin-left: 0; margin-right: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
                         <ui:VisualElement class="Button" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; width: 15%; height: 70%; align-self: center; justify-content: flex-start; top: 100%; background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&amp;guid=17ffd138921d55b4386a068c711508d3&amp;type=3#uipack_rpg_vector&apos;);">
                             <ui:Button text="^" display-tooltip-when-elided="true" name="CloseVillagerDialogue" style="background-color: rgba(188, 188, 188, 0); width: 100%; height: 100%; font-size: 26px; border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="RightButtons" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 33%; height: 100%; align-self: flex-end; flex-direction: row-reverse;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="VillageHeart" class="WindowDown WindowUp" style="display: flex;">
+            <Style src="project://database/Assets/UI/scroll.uss?fileID=7433441132597879392&amp;guid=e25370ee2f0f78c4da0f838baf13d42e&amp;type=3#scroll" />
+            <Style src="project://database/Assets/UI%20Toolkit/Styles/VillagerInfo.uss?fileID=7433441132597879392&amp;guid=d135c41ac9c71b343b348ae7899645c6&amp;type=3#VillagerInfo" />
+            <Style src="project://database/Assets/UI/GameUI/CloseButton.uss?fileID=7433441132597879392&amp;guid=44c8bf6a337441f48ad2bcf95e7ab498&amp;type=3#CloseButton" />
+            <ui:VisualElement name="ScreenContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; align-self: auto;">
+                <ui:VisualElement name="Background" class="PanelBase" style="align-self: center; justify-content: flex-start; align-items: flex-start; flex-direction: column;">
+                    <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 10%; max-height: 10%; min-height: 10%; flex-direction: row-reverse; top: -5%; position: absolute;">
+                        <ui:Button display-tooltip-when-elided="true" name="CloseButton" class="Button" style="width: 6%; height: 100%; background-image: url(&apos;project://database/Assets/90%20Animated%20emojis%202D/Art/Sprites/Eyes/Eye%20cross/Eye%20cross%2007.psd?fileID=2800000&amp;guid=346b4f93047ea4f91a7da9664f0ebdb4&amp;type=3#Eye cross 07&apos;); background-color: rgba(188, 188, 188, 0); translate: 35px 0;" />
+                    </ui:VisualElement>
+                    <ui:Button text="Level Up" display-tooltip-when-elided="true" name="LevelUpButton" style="align-self: center; justify-content: flex-start; align-items: auto; position: absolute; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; width: 20%; height: 10%; top: 43%; left: 41%; font-size: 48px; flex-grow: 1;" />
+                    <ui:Slider picking-mode="Ignore" label="Village Heart" value="0" high-value="1" name="VillageHeartExpSlider" style="width: 90%; height: 10%; flex-direction: column; align-self: center; margin-top: 77px;" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

@@ -20,6 +20,7 @@ public class UIToolkitManager : MonoBehaviour
     private VisualElement buildingManagementWindow;
     private VisualElement tutorialWindow;
     private VisualElement topBar;
+    private VisualElement villageHeartWindow;
 
     // Templates
     [SerializeField] private VisualTreeAsset villagerManagementTemplate;
@@ -96,12 +97,19 @@ public class UIToolkitManager : MonoBehaviour
         
         // Village Heart
         var sliderBar = new VisualElement();
-        root.Q("VillageHeartExpSlider").Q("unity-dragger").Add(sliderBar);
+        villageHeartWindow = root.Q<VisualElement>("VillageHeart");
+        var slider = root.Q("VillageHeartExpSlider");
+        slider.Q("unity-dragger").Add(sliderBar);
+        slider.SetEnabled(false);
         sliderBar.AddToClassList("VillageHeartBar");
+        villageHeartWindow.Q<Button>("CloseButton").RegisterCallback<ClickEvent>(evt =>
+        {
+            CloseVillageHeart();
+        });
         
         root.Q<Button>("LevelUpButton").RegisterCallback<ClickEvent>(evt =>
         {
-            gameManager.level.villageHeart.GetComponent<VillageHeart>().ReadyToLevelUp();
+            gameManager.level.villageHeart.GetComponent<VillageHeart>().LevelUp();
         });
         
         
@@ -111,6 +119,12 @@ public class UIToolkitManager : MonoBehaviour
         {
             button.RegisterCallback<MouseEnterEvent>(evt => PlayAudio(evt, buttonSound));
         }
+    }
+
+    private void Update()
+    {
+        topBar.Q<TextElement>("Time").text = System.DateTime.UtcNow.ToLocalTime().ToString("HH:mm");
+
     }
 
     #region VillagerManagement
@@ -140,15 +154,7 @@ public class UIToolkitManager : MonoBehaviour
             
             // Delay the spawning in of panels
             StartCoroutine(AddTemplateToGrid(template, delay, villager));
-            var roleSelectField = root.Q<EnumField>("RoleSelector");
-
-            // Add an event to the role change enum to be fired on change.
-            roleSelectField.RegisterCallback<ChangeEvent<Enum>>((evt) =>
-            {
-                Enum.TryParse(evt.newValue.ToString(), out Roles role);
-                villager.CurrentRole = role;
-            });
-            
+  
             // Assign the render texture.
             template.Q<VisualElement>("Portrait").style.backgroundImage = new StyleBackground(Background.FromRenderTexture(villager._portraitRenderTexture));
             delay += 0.2f;
@@ -173,6 +179,16 @@ public class UIToolkitManager : MonoBehaviour
         template.style.marginRight = 20;
         template.style.marginTop = 20;
         template.style.marginBottom = 20;
+        
+        var roleSelectField = template.Q<EnumField>();
+        // Add an event to the role change enum to be fired on change.
+        roleSelectField.RegisterCallback<ChangeEvent<string>>((evt) =>
+        {
+            Enum.TryParse(evt.newValue.ToString(), out Roles role);
+            // villager.CurrentRole = role;
+            StartCoroutine(RoleChanged((int)role, villager));
+        });
+        
         template.Q("Container").AddToClassList("PanelVisible");
         yield return new WaitForSeconds(delay);
         template.Q("Container").RemoveFromClassList("PanelHidden");
@@ -182,6 +198,19 @@ public class UIToolkitManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         template.RemoveFromClassList("PanelHidden");
+    }
+    
+    private IEnumerator RoleChanged(int value, Villager villager)
+    {
+        foreach (var item in StorageManager.itemList)
+        {
+            if ((int)item.itemSO.assignRole == value)
+            {
+                StorageManager.EmptyStockpileSpace(item);
+                villager.CurrentRole = (Roles)value;
+                yield break;
+            }
+        }
     }
     #endregion
 
@@ -408,6 +437,27 @@ public class UIToolkitManager : MonoBehaviour
         });
 
         topBar.Q<TextElement>("VillagerLog").text = Level.GetVillagerLog(villager);
+        // scrollView.scrollOffset = scrollView.contentContainer.layout.max - scrollView.contentViewport.layout.size;
+
+        // topBar.Q<ScrollView>().scrollOffset = topBar.Q<ScrollView>().contentContainer.layout.max  - topBar.Q<ScrollView>().contentViewport.layout.size;
+        topBar.Q<ScrollView>().contentContainer.RegisterCallback<GeometryChangedEvent>(evt =>
+        {
+            topBar.Q<ScrollView>().verticalScroller.value = topBar.Q<ScrollView>().verticalScroller.highValue;
+        });
+    }
+
+    #endregion
+
+    #region VillageHeart
+
+    public void OpenVillageHeart()
+    {
+        villageHeartWindow.AddToClassList("WindowUp");
+    }
+
+    public void CloseVillageHeart()
+    {
+        villageHeartWindow.RemoveFromClassList("WindowUp");
     }
 
     #endregion
@@ -419,10 +469,12 @@ public class UIToolkitManager : MonoBehaviour
         inventoryWindow.RemoveFromClassList("WindowUp");
         craftingMenuWindow.RemoveFromClassList("WindowUp");
         tutorialWindow.RemoveFromClassList("WindowUp");
+        villageHeartWindow.RemoveFromClassList("WindowUp");
         craftingMenuButtons = new List<StoredItemSO>();
         itemsInInventory = new Dictionary<StoredItemSO, int>();
         itemSlot = new Dictionary<StoredItemSO, TemplateContainer>();
         villagerInformation = new Dictionary<Villager, VisualElement>();
+        villageHeartExp = root.Q<Slider>("VillageHeartExpSlider");
     }
 
     private void PlayAudio(MouseEnterEvent mouseEnterEvent, AudioClip audio)
@@ -430,4 +482,19 @@ public class UIToolkitManager : MonoBehaviour
         _audioSource.clip = audio;
         _audioSource.Play();
    }
+    
+    public bool IsPointerOverUI ( Vector2 screenPos )
+    {
+        Vector2 pointerUiPos = new Vector2{ x = screenPos.x , y = Screen.height - screenPos.y };
+        List<VisualElement> picked = new List<VisualElement>();
+        _uiDocument.rootVisualElement.panel.PickAll( pointerUiPos , picked );
+        foreach( var ve in picked )
+            if( ve!=null )
+            {
+                Color32 bcol = ve.resolvedStyle.backgroundColor;
+                if( bcol.a!=0 && ve.enabledInHierarchy )
+                    return true;
+            }
+        return false;
+    }
 }
