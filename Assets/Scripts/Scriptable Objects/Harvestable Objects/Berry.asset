@@ -18,6 +18,6 @@ MonoBehaviour:
     type: 3}
   maxDropAmount: 5
   minDropAmount: 2
-  taskSprite: {fileID: 21300000, guid: b6c49e41a57e648e9a16f44ce4b8d9b9, type: 3}
+  taskSprite: {fileID: 21300000, guid: 352b6e4a25af9bc4e8688cca2deb9f1a, type: 3}
   taskCompleteSprite: {fileID: 21300000, guid: 5fcf65549b5d75746a64d62cee7eacc8, type: 3}
   harvestType: 0

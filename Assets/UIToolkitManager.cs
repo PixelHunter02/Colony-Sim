@@ -39,8 +39,12 @@ public class UIToolkitManager : MonoBehaviour
     
     // Sliders
     public Slider villageHeartExp;
-
-
+    
+    // Top Bar
+    private EnumField topRoleSelectField;
+    private Villager topBarVillager;
+    
+    
     public static Action DrawInventoryAction;
     private void OnEnable()
     {
@@ -94,6 +98,9 @@ public class UIToolkitManager : MonoBehaviour
         {
             topBar.RemoveFromClassList("TopBarDown");
         });
+
+        topRoleSelectField = topBar.Q<EnumField>("RoleSelector");
+        topRoleSelectField.RegisterCallback<ChangeEvent<Enum>>(evt =>RoleSelectTopBar(evt));
         
         // Village Heart
         var sliderBar = new VisualElement();
@@ -427,14 +434,13 @@ public class UIToolkitManager : MonoBehaviour
         topBar.Q<VisualElement>("Portrait").style.backgroundImage = new StyleBackground(Background.FromRenderTexture(villager._portraitRenderTexture));
         topBar.Q<TextElement>("NameTag").text = villager.VillagerStats.VillagerName;
         topBar.Q<EnumField>("RoleSelector").Init(villager.CurrentRole);
-        var roleSelectField = topBar.Q<EnumField>("RoleSelector");
 
         // Add an event to the role change enum to be fired on change.
-        roleSelectField.RegisterCallback<ChangeEvent<Enum>>((evt) =>
-        {
-            Enum.TryParse(evt.newValue.ToString(), out Roles role);
-            villager.CurrentRole = role;
-        });
+        // roleSelectField.RegisterCallback<ChangeEvent<Enum>>((evt) =>
+        // {
+        //     previousTopBar = RoleSelectTopBar(evt,villager);
+        // });
+        topBarVillager = villager;
 
         topBar.Q<TextElement>("VillagerLog").text = Level.GetVillagerLog(villager);
         // scrollView.scrollOffset = scrollView.contentContainer.layout.max - scrollView.contentViewport.layout.size;
@@ -444,6 +450,12 @@ public class UIToolkitManager : MonoBehaviour
         {
             topBar.Q<ScrollView>().verticalScroller.value = topBar.Q<ScrollView>().verticalScroller.highValue;
         });
+    }
+
+    public void RoleSelectTopBar(ChangeEvent<Enum>evt)
+    {
+        Enum.TryParse(evt.newValue.ToString(), out Roles role);
+        topBarVillager.CurrentRole = role;
     }
 
     #endregion

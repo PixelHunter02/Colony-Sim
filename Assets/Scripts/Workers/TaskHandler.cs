@@ -141,50 +141,6 @@ public class TaskHandler : MonoBehaviour
         StorageManager.EmptyStockpileSpace(location);
     }
     #endregion
-
-    
-    // public IEnumerator WalkToLocationCR(Villager assignedVillager, Component location, float distance)
-    // {
-    //     Villager.StopVillager(assignedVillager,false);
-    //     Villager.SetVillagerDestination(assignedVillager, location.transform.position);
-    //
-    //     // Set the villagers state to walking if not already.
-    //     if (assignedVillager.CurrentState != VillagerStates.Walking)
-    //     {
-    //         assignedVillager.CurrentState = VillagerStates.Walking;
-    //     }
-    //     
-    //     while (Vector3.Distance(assignedVillager.transform.position, location.transform.position) > distance)
-    //     {
-    //         yield return null;
-    //     }
-    //     
-    //     Villager.StopVillager(assignedVillager,true);
-    //
-    //     yield return null;
-    // }
-    
-    public IEnumerator WalkToLocationCR(Villager assignedVillager, Vector3 location)
-    {
-        Villager.StopVillager(assignedVillager,false);
-        Villager.SetVillagerDestination(assignedVillager, location);
-        // Set the villagers state to walking if not already.
-        if (assignedVillager.CurrentState != VillagerStates.Walking)
-        {
-            assignedVillager.CurrentState = VillagerStates.Walking;
-        }
-        
-        while (Vector3.Distance(assignedVillager.transform.position, location) > 2f)
-        {
-            Debug.Log(Vector3.Distance(assignedVillager.transform.position, location));
-
-            yield return null;
-        }
-        
-        Villager.StopVillager(assignedVillager,true);
-
-        yield return null;
-    }
     
     public IEnumerator WalkToLocationCR(Villager assignedVillager, Vector3 location, Action onArrivedAtPosition = null)
     {
@@ -196,7 +152,7 @@ public class TaskHandler : MonoBehaviour
             assignedVillager.CurrentState = VillagerStates.Walking;
         }
         
-        while (Vector3.Distance(assignedVillager.transform.position, location) > 2f)
+        while (Vector3.Distance(assignedVillager.transform.position, location) > 3f)
         {
             Debug.Log(Vector3.Distance(assignedVillager.transform.position, location));
 
