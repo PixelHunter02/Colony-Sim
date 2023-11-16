@@ -1,0 +1,19 @@
+.SettingsPanelUp {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    left: auto;
+    width: 100%;
+    height: 100%;
+    transition-duration: 1s;
+}
+
+.SettingsPanelDown {
+    transition-duration: 1s;
+    translate: 0 100%;
+}
+
+.UIPanel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}

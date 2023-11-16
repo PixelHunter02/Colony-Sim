@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.UIElements;
@@ -12,6 +13,7 @@ public class UIToolkitManager : MonoBehaviour
     private UIDocument _uiDocument;
     VisualElement root;
     [SerializeField] private AudioSource _audioSource;
+    private UIDocument settingsUI;
 
     // Windows
     private VisualElement villagerManagementWindow;
@@ -33,7 +35,9 @@ public class UIToolkitManager : MonoBehaviour
     private Dictionary<StoredItemSO, int> itemsInInventory;
     private Dictionary<StoredItemSO, TemplateContainer> itemSlot;
     private Dictionary<Villager, VisualElement> villagerInformation;
-    
+
+    private Dictionary<StoredItemSO, Button> buildButtons;
+
     // Audio
     [SerializeField] private AudioClip buttonSound;
     
@@ -87,6 +91,11 @@ public class UIToolkitManager : MonoBehaviour
 
         // Building Button
         var buildingButton = root.Q<Button>("BuildingButton");
+        buildingButton.RegisterCallback<ClickEvent>(OnBuildingButtonClicked);
+        root.Q<Button>("CloseBuildMode").RegisterCallback<ClickEvent>(evt =>
+        {
+            root.Q("ButtonContainer").RemoveFromClassList("BuildModeEnabled");
+        } );
         // buildingManagementWindow = root.Q<TemplateContainer>("Building")
         
         // Tutorial Button
@@ -141,7 +150,7 @@ public class UIToolkitManager : MonoBehaviour
         float delay = 1;
         villagerManagementWindow.style.display = DisplayStyle.Flex;
         villagerManagementWindow.AddToClassList("WindowUp");
-
+        topBar.RemoveFromClassList("TopBarDown");
 
         // Add Villager Information to Menu.
         foreach(var villager in VillagerManager.GetVillagers())
@@ -226,6 +235,7 @@ public class UIToolkitManager : MonoBehaviour
     private void OnCraftingMenuButtonClicked(ClickEvent clickEvent)
     {
         OpenCraftingMenu();
+        topBar.RemoveFromClassList("TopBarDown");
     }
 
     private void OpenCraftingMenu()
@@ -311,6 +321,7 @@ public class UIToolkitManager : MonoBehaviour
     private void OnInventoryButtonClicked(ClickEvent clickEvent)
     {
         OpenInventory();
+        topBar.RemoveFromClassList("TopBarDown");
         
         if (gameManager.level.tutorialManager.TutorialStage == TutorialStage.InventoryTutorial)
         {
@@ -422,8 +433,53 @@ public class UIToolkitManager : MonoBehaviour
 
     #region Building
 
-    
+    private void OnBuildingButtonClicked(ClickEvent evt)
+    {
+        root.Q("ButtonContainer").AddToClassList("BuildModeEnabled");
+        foreach (var building in gameManager.buildingManager.buildings)
+        {
+            if (!buildButtons.ContainsKey(building))
+            {
+                var button = new Button(() => Debug.Log($"Building {building.objectName}"));
+                button.RegisterCallback<MouseEnterEvent>(evt => PlayAudio(evt, buttonSound));
+                var scrollview = root.Q<ScrollView>("BuildScrollView");
+                scrollview.contentContainer.Add(button);
+                float contentContainerSize = 10;
+                foreach (var VARIABLE in scrollview.contentContainer.hierarchy.Children())
+                {
+                    if (VARIABLE.ClassListContains("Button"))
+                    {
+                        contentContainerSize += 10;
+                    }
+            
+                }
+                scrollview.contentContainer.style.width = Length.Percent(contentContainerSize);
+                buildButtons.Add(building,button);
+                // scrollview.style.width = Length.Percent(99.99f);
+                // scrollview.style.width = Length.Percent(100f);
+                // scrollview.style.height = Length.Percent(99.99f);
+                // scrollview.style.height = Length.Percent(100f);
 
+                button.AddToClassList("Button");
+                button.style.backgroundImage = new StyleBackground(building.uiSprite);
+                button.style.alignSelf = Align.FlexEnd;
+                // root.Q<ScrollView>("BuildScrollView").;
+                // scrollview.contentContainer.style.width = Length.Percent(100);
+                Debug.Log(root.Q<ScrollView>("BuildScrollView").contentContainer.style.width.value.value);
+            }
+
+        } 
+            
+        StartCoroutine(delayedResize());
+
+    }
+
+    private IEnumerator delayedResize()
+    {
+        yield return new WaitForSeconds(0.1f);
+        root.Q<ScrollView>("BuildScrollView").contentContainer.style.width =  Length.Percent(100);
+    }
+    
     #endregion
 
     #region VillagerInformationTop
@@ -435,11 +491,6 @@ public class UIToolkitManager : MonoBehaviour
         topBar.Q<TextElement>("NameTag").text = villager.VillagerStats.VillagerName;
         topBar.Q<EnumField>("RoleSelector").Init(villager.CurrentRole);
 
-        // Add an event to the role change enum to be fired on change.
-        // roleSelectField.RegisterCallback<ChangeEvent<Enum>>((evt) =>
-        // {
-        //     previousTopBar = RoleSelectTopBar(evt,villager);
-        // });
         topBarVillager = villager;
 
         topBar.Q<TextElement>("VillagerLog").text = Level.GetVillagerLog(villager);
@@ -486,6 +537,7 @@ public class UIToolkitManager : MonoBehaviour
         itemsInInventory = new Dictionary<StoredItemSO, int>();
         itemSlot = new Dictionary<StoredItemSO, TemplateContainer>();
         villagerInformation = new Dictionary<Villager, VisualElement>();
+        buildButtons = new Dictionary<StoredItemSO, Button>();
         villageHeartExp = root.Q<Slider>("VillageHeartExpSlider");
     }
 

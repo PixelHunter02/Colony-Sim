@@ -1,0 +1,38 @@
+Slider.Settings {
+    width: 100%;
+    flex-direction: row;
+    align-self: stretch;
+    justify-content: space-between;
+    border-left-color: rgb(114, 85, 55);
+    border-right-color: rgb(114, 85, 55);
+    border-top-color: rgb(114, 85, 55);
+    border-bottom-color: rgb(114, 85, 55);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    font-size: 25px;
+    padding-left: 23px;
+    padding-right: 23px;
+    padding-top: 22px;
+    padding-bottom: 23px;
+    margin-left: 2px;
+    margin-right: 4px;
+}
+
+Label.Settings {
+    -unity-text-align: upper-center;
+    font-size: 47px;
+    border-bottom-color: rgb(129, 96, 63);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    padding-top: 26px;
+    width: 100%;
+}
+
+.Settings {
+}

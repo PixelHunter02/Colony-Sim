@@ -1,13 +1,16 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SettingsManager : MonoBehaviour
 {
     /// <summary>
     /// Audio
     /// </summary>
-    public float musicVolume;
-    public float villagerVolume;
-    public float interactionVolume;
+    private float masterVolume;
+    
+    private List<AudioSource> villagerAudioSources;
 
     /// <summary>
     /// Camera
