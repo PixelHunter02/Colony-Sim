@@ -1,0 +1,38 @@
+.MainMenuButton {
+    width: 20%;
+    height: 50%;
+    font-size: 50px;
+    margin-top: 0;
+    background-image: url('project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&guid=17ffd138921d55b4386a068c711508d3&type=3#uipack_rpg_vector');
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    align-self: center;
+    background-color: rgba(0, 0, 0, 0);
+    transition-duration: 0.2s;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    color: rgb(0, 0, 0);
+    -unity-text-align: middle-center;
+}
+
+.MainMenuButton:hover {
+    scale: 1.2 1.2;
+    translate: 0 -20%;
+    transition-duration: 0.2s;
+    color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.MainMenuTitleImage {
+    background-image: url('project://database/Assets/Images/A%20Colony's%20Journey%20Main%20Menu.png?fileID=2800000&guid=d311825ad990e6b4bb4a14f707a9f0d2&type=3#A Colony's Journey Main Menu');
+    -unity-background-scale-mode: scale-to-fit;
+    height: 100%;
+    width: 100%;
+    margin-bottom: 30%;
+    margin-top: 2%;
+}
