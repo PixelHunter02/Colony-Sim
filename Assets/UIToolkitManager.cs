@@ -438,8 +438,8 @@ public class UIToolkitManager : MonoBehaviour
         root.Q("ButtonContainer").AddToClassList("BuildModeEnabled");
         foreach (var building in gameManager.buildingManager.buildings)
         {
-            if (!buildButtons.ContainsKey(building))
-            {
+            // if (!buildButtons.ContainsKey(building))
+            // {
                 var button = new Button(() => Debug.Log($"Building {building.objectName}"));
                 button.RegisterCallback<MouseEnterEvent>(evt => PlayAudio(evt, buttonSound));
                 var scrollview = root.Q<ScrollView>("BuildScrollView");
@@ -466,10 +466,11 @@ public class UIToolkitManager : MonoBehaviour
                 // root.Q<ScrollView>("BuildScrollView").;
                 // scrollview.contentContainer.style.width = Length.Percent(100);
                 Debug.Log(root.Q<ScrollView>("BuildScrollView").contentContainer.style.width.value.value);
-            }
+            // }
 
         } 
-            
+        
+        // TODO Fix later when there is no deadline and I am more experienced with UI Toolkit 16/11/23
         StartCoroutine(delayedResize());
 
     }
