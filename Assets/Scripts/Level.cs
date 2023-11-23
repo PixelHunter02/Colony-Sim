@@ -239,7 +239,7 @@ public class Level : MonoBehaviour
     {
         if (lastSelected == villager)
         {
-            villager.VillagerStats.CurrentEmotion = Emotion.None;
+            // villager.VillagerStats.CurrentEmotion = Emotion.None;
             lastSelected = villager;
             var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
             villagerLogTMP.text = storedLog;
@@ -282,14 +282,13 @@ public class Level : MonoBehaviour
 
 
     public static event Action<Villager> AddToVillagerLogAction;
-    public static void AddToVillagerLog(Villager villager, string newLog, Emotion emotion = Emotion.None)
+    public static void AddToVillagerLog(Villager villager, string newLog)
     {
         var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
         StringBuilder log = new StringBuilder(storedLog);
-        log.Append(newLog);
         log.Append(Environment.NewLine);
+        log.Append(newLog);
         villagerLog[villager] = log.ToString();
-        villager.VillagerStats.CurrentEmotion = emotion;
         AddToVillagerLogAction?.Invoke(villager);
     }
 

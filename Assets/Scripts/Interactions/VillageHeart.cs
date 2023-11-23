@@ -34,7 +34,8 @@ public class VillageHeart : MonoBehaviour,IInteractable
     public TMP_Text villageHeartExpText;
     public TMP_Text villageHeartLevelText;
 
-    [SerializeField] private UIToolkitManager uIToolkitManager;
+    public UIToolkitManager uIToolkitManager;
+    
 
     public float Experience
     {
@@ -52,12 +53,14 @@ public class VillageHeart : MonoBehaviour,IInteractable
                 readyParticle.Stop();
             }
             
-            villagerHeartEXPSlider.value = experience / experienceToNextLevel;
-            villageHeartMenuSlider.value = experience / experienceToNextLevel;
+            // villagerHeartEXPSlider.value = experience / experienceToNextLevel;
+            // villageHeartMenuSlider.value = experience / experienceToNextLevel;
 
-            
+            // Debug.Log(uIToolkitManager);
+            // Debug.Log(uIToolkitManager.villageHeartExp);
             uIToolkitManager.villageHeartExp.value = experience / experienceToNextLevel;
-            villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
+            
+            // villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
         }
     }
     
@@ -67,11 +70,16 @@ public class VillageHeart : MonoBehaviour,IInteractable
     private void Awake()
     {
         _gameManager = GameManager.Instance;
-        enabled = false;
-        villagerHeartEXPSlider.value = experience / experienceToNextLevel;
-        villageHeartMenuSlider.value = experience / experienceToNextLevel;
-        uIToolkitManager.villageHeartExp.value = experience / experienceToNextLevel;
-        villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
+        // uIToolkitManager = GameObject.Find("UIToolkit").GetComponent<UIToolkitManager>();
+        // enabled = false;
+        // villagerHeartEXPSlider.value = experience / experienceToNextLevel;
+        // villageHeartMenuSlider.value = experience / experienceToNextLevel;
+        // villageHeartExpText.text = $"{Experience}/{experienceToNextLevel}";
+    }
+
+    private void Start()
+    {
+        // uIToolkitManager.villageHeartExp.value = experience / experienceToNextLevel;
     }
 
     public void OnInteraction()
@@ -92,7 +100,7 @@ public class VillageHeart : MonoBehaviour,IInteractable
             _gameManager.level.tutorialManager.TutorialStage = TutorialStage.VillagerManagementTutorial;
         }
         
-        Debug.Log(uIToolkitManager);
+        // Debug.Log(uIToolkitManager);
         uIToolkitManager.OpenVillageHeart();
         
 

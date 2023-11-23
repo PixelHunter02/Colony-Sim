@@ -161,7 +161,7 @@
     flex-grow: 0;
 }
 
-* {
+.test2 {
     overflow: visible;
     justify-content: flex-start;
     align-self: auto;
@@ -175,12 +175,13 @@
     flex-grow: 1;
     background-color: rgba(0, 0, 0, 0);
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: flex-start;
     height: 100%;
     width: 100%;
-    align-self: flex-end;
-    align-items: flex-end;
+    align-self: auto;
+    align-items: auto;
     transition-duration: 1s;
+    translate: 0 0;
 }
 
 .BuildModeEnabled {
@@ -188,6 +189,7 @@
     width: 100%;
     height: 100%;
     transition-duration: 1s;
+    align-items: auto;
 }
 
 #BuildScrollView Scroller {

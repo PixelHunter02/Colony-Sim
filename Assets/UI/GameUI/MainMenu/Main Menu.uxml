@@ -1,11 +1,27 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/GameUI/MainMenu/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=8e8cc048bf4f60d4f928b1361ed19c01&amp;type=3#MainMenuStyle" />
-    <ui:VisualElement name="RootVisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
-        <ui:VisualElement name="Title" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 95%;">
-            <ui:VisualElement name="TItleImage" class="MainMenuTitleImage" />
+    <Style src="project://database/Assets/UI/GameUI/MainMenu/CharacterCreation.uss?fileID=7433441132597879392&amp;guid=5ea901c15f4f24445ad974a08ff80eb3&amp;type=3#CharacterCreation" />
+    <ui:VisualElement name="CharacterCreation" picking-mode="Ignore" class="CharacterCreationMenu CharacterCreationMenuHidden">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: auto; flex-direction: row;">
+            <ui:VisualElement name="Left" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; flex-direction: column; justify-content: space-around; align-self: stretch; padding-left: 6%;">
+                <ui:Button text="&lt;" display-tooltip-when-elided="true" name="LeftHairButton" class="CCButton" />
+                <ui:Button text="&lt;" display-tooltip-when-elided="true" name="LeftBodyButton" class="CCButton" style="min-width: auto; min-height: auto;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="Right" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-end; justify-content: space-around; margin-left: 0; padding-right: 131px;">
+                <ui:Button text="&gt;" display-tooltip-when-elided="true" name="RightHairButton" class="CCButton" />
+                <ui:Button text="&gt;" display-tooltip-when-elided="true" name="RightBodyButton" class="CCButton" style="min-width: auto; min-height: auto;" />
+            </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="Buttons" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 20%;">
-            <ui:VisualElement name="ButtonContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; align-self: auto; justify-content: space-around; height: auto;">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 10%; justify-content: flex-end;">
+            <ui:Button text="Begin Your Journey!" display-tooltip-when-elided="true" name="BeginJourneyButton" style="height: 10%; width: 60%; justify-content: flex-start; align-self: center; margin-bottom: 89px; font-size: 46px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="MainMenu" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%; position: absolute;">
+        <ui:VisualElement name="Title" class="TitleImageShown TitleImageHidden">
+            <ui:VisualElement name="TItleImage" class="MainMenuTitleImage" style="background-image: url(&apos;project://database/Assets/Images/A%20Colonys%20Journey%20Main%20Menu.png?fileID=2800000&amp;guid=c6a60f35791e81f49bf27434f65c6d60&amp;type=3#A Colonys Journey Main Menu&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Buttons" picking-mode="Ignore" class="ButtonsHidden" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 20%; width: 100%; translate: 0 0;">
+            <ui:VisualElement name="ButtonContainer" picking-mode="Ignore" class="ButtonsShown ButtonsHidden" style="display: flex;">
                 <ui:Button text="Play Game" display-tooltip-when-elided="true" name="PlayButton" class="MainMenuButton" />
                 <ui:Button text="Settings" display-tooltip-when-elided="true" name="SettingsButton" class="MainMenuButton" />
                 <ui:Button text="Exit Game" display-tooltip-when-elided="true" name="ExitButton" class="MainMenuButton" />

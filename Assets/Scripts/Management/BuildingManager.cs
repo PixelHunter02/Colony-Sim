@@ -41,7 +41,7 @@ public class BuildingManager : MonoBehaviour
 
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if(SceneManager.GetActiveScene().name.Equals("GameScene"))
             MovePreview(previewGO);
     }
 
@@ -66,25 +66,27 @@ public class BuildingManager : MonoBehaviour
     {
         if (previewObj != null)
         {
-            if (_gameManager.level.GameState is not GameState.Building)
-            {
-                Destroy(previewGO);
-            }
+            // if (_gameManager.level.GameState is not GameState.Building)
+            // {
+            //     Destroy(previewGO);
+            // }
             
             var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
             Vector3Int cellPosition = new Vector3Int();
-            if (mousePosition != Vector3.zero && _gameManager.level.GameState is GameState.Building &&
-                currentBuilding != null)
+            Vector3 vec3 = new Vector3();
+            if (mousePosition != Vector3.zero && currentBuilding != null)
             {
                 previewGO.SetActive(true);
                 cellPosition = _gameManager.grid.WorldToCell(mousePosition);
+                vec3 = cellPosition;
+                vec3.y = -1.5f;
             }
             else
             {
                 previewGO.SetActive(false);
             }
 
-            previewObj.transform.position = cellPosition;
+            previewObj.transform.position = vec3;
             previewGO.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
         }
     }
@@ -92,11 +94,12 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
-        if (mousePosition != Vector3.zero && _gameManager.level.GameState is GameState.Building &&
-            currentBuilding != null)
+        if (mousePosition != Vector3.zero && currentBuilding != null)
         {
             var cellPosition = _gameManager.grid.WorldToCell(mousePosition);
-            var placedItem = Instantiate(currentBuilding.prefab, cellPosition, Quaternion.identity);
+            Vector3 vec3 = cellPosition;
+            vec3.y = -1.5f;
+            var placedItem = Instantiate(currentBuilding.prefab, vec3, Quaternion.identity);
 
             placedItem.transform.eulerAngles = new Vector3(0, 90 * currentBuildingRotationModifier, 0);
             itemBuilt?.Invoke(currentBuilding);

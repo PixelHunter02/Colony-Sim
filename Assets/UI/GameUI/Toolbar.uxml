@@ -35,7 +35,7 @@
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); height: 95%; width: 85%; background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vectorLight.png?fileID=2800000&amp;guid=a860cb54d4596fe4ba46c921262efc8d&amp;type=3#uipack_rpg_vectorLight&apos;); -unity-slice-scale: 0.4px; -unity-slice-left: 85; -unity-slice-top: 85; -unity-slice-right: 85; -unity-slice-bottom: 85; margin-top: 0.4%; padding-left: 1%; padding-right: 1%; padding-top: 1%; padding-bottom: 1%;">
                     <ui:ScrollView horizontal-scroller-visibility="Hidden" style="width: 100%; height: 100%; justify-content: flex-end; align-self: auto; align-items: stretch;">
-                        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="VillagerLog" style="font-size: 26px; white-space: normal;" />
+                        <ui:Label tabindex="-1" display-tooltip-when-elided="true" name="VillagerLog" style="font-size: 26px; white-space: normal;" />
                     </ui:ScrollView>
                 </ui:VisualElement>
             </ui:VisualElement>
@@ -57,27 +57,27 @@
         </ui:VisualElement>
         <ui:VisualElement name="ToolbarBackground" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&amp;guid=17ffd138921d55b4386a068c711508d3&amp;type=3#uipack_rpg_vector&apos;); width: 80%; height: 10%; max-height: 10%; -unity-slice-scale: 0.5px; -unity-slice-left: 24; -unity-slice-top: 24; -unity-slice-right: 24; -unity-slice-bottom: 24; margin-bottom: 1%; flex-direction: row; align-self: center; align-items: center; justify-content: space-around; scale: 0.75 0.75; overflow: visible;">
             <ui:VisualElement name="ToolbarContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-around; align-self: flex-end; width: 100%; height: 100%; position: relative; translate: 0 0; overflow: visible; min-width: 232px;">
-                <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 250%; flex-direction: row; justify-content: space-between; translate: 0 -2%; overflow: hidden;">
-                    <ui:VisualElement name="ButtonContainer" class="BuildModeDisabled BuildModeEnabled" style="width: 100%; height: 100%; align-items: auto; justify-content: space-around; min-width: 0; min-height: 0;">
+                <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 250%; flex-direction: row; justify-content: space-between; translate: 0 -2%; overflow: hidden; align-self: flex-end;">
+                    <ui:VisualElement name="ButtonContainer" class="BuildModeDisabled" style="width: 100%; height: 100%; align-items: auto; justify-content: space-around; min-width: 0; min-height: 0; position: absolute;">
                         <ui:Button display-tooltip-when-elided="true" name="CraftingButton" enable-rich-text="true" class="Button" style="background-image: url(&apos;project://database/Assets/Sprites/ui/Craft.png?fileID=2800000&amp;guid=415e1deb72b994f4095ce7023b59c623&amp;type=3#Craft&apos;); align-self: flex-end;" />
                         <ui:Button display-tooltip-when-elided="true" name="VillagerManagementButton" enable-rich-text="true" tooltip="Villager Management" class="Button" style="align-self: flex-end;" />
                         <ui:Button display-tooltip-when-elided="true" name="InventoryButton" enable-rich-text="true" class="Button" style="background-image: url(&apos;project://database/Assets/Sprites/ui/Chest.png?fileID=2800000&amp;guid=49d947054dac78c42a4fa91c91c43d3a&amp;type=3#Chest&apos;); align-self: flex-end;" />
                         <ui:Button display-tooltip-when-elided="true" name="StockpileButton" enable-rich-text="true" class="Button" style="background-image: url(&apos;project://database/Assets/Sprites/ui/GUI_Icons%201.png?fileID=2800000&amp;guid=0e537e54e32aecc4c9c822c3a328b1b7&amp;type=3#GUI_Icons 1&apos;); align-self: flex-end;" />
                         <ui:Button display-tooltip-when-elided="true" name="BuildingButton" enable-rich-text="true" class="Button" style="background-image: url(&apos;project://database/Assets/Sprites/ui/Build.png?fileID=2800000&amp;guid=e78ed9567eee25b489726f8e1b0b874e&amp;type=3#Build&apos;); align-self: flex-end;" />
-                        <ui:ScrollView name="BuildScrollView" mode="Horizontal" mouse-wheel-scroll-size="128" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="translate: 100% 0; width: 100%; height: 100%; position: absolute; left: 0; align-items: auto; padding-top: 0; padding-left: 0; padding-right: 0;">
+                        <ui:ScrollView name="BuildScrollView" mode="Horizontal" mouse-wheel-scroll-size="128" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="width: 100%; height: 100%; position: absolute; left: 0; translate: 100% 0;">
                             <ui:Button display-tooltip-when-elided="true" name="CloseBuildMode" class="Button" style="width: 8%; height: 60%; min-height: auto; flex-shrink: 1; flex-grow: 0; background-color: rgba(56, 56, 56, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/Role.png?fileID=2800000&amp;guid=8e0c547248675cb43a99c072d4f2a5ce&amp;type=3#Role&apos;);" />
                         </ui:ScrollView>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:Instance template="villagerWindowNew" name="CraftingWindow" class="WindowDown WindowUp" style="display: none; flex-direction: row; left: 0;" />
-        <ui:Instance template="villagerWindowNew" name="VillagerManagementWindow" class="WindowDown WindowUp" style="display: none;" />
-        <ui:VisualElement name="InventoryWindow" class="WindowDown WindowUp" style="display: none;">
+        <ui:Instance template="villagerWindowNew" name="CraftingWindow" class="WindowDown WindowUp" style="display: flex; flex-direction: row; left: 0;" />
+        <ui:Instance template="villagerWindowNew" name="VillagerManagementWindow" class="WindowDown WindowUp" style="display: flex;" />
+        <ui:VisualElement name="InventoryWindow" class="WindowDown WindowUp" style="display: flex;">
             <Style src="project://database/Assets/UI/scroll.uss?fileID=7433441132597879392&amp;guid=e25370ee2f0f78c4da0f838baf13d42e&amp;type=3#scroll" />
             <Style src="project://database/Assets/UI%20Toolkit/Styles/VillagerInfo.uss?fileID=7433441132597879392&amp;guid=d135c41ac9c71b343b348ae7899645c6&amp;type=3#VillagerInfo" />
             <Style src="project://database/Assets/UI/GameUI/CloseButton.uss?fileID=7433441132597879392&amp;guid=44c8bf6a337441f48ad2bcf95e7ab498&amp;type=3#CloseButton" />
-            <ui:VisualElement name="ScreenContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; align-self: auto;">
+            <ui:VisualElement name="ScreenContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; align-self: auto; width: 100%; height: 100%;">
                 <ui:VisualElement name="Background" class="PanelBase">
                     <ui:ScrollView name="TemplateContainer" tabindex="0" mode="Vertical" focusable="false" class="unity-scroll-view__content-container" style="width: 100%; height: 100%; justify-content: flex-start;" />
                     <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 10%; max-height: 10%; min-height: 10%; flex-direction: row-reverse;">
@@ -103,11 +103,11 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="VillageHeart" class="WindowDown WindowUp" style="display: none; left: 0; bottom: 4px;">
+        <ui:VisualElement name="VillageHeart" class="WindowDown WindowUp" style="display: flex; left: 0; bottom: 4px;">
             <Style src="project://database/Assets/UI/scroll.uss?fileID=7433441132597879392&amp;guid=e25370ee2f0f78c4da0f838baf13d42e&amp;type=3#scroll" />
             <Style src="project://database/Assets/UI%20Toolkit/Styles/VillagerInfo.uss?fileID=7433441132597879392&amp;guid=d135c41ac9c71b343b348ae7899645c6&amp;type=3#VillagerInfo" />
             <Style src="project://database/Assets/UI/GameUI/CloseButton.uss?fileID=7433441132597879392&amp;guid=44c8bf6a337441f48ad2bcf95e7ab498&amp;type=3#CloseButton" />
-            <ui:VisualElement name="ScreenContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; align-self: auto;">
+            <ui:VisualElement name="ScreenContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); justify-content: center; align-items: center; align-self: auto; width: 100%; height: 100%;">
                 <ui:VisualElement name="Background" class="PanelBase" style="align-self: center; justify-content: flex-start; align-items: flex-start; flex-direction: column;">
                     <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 10%; max-height: 10%; min-height: 10%; flex-direction: row-reverse; top: -5%; position: absolute;">
                         <ui:Button display-tooltip-when-elided="true" name="CloseButton" class="Button" style="width: 6%; height: 100%; background-image: url(&apos;project://database/Assets/90%20Animated%20emojis%202D/Art/Sprites/Eyes/Eye%20cross/Eye%20cross%2007.psd?fileID=2800000&amp;guid=346b4f93047ea4f91a7da9664f0ebdb4&amp;type=3#Eye cross 07&apos;); background-color: rgba(188, 188, 188, 0); translate: 35px 0;" />

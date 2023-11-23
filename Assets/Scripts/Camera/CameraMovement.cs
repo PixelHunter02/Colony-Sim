@@ -54,7 +54,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        if (SceneManager.GetActiveScene().name.Equals("New Scene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
+        if (SceneManager.GetActiveScene().name.Equals("GameScene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
             // if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             // {
@@ -186,7 +186,7 @@ public class CameraMovement : MonoBehaviour
 
     private void AssignValues(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name.Equals("New Scene") || scene.name.Equals("Tablet"))
+        if (scene.name.Equals("GameScene"))
         {
             _cinemachineCameraOffset = GameObject.Find("VirtualCamera").GetComponent<CinemachineCameraOffset>();
             _cinemachineVCam = GameObject.Find("VirtualCamera").GetComponent<CinemachineVirtualCamera>();  

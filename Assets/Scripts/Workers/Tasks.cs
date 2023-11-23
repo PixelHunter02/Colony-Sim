@@ -14,7 +14,7 @@ namespace SG_Tasks
             villager.CurrentState = VillagerStates.Walking;
 
 
-            while (Vector3.Distance(villager.transform.position, position) > 0.5f )
+            while (Vector3.Distance(villager.transform.position, position) > 2f )
             {
                 yield return null;
             }

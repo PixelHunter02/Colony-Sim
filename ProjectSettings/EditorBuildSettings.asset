@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu 2.unity
     guid: ceef8b7349f99d9448e96d45aad5931b
   - enabled: 1
-    path: Assets/Scenes/New Scene.unity
+    path: Assets/Scenes/GameScene.unity
     guid: d430a415e8a9c2b45828caa2b3708d1e
   m_configObjects:
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,

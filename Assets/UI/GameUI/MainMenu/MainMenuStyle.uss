@@ -29,10 +29,46 @@
 }
 
 .MainMenuTitleImage {
-    background-image: url('project://database/Assets/Images/A%20Colony's%20Journey%20Main%20Menu.png?fileID=2800000&guid=d311825ad990e6b4bb4a14f707a9f0d2&type=3#A Colony's Journey Main Menu');
+    background-image: url('project://database/Assets/Images/A%20Colonys%20Journey%20Main%20Menu.png?fileID=2800000&guid=c6a60f35791e81f49bf27434f65c6d60&type=3#A Colonys Journey Main Menu');
     -unity-background-scale-mode: scale-to-fit;
     height: 100%;
     width: 100%;
     margin-bottom: 30%;
     margin-top: 2%;
+}
+
+.TitleImageShown {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    height: 95%;
+    align-self: auto;
+    width: 100%;
+    transition-duration: 0.5s;
+    transition-delay: 0.5s;
+}
+
+.TitleImageHidden {
+    translate: 0 -100%;
+    transition-duration: 0.5s;
+    transition-delay: 0.5s;
+}
+
+.ButtonsShown {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0);
+    flex-direction: row;
+    align-self: auto;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+    transition-duration: 0.5s;
+    translate: 0 0;
+    transition-timing-function: ease;
+    display: flex;
+}
+
+.ButtonsHidden {
+    translate: 0 100%;
+    transition-duration: 0.5s;
+    display: flex;
 }

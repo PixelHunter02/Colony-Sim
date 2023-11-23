@@ -15,6 +15,8 @@ public class UIToolkitManager : MonoBehaviour
     [SerializeField] private AudioSource _audioSource;
     private UIDocument settingsUI;
 
+    public static bool isPointerOverUI;
+
     // Windows
     private VisualElement villagerManagementWindow;
     private VisualElement inventoryWindow;
@@ -95,6 +97,7 @@ public class UIToolkitManager : MonoBehaviour
         root.Q<Button>("CloseBuildMode").RegisterCallback<ClickEvent>(evt =>
         {
             root.Q("ButtonContainer").RemoveFromClassList("BuildModeEnabled");
+            gameManager.buildingManager.currentBuilding = null;
         } );
         // buildingManagementWindow = root.Q<TemplateContainer>("Building")
         
@@ -113,6 +116,7 @@ public class UIToolkitManager : MonoBehaviour
         
         // Village Heart
         var sliderBar = new VisualElement();
+        villageHeartExp = root.Q<Slider>("VillageHeartExpSlider");
         villageHeartWindow = root.Q<VisualElement>("VillageHeart");
         var slider = root.Q("VillageHeartExpSlider");
         slider.Q("unity-dragger").Add(sliderBar);
@@ -140,7 +144,7 @@ public class UIToolkitManager : MonoBehaviour
     private void Update()
     {
         topBar.Q<TextElement>("Time").text = System.DateTime.UtcNow.ToLocalTime().ToString("HH:mm");
-
+        Debug.Log(isPointerOverUI);
     }
 
     #region VillagerManagement
@@ -438,9 +442,14 @@ public class UIToolkitManager : MonoBehaviour
         root.Q("ButtonContainer").AddToClassList("BuildModeEnabled");
         foreach (var building in gameManager.buildingManager.buildings)
         {
-            // if (!buildButtons.ContainsKey(building))
-            // {
-                var button = new Button(() => Debug.Log($"Building {building.objectName}"));
+            if (!buildButtons.ContainsKey(building))
+            {
+                var button = new Button(() =>
+                {
+                    Debug.Log($"Building {building.objectName}");
+                    gameManager.buildingManager.currentBuilding = building;
+                    gameManager.buildingManager.PreviewSetup(gameManager.buildingManager.currentBuilding.prefab);
+                });
                 button.RegisterCallback<MouseEnterEvent>(evt => PlayAudio(evt, buttonSound));
                 var scrollview = root.Q<ScrollView>("BuildScrollView");
                 scrollview.contentContainer.Add(button);
@@ -455,18 +464,13 @@ public class UIToolkitManager : MonoBehaviour
                 }
                 scrollview.contentContainer.style.width = Length.Percent(contentContainerSize);
                 buildButtons.Add(building,button);
-                // scrollview.style.width = Length.Percent(99.99f);
-                // scrollview.style.width = Length.Percent(100f);
-                // scrollview.style.height = Length.Percent(99.99f);
-                // scrollview.style.height = Length.Percent(100f);
-
+                
                 button.AddToClassList("Button");
                 button.style.backgroundImage = new StyleBackground(building.uiSprite);
                 button.style.alignSelf = Align.FlexEnd;
-                // root.Q<ScrollView>("BuildScrollView").;
-                // scrollview.contentContainer.style.width = Length.Percent(100);
+                
                 Debug.Log(root.Q<ScrollView>("BuildScrollView").contentContainer.style.width.value.value);
-            // }
+            }
 
         } 
         
@@ -493,7 +497,8 @@ public class UIToolkitManager : MonoBehaviour
         topBar.Q<EnumField>("RoleSelector").Init(villager.CurrentRole);
 
         topBarVillager = villager;
-
+        Debug.Log(topBarVillager);
+        
         topBar.Q<TextElement>("VillagerLog").text = Level.GetVillagerLog(villager);
         // scrollView.scrollOffset = scrollView.contentContainer.layout.max - scrollView.contentViewport.layout.size;
 
@@ -508,6 +513,7 @@ public class UIToolkitManager : MonoBehaviour
     {
         Enum.TryParse(evt.newValue.ToString(), out Roles role);
         topBarVillager.CurrentRole = role;
+        topRoleSelectField.SetValueWithoutNotify(evt.newValue);
     }
 
     #endregion
@@ -539,7 +545,6 @@ public class UIToolkitManager : MonoBehaviour
         itemSlot = new Dictionary<StoredItemSO, TemplateContainer>();
         villagerInformation = new Dictionary<Villager, VisualElement>();
         buildButtons = new Dictionary<StoredItemSO, Button>();
-        villageHeartExp = root.Q<Slider>("VillageHeartExpSlider");
     }
 
     private void PlayAudio(MouseEnterEvent mouseEnterEvent, AudioClip audio)

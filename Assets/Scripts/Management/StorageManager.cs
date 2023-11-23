@@ -36,7 +36,7 @@ public class StorageManager : MonoBehaviour
 
     private void GetReferences(Scene scene, LoadSceneMode mode)
     {
-        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Equals("GameScene"))
         {
 
             inventoryMenu = _gameManager.level.inventoryMenu;

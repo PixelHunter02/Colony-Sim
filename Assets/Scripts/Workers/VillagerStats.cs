@@ -84,35 +84,35 @@ public class VillagerStats : MonoBehaviour
         }
     }
 
-    public List<GameObject> emojis;
-    [SerializeField] private GameObject emojiCanvas;
-    [SerializeField] private Transform emojiContainer;
+    // public List<GameObject> emojis;
+    // [SerializeField] private GameObject emojiCanvas;
+    // [SerializeField] private Transform emojiContainer;
 
-    private Emotion currentEmotion;
-
-    public Emotion CurrentEmotion
-    {
-        get => currentEmotion;
-        set
-        {
-            currentEmotion = value;
-            switch (value)
-            {
-                case Emotion.Instruction:
-                    emojiCanvas.SetActive(true);
-                    Instantiate(emojis[0], emojiContainer);
-                    break;
-                case Emotion.None:
-                    for(int i = 0; i < emojiContainer.childCount;i++)
-                    {
-                        Destroy(emojiContainer.transform.GetChild(i).gameObject);
-                    }
-                    emojiCanvas.SetActive(false);
-                    break;
-
-            }
-        }
-    }
+    // private Emotion currentEmotion;
+    //
+    // public Emotion CurrentEmotion
+    // {
+    //     get => currentEmotion;
+    //     set
+    //     {
+    //         currentEmotion = value;
+    //         switch (value)
+    //         {
+    //             case Emotion.Instruction:
+    //                 emojiCanvas.SetActive(true);
+    //                 Instantiate(emojis[0], emojiContainer);
+    //                 break;
+    //             case Emotion.None:
+    //                 for(int i = 0; i < emojiContainer.childCount;i++)
+    //                 {
+    //                     Destroy(emojiContainer.transform.GetChild(i).gameObject);
+    //                 }
+    //                 emojiCanvas.SetActive(false);
+    //                 break;
+    //
+    //         }
+    //     }
+    // }
 
 
     private void Start()

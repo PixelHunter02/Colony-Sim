@@ -39,7 +39,7 @@ public class Villager : MonoBehaviour, IInteractable
         get => _villagerRole;
         set
         {
-            if (SceneManager.GetActiveScene().name == "New Scene")
+            if (SceneManager.GetActiveScene().name == "GameScene")
             {
                 Level.AddToVillagerLog(this, $"{_villagerStats.VillagerName} Changed From {_villagerRole} To {value}");
             }
@@ -159,7 +159,7 @@ public class Villager : MonoBehaviour, IInteractable
         agent = GetComponent<NavMeshAgent>();
 
         _animator = transform.GetChild(0).GetComponent<Animator>();
-        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Equals("GameScene"))
         {
             _portraitRenderTexture = new RenderTexture(256, 256, 8);
             portraitCamera.targetTexture = _portraitRenderTexture;
@@ -169,7 +169,7 @@ public class Villager : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        if (SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if (SceneManager.GetActiveScene().name.Equals("GameScene"))
         {
             objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
             objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
@@ -194,53 +194,53 @@ public class Villager : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (SceneManager.GetActiveScene().name.Contains("New Scene"))
-        {
-
-            if (objInAwarenessZone.Count == 0)
-            {
-                return;
-            }
-
-            for (int i = 0; i < objInAwarenessZone.Count; i++)
-            {
-                if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
-                {
-                    Debug.Log($"{_villagerStats.VillagerName} is {CurrentRole}");
-                    if ((CurrentRole == Roles.Fighter || CurrentRole == Roles.Leader) && !finding)
-                    {
-                        Debug.Log($"{_villagerStats.VillagerName} is {CurrentRole}");
-                        finding = true;
-                        StartCoroutine(FindTarget(3));
-                    }
-                    else if ((CurrentRole != Roles.Fighter || CurrentRole != Roles.Leader) &&!finding)
-                    {
-                        StartCoroutine(GoToLight(10));
-                        //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
-                    }
-
-                    if (!monsters.Contains(objInAwarenessZone[i]))
-                    {
-                        monsters.Add(objInAwarenessZone[i]);
-                    }
-                }
-            }
-
-            if (target)
-            {
-                transform.LookAt(target.transform);
-
-                for (int i = 0; i < objInTriggerZone.Count; i++)
-                {
-                    if (objInTriggerZone[i] == target && !attackStarted)
-                    {
-                        attackStarted = true;
-                        print(gameObject.name + " has found its target");
-                        StartCoroutine(AttackMonster());
-                    }
-                }
-            }
-        }
+        // if (SceneManager.GetActiveScene().name.Contains("GameScene"))
+        // {
+        //
+        //     if (objInAwarenessZone.Count == 0)
+        //     {
+        //         return;
+        //     }
+        //
+        //     for (int i = 0; i < objInAwarenessZone.Count; i++)
+        //     {
+        //         if (objInAwarenessZone[i].TryGetComponent(out Monster monster))
+        //         {
+        //             Debug.Log($"{_villagerStats.VillagerName} is {CurrentRole}");
+        //             if ((CurrentRole == Roles.Fighter || CurrentRole == Roles.Leader) && !finding)
+        //             {
+        //                 Debug.Log($"{_villagerStats.VillagerName} is {CurrentRole}");
+        //                 finding = true;
+        //                 StartCoroutine(FindTarget(3));
+        //             }
+        //             else if ((CurrentRole != Roles.Fighter || CurrentRole != Roles.Leader) &&!finding)
+        //             {
+        //                 StartCoroutine(GoToLight(10));
+        //                 //run away but this will be hard to code, making sure it doesn't run into another monster or to a fighter that is already busy
+        //             }
+        //
+        //             if (!monsters.Contains(objInAwarenessZone[i]))
+        //             {
+        //                 monsters.Add(objInAwarenessZone[i]);
+        //             }
+        //         }
+        //     }
+        //
+        //     if (target)
+        //     {
+        //         transform.LookAt(target.transform);
+        //
+        //         for (int i = 0; i < objInTriggerZone.Count; i++)
+        //         {
+        //             if (objInTriggerZone[i] == target && !attackStarted)
+        //             {
+        //                 attackStarted = true;
+        //                 print(gameObject.name + " has found its target");
+        //                 StartCoroutine(AttackMonster());
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     private IEnumerator RunTasksCR()
@@ -250,17 +250,18 @@ public class Villager : MonoBehaviour, IInteractable
             while(villagerQueue.Count > 0)
             {
                 yield return StartCoroutine(villagerQueue.Dequeue());
-                Debug.Log($"Taks {villagerQueue.Count} Completed");
+                // Debug.Log($"Taks {villagerQueue.Count} Completed");
+                yield return null;
             }
-
-            if (villagerQueue.Count == 0)
-            {
-                Debug.Log(_villagerStats.VillagerName + "Started Walking Randomly");
-                villagerQueue.Enqueue(RandomWalk(3));
-            }
+    
+            // if (villagerQueue.Count == 0)
+            // {
+            //     // Debug.Log(_villagerStats.VillagerName + "Started Walking Randomly");
+            //     villagerQueue.Enqueue(RandomWalk(3));
+            //     yield return null;
+            // }
             yield return null;
         }
-        yield return null;  
     }
 
     
@@ -393,7 +394,7 @@ public class Villager : MonoBehaviour, IInteractable
             return; 
         }
         
-        VillagerStats.CurrentEmotion = Emotion.None;
+        // VillagerStats.CurrentEmotion = Emotion.None;
         var tutorialManager = _gameManager.level.tutorialManager;
         if (tutorialManager.TutorialStage == TutorialStage.KeyboardMovementTutorial)
         {

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -42,7 +43,7 @@ public class Interactions : MonoBehaviour
 
     private void Update()
     {
-        if(SceneManager.GetActiveScene().name.Equals("New Scene"))
+        if(SceneManager.GetActiveScene().name.Equals("GameScene"))
             OutlineInteractable();
     }
 
@@ -88,12 +89,18 @@ public class Interactions : MonoBehaviour
 
     private void Interactable()
     {
+        if (SceneManager.GetActiveScene().name != "GameScene")
+        {
+            return;
+        }
         // Get the information of the object being clicked
         var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
+
         if (!Physics.Raycast(ray, out var hit, 1000))
             return;
         Debug.Log(hit.transform.name);
-        if (hit.transform.TryGetComponent(out IInteractable interactable) && !isOverUI)
+        
+        if (hit.transform.TryGetComponent(out IInteractable interactable))
         {
             // Debug.Log(hit.transform.name);
             interactable.OnInteraction();
@@ -113,6 +120,10 @@ public class Interactions : MonoBehaviour
 
     private void BeginDrawStockpile()
     {
+        if (SceneManager.GetActiveScene().name != "GameScene")
+        {
+            return;
+        }
         // Get the information of the object being clicked
         var ray = _gameManager.level.Camera.ScreenPointToRay(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>());
         if (!Physics.Raycast(ray, out var hit, 100,ground) || isOverUI ||!_gameManager.level.stockpileMode) 

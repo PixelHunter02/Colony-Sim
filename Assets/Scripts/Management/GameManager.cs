@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public string gameScene = "New Scene";
-    public string mainMenu = "Main Menu";
+    public string gameScene = "GameScene";
+    public string mainMenu = "Main Menu 2";
 
     #region SingletonPattern
 
@@ -73,21 +73,21 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded += SceneSetup;
 
-        HarvestableObject.onHarvestCompletedEvent += level.villagerNavMesh.BuildNavMesh;
-        HarvestableObject.onHarvestCompletedEvent += level.monsterNavMesh.BuildNavMesh;
+        // HarvestableObject.onHarvestCompletedEvent += level.villagerNavMesh.BuildNavMesh;
+        // HarvestableObject.onHarvestCompletedEvent += level.monsterNavMesh.BuildNavMesh;
     }
 
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= SceneSetup;
         
-        HarvestableObject.onHarvestCompletedEvent -= level.villagerNavMesh.BuildNavMesh;
-        HarvestableObject.onHarvestCompletedEvent -= level.monsterNavMesh.BuildNavMesh;
+        // HarvestableObject.onHarvestCompletedEvent -= level.villagerNavMesh.BuildNavMesh;
+        // HarvestableObject.onHarvestCompletedEvent -= level.monsterNavMesh.BuildNavMesh;
     }
 
     private void SceneSetup(Scene scene, LoadSceneMode mode)
     {
-        if(scene.name.Equals(gameScene) || SceneManager.GetActiveScene().name.Equals("Tablet"))
+        if(scene.name.Equals(gameScene))
         {
             level = GameObject.Find("LocalSettings").GetComponent<Level>();
             mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();

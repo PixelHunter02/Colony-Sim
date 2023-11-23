@@ -22,7 +22,7 @@ public class TaskHandler : MonoBehaviour
 
     public IEnumerator TaskToAssign(BuildStats task)
     {
-        if (VillagerManager.TryGetVillagerByRole(crafters, out Villager villager))
+        if (VillagerManager.TryGetVillagerByRole(out Villager villager))
         {
             yield return StartCoroutine(RunTaskCR(villager, task));
             queuedTasks.Dequeue();
