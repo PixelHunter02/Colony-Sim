@@ -49,6 +49,7 @@ public class UIToolkitManager : MonoBehaviour
     // Top Bar
     private EnumField topRoleSelectField;
     private Villager topBarVillager;
+    private SettingsUIManager settingsUIManager;
     
     
     public static Action DrawInventoryAction;
@@ -114,6 +115,13 @@ public class UIToolkitManager : MonoBehaviour
         topRoleSelectField = topBar.Q<EnumField>("RoleSelector");
         topRoleSelectField.RegisterCallback<ChangeEvent<Enum>>(evt =>RoleSelectTopBar(evt));
         
+        // Settings UI
+        settingsUIManager = SettingsUIManager.Instance;
+        topBar.Q<Button>("SettingsButton").RegisterCallback<ClickEvent>(evt =>
+        {
+            settingsUIManager.OpenSettingsUI();
+        });
+
         // Village Heart
         var sliderBar = new VisualElement();
         villageHeartExp = root.Q<Slider>("VillageHeartExpSlider");
@@ -394,14 +402,14 @@ public class UIToolkitManager : MonoBehaviour
         }
         
         List<StoredItemSO> itemsToBeRemoved = new List<StoredItemSO>();
-        // foreach (var item in itemSlot)
-        // {
-        //     if (!itemsInInventory.ContainsKey(item.Key))
-        //     {
-        //         inventoryWindow.Remove(item.Value);
-        //         itemsToBeRemoved.Add(item.Key);
-        //     }
-        // }
+        foreach (var item in itemSlot)
+        {
+            if (!itemsInInventory.ContainsKey(item.Key))
+            {
+                inventoryWindow.Remove(item.Value);
+                itemsToBeRemoved.Add(item.Key);
+            }
+        }
 
         foreach (var itemSo in itemsToBeRemoved)
         {
@@ -500,9 +508,6 @@ public class UIToolkitManager : MonoBehaviour
         Debug.Log(topBarVillager);
         
         topBar.Q<TextElement>("VillagerLog").text = Level.GetVillagerLog(villager);
-        // scrollView.scrollOffset = scrollView.contentContainer.layout.max - scrollView.contentViewport.layout.size;
-
-        // topBar.Q<ScrollView>().scrollOffset = topBar.Q<ScrollView>().contentContainer.layout.max  - topBar.Q<ScrollView>().contentViewport.layout.size;
         topBar.Q<ScrollView>().contentContainer.RegisterCallback<GeometryChangedEvent>(evt =>
         {
             topBar.Q<ScrollView>().verticalScroller.value = topBar.Q<ScrollView>().verticalScroller.highValue;
@@ -551,7 +556,7 @@ public class UIToolkitManager : MonoBehaviour
     {
         _audioSource.clip = audio;
         _audioSource.Play();
-   }
+    }
     
     public bool IsPointerOverUI ( Vector2 screenPos )
     {

@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 public class SettingsUIManager : MonoBehaviour
 {
     // Core
+    public static SettingsUIManager Instance;
     private UIDocument uiDocument;
     private VisualElement root;
     private GameManager _gameManager;
@@ -23,6 +24,15 @@ public class SettingsUIManager : MonoBehaviour
 
     private void Awake()
     {
+        if (!Instance)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
+        
         if (!_gameManager)
         {
             _gameManager = GameManager.Instance;
@@ -62,5 +72,12 @@ public class SettingsUIManager : MonoBehaviour
         {
             audioMixer.SetFloat("UI", Mathf.Log10(evt.newValue)*20);
         });
+        root.AddToClassList("SettingsPanelDown");
     }
+
+    public void OpenSettingsUI()
+    {
+        root.AddToClassList("SettingsPanelUp");
+        root.RemoveFromClassList("SettingsPanelDown");
+    } 
 }

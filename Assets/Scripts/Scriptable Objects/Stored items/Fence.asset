@@ -14,8 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8799760028346810535, guid: 04c88e53193d90f498567a36e76f34b3, type: 3}
   objectName: WoodFence
-  maxSize: 20
   uiSprite: {fileID: 21300000, guid: dc1d52b0239c9dc4bad3cc2d9bc4ff28, type: 3}
-  pickupSound: {fileID: 0}
-  useSound: {fileID: 0}
   canBePlaced: 1
+  craftingRecipe:
+  - itemSO: {fileID: 11400000, guid: 950d01fadf8da244692cceeaffa3fcda, type: 2}
+    storageLocation: {x: 0, y: 0, z: 0}
+    go: {fileID: 0}
+    amount: 2
+  itemDescrition: 
+  assignRole: 0
+  levelUnlocked: 0

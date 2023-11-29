@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1558265980526532, guid: 1fbdd99ef1d1e2b4dac24a8d8ef04741, type: 3}
   objectName: Campfire
-  uiSprite: {fileID: 21300000, guid: e6284f2e8893e094aa67fda3d9bc743f, type: 3}
+  uiSprite: {fileID: 21300000, guid: d7bde3e441be46745b975260794b2c08, type: 3}
   canBePlaced: 0
   craftingRecipe:
   - itemSO: {fileID: 11400000, guid: 950d01fadf8da244692cceeaffa3fcda, type: 2}
