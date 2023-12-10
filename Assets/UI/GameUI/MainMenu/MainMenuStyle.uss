@@ -3,7 +3,7 @@
     height: 50%;
     font-size: 50px;
     margin-top: 0;
-    background-image: url('project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&guid=17ffd138921d55b4386a068c711508d3&type=3#uipack_rpg_vector');
+    background-image: url('project://database/Assets/Images/Button.png?fileID=2800000&guid=8fe0c4b41e25470428660aa2cc6b41af&type=3#Button');
     -unity-background-image-tint-color: rgb(255, 255, 255);
     align-self: center;
     background-color: rgba(0, 0, 0, 0);
@@ -14,6 +14,12 @@
     border-bottom-color: rgba(0, 0, 0, 0);
     color: rgb(0, 0, 0);
     -unity-text-align: middle-center;
+    -unity-slice-scale: 0.4px;
+    -unity-slice-left: 433;
+    -unity-slice-top: 0;
+    -unity-slice-right: 433;
+    -unity-slice-bottom: 0;
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
 }
 
 .MainMenuButton:hover {
@@ -26,6 +32,8 @@
     border-right-color: rgba(0, 0, 0, 0);
     border-top-color: rgba(0, 0, 0, 0);
     border-bottom-color: rgba(0, 0, 0, 0);
+    -unity-text-outline-width: 0;
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
 }
 
 .MainMenuTitleImage {

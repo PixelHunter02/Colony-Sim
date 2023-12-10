@@ -57,10 +57,10 @@ public class Villager : MonoBehaviour, IInteractable
                 case Roles.Fighter:
                     break;
                 case Roles.Lumberjack:
-                    if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillagerManagementTutorial)
-                    {
-                        _gameManager.level.tutorialManager.TutorialStage = TutorialStage.BuildingTutorial;
-                    }
+                    // if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillagerManagementTutorial)
+                    // {
+                    //     _gameManager.level.tutorialManager.TutorialStage = TutorialStage.BuildingTutorial;
+                    // }
                     break;
                 case Roles.Miner:
                     break;
@@ -171,6 +171,10 @@ public class Villager : MonoBehaviour, IInteractable
     {
         if (SceneManager.GetActiveScene().name.Equals("GameScene"))
         {
+            if (!VillagerManager.villagers.Contains(this))
+            {
+                VillagerManager.AddVillagerToList(this);
+            }
             objInTriggerZone = gameObject.GetComponentInChildren<TriggerZone>().objInTriggerZone;
             objInAwarenessZone = gameObject.GetComponentInChildren<AwarenessZone>().objInAwarenessZone;
             
@@ -250,16 +254,16 @@ public class Villager : MonoBehaviour, IInteractable
             while(villagerQueue.Count > 0)
             {
                 yield return StartCoroutine(villagerQueue.Dequeue());
-                // Debug.Log($"Taks {villagerQueue.Count} Completed");
+                Debug.Log($"Taks {villagerQueue.Count} Completed");
                 yield return null;
             }
     
-            // if (villagerQueue.Count == 0)
-            // {
-            //     // Debug.Log(_villagerStats.VillagerName + "Started Walking Randomly");
-            //     villagerQueue.Enqueue(RandomWalk(3));
-            //     yield return null;
-            // }
+            if (villagerQueue.Count == 0)
+            {
+                Debug.Log(_villagerStats.VillagerName + "Started Walking Randomly");
+                villagerQueue.Enqueue(RandomWalk(3));
+                yield return null;
+            }
             yield return null;
         }
     }
@@ -373,6 +377,8 @@ public class Villager : MonoBehaviour, IInteractable
     {
         villager.agent.isStopped = value;
     }
+    
+    public static event Action TutorialStageTwo;
 
     public void OnInteraction()
     {
@@ -394,15 +400,9 @@ public class Villager : MonoBehaviour, IInteractable
             return; 
         }
         
-        // VillagerStats.CurrentEmotion = Emotion.None;
-        var tutorialManager = _gameManager.level.tutorialManager;
-        if (tutorialManager.TutorialStage == TutorialStage.KeyboardMovementTutorial)
-        {
-            tutorialManager.wKey.transform.DOScale(Vector3.one,0.5f);
-            tutorialManager.sKey.transform.DOScale(Vector3.one, 0.5f);
-            tutorialManager.aKey.transform.DOScale(Vector3.one, 0.5f);
-            tutorialManager.dKey.transform.DOScale(Vector3.one, 0.5f);
-        }
+        
+        
+        
     }
 
     public bool CanInteract()
@@ -431,7 +431,7 @@ public class Villager : MonoBehaviour, IInteractable
         yield return StartCoroutine(Tasks.WalkToLocation(this, newPosition));
 
         CurrentState = VillagerStates.Idle;
-        yield return new WaitForSeconds(UnityEngine.Random.Range(0.1f, 1f));
+        yield return new WaitForSeconds(UnityEngine.Random.Range(3f, 5f));
 
     }
 

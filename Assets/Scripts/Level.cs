@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Cinemachine;
 using TMPro;
@@ -148,6 +149,9 @@ public class Level : MonoBehaviour
     public NavMeshSurface monsterNavMesh;
     
     private List<Roles> craftingRoles;
+    
+    public static event Action tutorialStageOne;
+
 
     private void Awake()
     {
@@ -174,9 +178,8 @@ public class Level : MonoBehaviour
         }
 
         _buildingToolbarButtons = new Dictionary<StoredItemSO, GameObject>();
-        tutorialManager.TutorialStage = TutorialStage.KeyboardMovementTutorial;
+        // tutorialManager.TutorialStage = TutorialStage.KeyboardMovementTutorial;
         gridMaterial.SetFloat("_Alpha", 0);
-
     }
 
     private void OnEnable()
@@ -189,11 +192,18 @@ public class Level : MonoBehaviour
             AddToVillagerLogAction -= ShowVillagerInformationOnUpdate;
     }
 
-    // private void Start()
-    // {
-    //     _gameManager.inputManager.playerInputActions.Player.Escape.started += Pause;
-    // }
-    //
+    private void Start()
+    {
+        // _gameManager.inputManager.playerInputActions.Player.Escape.started += Pause;
+        StartCoroutine(DelayedStart());
+    }
+
+    private IEnumerator DelayedStart()
+    {
+        yield return new WaitForSeconds(0.2f);
+        tutorialStageOne?.Invoke();
+    }
+    
     // private void Pause(InputAction.CallbackContext context)
     // {
     //     if (_gameManager.inputManager.EscapePressed() && GameState != GameState.Playing)
@@ -286,6 +296,7 @@ public class Level : MonoBehaviour
     {
         var storedLog = villagerLog.GetValueOrDefault(villager, String.Empty);
         StringBuilder log = new StringBuilder(storedLog);
+        log.Append(Environment.NewLine);
         log.Append(Environment.NewLine);
         log.Append(newLog);
         villagerLog[villager] = log.ToString();
@@ -426,6 +437,14 @@ public class Level : MonoBehaviour
 
     public static  string GetVillagerLog(Villager villager)
     {
-        return villagerLog[villager];
+        if (villagerLog.ContainsKey(villager))
+        {
+            return villagerLog[villager];
+        }
+        else
+        {
+            villagerLog.TryAdd(villager, String.Empty);
+            return villagerLog[villager];
+        }
     }
 }

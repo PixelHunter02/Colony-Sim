@@ -4,21 +4,21 @@
     <ui:VisualElement name="CharacterCreation" picking-mode="Ignore" class="CharacterCreationMenu CharacterCreationMenuHidden">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: auto; flex-direction: row;">
             <ui:VisualElement name="Left" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; flex-direction: column; justify-content: space-around; align-self: stretch; padding-left: 6%;">
-                <ui:Button text="&lt;" display-tooltip-when-elided="true" name="LeftHairButton" class="CCButton" />
-                <ui:Button text="&lt;" display-tooltip-when-elided="true" name="LeftBodyButton" class="CCButton" style="min-width: auto; min-height: auto;" />
+                <ui:Button display-tooltip-when-elided="true" name="LeftHairButton" class="CCButton" style="background-color: rgba(188, 188, 188, 0); background-image: url(&apos;project://database/Assets/Images/CC_Arrow_Left.png?fileID=2800000&amp;guid=e0ae2979c9a70a849b3a5860bc052725&amp;type=3#CC_Arrow_Left&apos;); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
+                <ui:Button display-tooltip-when-elided="true" name="LeftBodyButton" class="CCButton" style="min-width: auto; min-height: auto; background-color: rgba(188, 188, 188, 0); background-image: url(&apos;project://database/Assets/Images/CC_Arrow_Left.png?fileID=2800000&amp;guid=e0ae2979c9a70a849b3a5860bc052725&amp;type=3#CC_Arrow_Left&apos;); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
             </ui:VisualElement>
             <ui:VisualElement name="Right" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-end; justify-content: space-around; margin-left: 0; padding-right: 131px;">
-                <ui:Button text="&gt;" display-tooltip-when-elided="true" name="RightHairButton" class="CCButton" />
-                <ui:Button text="&gt;" display-tooltip-when-elided="true" name="RightBodyButton" class="CCButton" style="min-width: auto; min-height: auto;" />
+                <ui:Button display-tooltip-when-elided="true" name="RightHairButton" class="CCButton" style="background-image: url(&apos;project://database/Assets/Images/Arrow.png?fileID=2800000&amp;guid=9988a89605bb967418fd7dc22485b8c5&amp;type=3#Arrow&apos;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
+                <ui:Button display-tooltip-when-elided="true" name="RightBodyButton" class="CCButton" style="min-width: auto; min-height: auto; background-image: url(&apos;project://database/Assets/Images/Arrow.png?fileID=2800000&amp;guid=9988a89605bb967418fd7dc22485b8c5&amp;type=3#Arrow&apos;); background-color: rgba(188, 188, 188, 0); border-left-color: rgba(149, 149, 149, 0); border-right-color: rgba(149, 149, 149, 0); border-top-color: rgba(149, 149, 149, 0); border-bottom-color: rgba(149, 149, 149, 0);" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 10%; justify-content: flex-end;">
-            <ui:Button text="Begin Your Journey!" display-tooltip-when-elided="true" name="BeginJourneyButton" style="height: 10%; width: 60%; justify-content: flex-start; align-self: center; margin-bottom: 89px; font-size: 46px;" />
+            <ui:Button text="Begin Your Journey!" display-tooltip-when-elided="true" name="BeginJourneyButton" class="MainMenuButton" style="height: 10%; width: 60%; justify-content: flex-start; align-self: center; margin-bottom: 89px; font-size: 46px; background-image: url(&apos;project://database/Assets/Images/Button.png?fileID=2800000&amp;guid=8fe0c4b41e25470428660aa2cc6b41af&amp;type=3#Button&apos;); -unity-slice-left: 433; -unity-slice-top: 0; -unity-slice-right: 433; -unity-slice-bottom: 0; -unity-slice-scale: 0.4px;" />
         </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="MainMenu" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%; position: absolute;">
         <ui:VisualElement name="Title" class="TitleImageShown TitleImageHidden">
-            <ui:VisualElement name="TItleImage" class="MainMenuTitleImage" style="background-image: url(&apos;project://database/Assets/Images/A%20Colonys%20Journey%20Main%20Menu.png?fileID=2800000&amp;guid=c6a60f35791e81f49bf27434f65c6d60&amp;type=3#A Colonys Journey Main Menu&apos;);" />
+            <ui:VisualElement name="TItleImage" class="MainMenuTitleImage" style="background-image: url(&apos;project://database/Assets/Images/MainMenu.png?fileID=2800000&amp;guid=f5e5ff92717066a4ca8a38ff3c9a4d4b&amp;type=3#MainMenu&apos;); margin-top: 0;" />
         </ui:VisualElement>
         <ui:VisualElement name="Buttons" picking-mode="Ignore" class="ButtonsHidden" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 20%; width: 100%; translate: 0 0;">
             <ui:VisualElement name="ButtonContainer" picking-mode="Ignore" class="ButtonsShown ButtonsHidden" style="display: flex;">

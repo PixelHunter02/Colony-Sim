@@ -23,6 +23,9 @@ public class HarvestableObject : MonoBehaviour, IInteractable
         _gameManager = GameManager.Instance;
         uIToolkitManager = GameObject.Find("UIToolkit").GetComponent<UIToolkitManager>();
     }
+    
+    public static event Action TutorialStageEight;
+
 
     public void OnInteraction()
     {
@@ -36,6 +39,8 @@ public class HarvestableObject : MonoBehaviour, IInteractable
             return; 
         }
         
+        TutorialStageEight?.Invoke();
+
         VillagerManager.TryGetVillagerByRole(harvestableObject.canInteract, out Villager villager);
         
         Debug.Log(villager.VillagerStats.VillagerName);

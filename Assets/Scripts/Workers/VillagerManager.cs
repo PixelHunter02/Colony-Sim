@@ -113,6 +113,7 @@ public class VillagerManager : MonoBehaviour
             {
                 if (villager.CurrentState is VillagerStates.Idle && !villager.ignoreQueue)
                 {
+                    // if(villager.)
                     villagerToReturn = villager;
                 }
             }

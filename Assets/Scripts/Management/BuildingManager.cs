@@ -91,6 +91,8 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+    public static event Action TutorialStageNine;
+
     private void PlaceBuilding(InputAction.CallbackContext context)
     {
         var mousePosition = _gameManager.inputManager.GetMouseToWorldPosition();
@@ -107,6 +109,7 @@ public class BuildingManager : MonoBehaviour
             // _gameManager.taskHandler.queuedTasks.Add(_gameManager.taskHandler.TaskToAssign(placedItem.GetComponent<BuildStats>()));
             Coroutine cr = StartCoroutine(_gameManager.taskHandler.TaskToAssign(placedItem.GetComponent<BuildStats>()));
             _gameManager.taskHandler.queuedTasks.Enqueue(cr);
+            TutorialStageNine?.Invoke();
         }
     }
 

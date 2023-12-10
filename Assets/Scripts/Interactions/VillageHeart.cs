@@ -95,10 +95,10 @@ public class VillageHeart : MonoBehaviour,IInteractable
         }
 
         Debug.Log("You Interacted with the village heart!");
-        if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillageHeartTutorial)
-        {
-            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.VillagerManagementTutorial;
-        }
+        // if (_gameManager.level.tutorialManager.TutorialStage is TutorialStage.VillageHeartTutorial)
+        // {
+        //     _gameManager.level.tutorialManager.TutorialStage = TutorialStage.VillagerManagementTutorial;
+        // }
         
         // Debug.Log(uIToolkitManager);
         uIToolkitManager.OpenVillageHeart();

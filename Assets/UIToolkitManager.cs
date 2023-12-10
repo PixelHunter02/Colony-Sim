@@ -186,6 +186,9 @@ public class UIToolkitManager : MonoBehaviour
             // Assign the render texture.
             template.Q<VisualElement>("Portrait").style.backgroundImage = new StyleBackground(Background.FromRenderTexture(villager._portraitRenderTexture));
             delay += 0.2f;
+            
+            // Set the Name
+            template.Q<TextElement>("NameTag").text = villager.VillagerStats.VillagerName;
         }
     }
 
@@ -228,6 +231,8 @@ public class UIToolkitManager : MonoBehaviour
         template.RemoveFromClassList("PanelHidden");
     }
     
+    public static event Action TutorialStageSeven;
+
     private IEnumerator RoleChanged(int value, Villager villager)
     {
         foreach (var item in StorageManager.itemList)
@@ -236,6 +241,7 @@ public class UIToolkitManager : MonoBehaviour
             {
                 StorageManager.EmptyStockpileSpace(item);
                 villager.CurrentRole = (Roles)value;
+                TutorialStageSeven?.Invoke();
                 yield break;
             }
         }
@@ -330,15 +336,13 @@ public class UIToolkitManager : MonoBehaviour
 
     #region Inventory
 
+    public static event Action TutorialStageFive;
     private void OnInventoryButtonClicked(ClickEvent clickEvent)
     {
         OpenInventory();
         topBar.RemoveFromClassList("TopBarDown");
         
-        if (gameManager.level.tutorialManager.TutorialStage == TutorialStage.InventoryTutorial)
-        {
-            gameManager.level.tutorialManager.TutorialStage = TutorialStage.CraftingTutorial;
-        }
+        TutorialStageFive?.Invoke();
     }
 
     private void OpenInventory()
@@ -402,14 +406,14 @@ public class UIToolkitManager : MonoBehaviour
         }
         
         List<StoredItemSO> itemsToBeRemoved = new List<StoredItemSO>();
-        foreach (var item in itemSlot)
-        {
-            if (!itemsInInventory.ContainsKey(item.Key))
-            {
-                inventoryWindow.Remove(item.Value);
-                itemsToBeRemoved.Add(item.Key);
-            }
-        }
+        // foreach (var item in itemSlot)
+        // {
+        //     if (!itemsInInventory.ContainsKey(item.Key))
+        //     {
+        //         inventoryWindow.Remove(item.Value);
+        //         itemsToBeRemoved.Add(item.Key);
+        //     }
+        // }
 
         foreach (var itemSo in itemsToBeRemoved)
         {
@@ -435,7 +439,7 @@ public class UIToolkitManager : MonoBehaviour
     #endregion
 
     #region Stockpile
-
+    
     private void OnStockpileClicked(ClickEvent clickEvent)
     {
         gameManager.level.StockpileModeEnabled();

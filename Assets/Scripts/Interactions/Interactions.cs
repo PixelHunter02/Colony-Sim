@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -219,6 +220,7 @@ public class Interactions : MonoBehaviour
         }
     }
     
+    public static event Action TutorialStageFour;
     private void PlaceStockpile()
     {
         if (!_drawingStockpile) 
@@ -229,10 +231,11 @@ public class Interactions : MonoBehaviour
             return;
         }
      
-        if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.StockpileTutorial)
-        {
-            _gameManager.level.tutorialManager.TutorialStage = TutorialStage.InventoryTutorial;
-        }
+        // if (_gameManager.level.tutorialManager.TutorialStage == TutorialStage.StockpileTutorial)
+        // {
+        //     _gameManager.level.tutorialManager.TutorialStage = TutorialStage.InventoryTutorial;
+        // }
+        TutorialStageFour?.Invoke();
 
         _gameManager.level.stockpileMode = false;
         _drawingStockpile = false;
