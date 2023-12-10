@@ -131,6 +131,7 @@ public class CraftingManager : MonoBehaviour
         _gameManager.storageManager.AddToStorage(itemToAdd);
         
         //PLAY CRAFT ANIMATION
+        assignedVillager.CurrentState = VillagerStates.Crafting;
         yield return new WaitForSeconds(3f);
         
         yield return StartCoroutine(PlaceCraftedItem(assignedVillager, itemToAdd));

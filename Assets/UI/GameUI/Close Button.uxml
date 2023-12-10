@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/GameUI/CloseButton.uss?fileID=7433441132597879392&amp;guid=44c8bf6a337441f48ad2bcf95e7ab498&amp;type=3#CloseButton" />
-    <ui:Button display-tooltip-when-elided="true" class="Button" />
+    <ui:Button display-tooltip-when-elided="true" class="Button" style="background-image: url(&apos;project://database/Assets/Images/CJ_Close%202.png?fileID=2800000&amp;guid=4d8716ebd6b7247489776a39f6cc82c5&amp;type=3#CJ_Close 2&apos;);" />
 </ui:UXML>

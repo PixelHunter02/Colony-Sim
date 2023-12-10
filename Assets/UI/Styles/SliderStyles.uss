@@ -3,10 +3,10 @@ Slider.Settings {
     flex-direction: row;
     align-self: stretch;
     justify-content: space-between;
-    border-left-color: rgb(114, 85, 55);
-    border-right-color: rgb(114, 85, 55);
-    border-top-color: rgb(114, 85, 55);
-    border-bottom-color: rgb(114, 85, 55);
+    border-left-color: rgba(114, 85, 55, 0);
+    border-right-color: rgba(114, 85, 55, 0);
+    border-top-color: rgba(114, 85, 55, 0);
+    border-bottom-color: rgba(114, 85, 55, 0);
     border-left-width: 2px;
     border-right-width: 2px;
     border-top-width: 2px;
@@ -18,8 +18,14 @@ Slider.Settings {
     padding-right: 23px;
     padding-top: 22px;
     padding-bottom: 23px;
-    margin-left: 2px;
-    margin-right: 4px;
+    margin-left: 15px;
+    margin-right: 0;
+    background-image: url('project://database/Assets/Images/Button.png?fileID=2800000&guid=8fe0c4b41e25470428660aa2cc6b41af&type=3#Button');
+    -unity-slice-left: 244;
+    -unity-slice-top: 24;
+    -unity-slice-right: 244;
+    -unity-slice-bottom: 244;
+    -unity-slice-scale: 0.4px;
 }
 
 Label.Settings {
@@ -30,8 +36,9 @@ Label.Settings {
     border-right-width: 2px;
     border-top-width: 2px;
     border-bottom-width: 2px;
-    padding-top: 26px;
     width: 100%;
+    padding-top: 13px;
+    padding-bottom: 0;
 }
 
 .Settings {

@@ -38,9 +38,7 @@ public class InputManager : MonoBehaviour
     {
         // Activate Input Actions
         playerInputActions = new PlayerInputActions();
-        playerInputActions.Player.Enable(); 
         playerInputActions.UI.Enable();  
-        playerInputActions.Touch.Enable();
 
 
         // Get reference to Game Manager
@@ -115,7 +113,7 @@ public class InputManager : MonoBehaviour
     public Vector3 GetMouseToWorldPosition()
     {
         var ray = _gameManager.mainCamera.ScreenPointToRay(playerInputActions.UI.Point.ReadValue<Vector2>());
-        if (Physics.Raycast(ray, out var hit, 1000, _layerMask) && !overUI) 
+        if (Physics.Raycast(ray, out var hit, 1000, _layerMask) && !overUI && hit.transform.gameObject.layer != 4) 
             return hit.point;
 
         return Vector3.zero;  

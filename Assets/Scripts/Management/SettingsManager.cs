@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Serialization;
 
 public class SettingsManager : MonoBehaviour
 {
@@ -17,7 +18,10 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     public bool invertY;
     public bool invertX;
-    public float rotationSpeed = 10;
+    public static float rotationSpeedModifier = 1;
+    public static float zoomSpeedModifier = 1;
+    public static float mousePanSpeedModifier = 1;
+    public static float keyboardMoveSpeedModifier = 1;
 
     public int CameraXModifier()
     {

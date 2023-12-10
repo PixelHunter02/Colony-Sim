@@ -113,7 +113,10 @@ public class Villager : MonoBehaviour, IInteractable
                     break;
                 case VillagerStates.AssigningRole:
                     _animator.Play("Spin");
-                break;
+                    break;
+                case VillagerStates.Crafting:
+                    _animator.Play("Craft");
+                    break;
             }
         }
     }
@@ -463,7 +466,8 @@ public enum VillagerStates
     Walking,
     Pickup,
     Fighting,
-    AssigningRole
+    AssigningRole,
+    Crafting
 }
 public enum Model
 {

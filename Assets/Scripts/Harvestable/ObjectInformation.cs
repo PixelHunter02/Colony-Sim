@@ -34,7 +34,7 @@ public class ObjectInformation : MonoBehaviour, IStorable
     {
         AssignStorage();
 
-        VillagerManager.TryGetVillagerByRole(out Villager villager);
+        VillagerManager.TryGetVillagerByRole(out Villager villager, transform.position);
         IEnumerator cr = Tasks.StoreItem(villager, this);
         Debug.Log(villager);
         villager.villagerQueue.Enqueue(cr);

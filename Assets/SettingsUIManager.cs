@@ -21,6 +21,11 @@ public class SettingsUIManager : MonoBehaviour
     private Slider backgroundMusicSldier;
     private Slider uiVolumeSlider;
     public AudioMixer audioMixer;
+    
+    //Camera Controls
+    private Slider mousePanSpeedSlider;
+    private Slider keyboardPanSpeedSlider;    
+    private Slider rotationSpeedSlider;
 
     private void Awake()
     {
@@ -41,6 +46,7 @@ public class SettingsUIManager : MonoBehaviour
 
     private void Start()
     {
+        //Core References
         uiDocument = GetComponent<UIDocument>();
         root = uiDocument.rootVisualElement;
         root.Q("CloseButton").Q<Button>().RegisterCallback<ClickEvent>(evt =>
@@ -48,36 +54,83 @@ public class SettingsUIManager : MonoBehaviour
             root.AddToClassList("SettingsPanelDown");
         });
         
+        SetUpVolumeSettings();
+        SetUpCameraSettings();
+        
+        root.AddToClassList("SettingsPanelDown");
+    }
+    
+    // SetupVolume
+    public void SetUpVolumeSettings()
+    {
         // Volume
         masterVolumeSlider = root.Q<Slider>("MasterVolumeSlider");
+        audioMixer.GetFloat("Master", out float masterValue);
+        masterVolumeSlider.SetValueWithoutNotify(Mathf.Pow(10, (masterValue / 20)));
         masterVolumeSlider.RegisterCallback<ChangeEvent<float>>(evt =>
         {
             audioMixer.SetFloat("Master", Mathf.Log10(evt.newValue)*20);
         });
         
         backgroundMusicSldier = root.Q<Slider>("MusicVolumeSlider");
+        audioMixer.GetFloat("Music", out float musicValue);
+        backgroundMusicSldier.SetValueWithoutNotify(Mathf.Pow(10, (musicValue / 20)));
         backgroundMusicSldier.RegisterCallback<ChangeEvent<float>>(evt =>
         {
             audioMixer.SetFloat("Music", Mathf.Log10(evt.newValue)*20);
         });
         
         villagerSlider = root.Q<Slider>("VillagerVolumeSlider");
+        audioMixer.GetFloat("Villager", out float villagerValue);
+        villagerSlider.SetValueWithoutNotify(Mathf.Pow(10, (villagerValue / 20)));
         villagerSlider.RegisterCallback<ChangeEvent<float>>(evt =>
         {
             audioMixer.SetFloat("Villager", Mathf.Log10(evt.newValue)*20);
         });
         
         uiVolumeSlider = root.Q<Slider>("UIVolumeSlider");
+        audioMixer.GetFloat("UI", out float uiValue);
+        uiVolumeSlider.SetValueWithoutNotify(Mathf.Pow(10, (uiValue / 20)));
         uiVolumeSlider.RegisterCallback<ChangeEvent<float>>(evt =>
         {
             audioMixer.SetFloat("UI", Mathf.Log10(evt.newValue)*20);
         });
-        root.AddToClassList("SettingsPanelDown");
     }
 
+    // Setup Camera Settings
+    public void SetUpCameraSettings()
+    {
+        mousePanSpeedSlider = root.Q<Slider>("MousePanSpeedSlider");
+        keyboardPanSpeedSlider = root.Q<Slider>("KeyboardMoveSpeedSlider");
+        rotationSpeedSlider = root.Q<Slider>("CameraRotateSlider");
+        
+        mousePanSpeedSlider.SetValueWithoutNotify(SettingsManager.mousePanSpeedModifier);
+        mousePanSpeedSlider.RegisterCallback<ChangeEvent<float>>(evt =>
+        {
+            SettingsManager.mousePanSpeedModifier = evt.newValue;
+        });
+        
+        keyboardPanSpeedSlider.SetValueWithoutNotify(SettingsManager.keyboardMoveSpeedModifier);
+        keyboardPanSpeedSlider.RegisterCallback<ChangeEvent<float>>(evt =>
+        {
+            SettingsManager.keyboardMoveSpeedModifier = evt.newValue;
+        });
+        
+        rotationSpeedSlider.SetValueWithoutNotify(SettingsManager.rotationSpeedModifier);
+        rotationSpeedSlider.RegisterCallback<ChangeEvent<float>>(evt =>
+        {
+            SettingsManager.rotationSpeedModifier = evt.newValue;
+        });
+    }
     public void OpenSettingsUI()
     {
         root.AddToClassList("SettingsPanelUp");
         root.RemoveFromClassList("SettingsPanelDown");
+    } 
+    
+    public void CloseSettingsUI()
+    {
+        root.AddToClassList("SettingsPanelDown");
+        root.RemoveFromClassList("SettingsPanelUp");
     } 
 }

@@ -113,7 +113,7 @@ public class UIToolkitManager : MonoBehaviour
         });
 
         topRoleSelectField = topBar.Q<EnumField>("RoleSelector");
-        topRoleSelectField.RegisterCallback<ChangeEvent<Enum>>(evt =>RoleSelectTopBar(evt));
+        topRoleSelectField.RegisterCallback<ChangeEvent<Enum>>(evt => RoleSelectTopBar(evt));
         
         // Settings UI
         settingsUIManager = SettingsUIManager.Instance;
@@ -235,15 +235,24 @@ public class UIToolkitManager : MonoBehaviour
 
     private IEnumerator RoleChanged(int value, Villager villager)
     {
+        var originalRole = villager.CurrentRole;
         foreach (var item in StorageManager.itemList)
         {
             if ((int)item.itemSO.assignRole == value)
             {
+                // Debug.Log("Setting Role");
                 StorageManager.EmptyStockpileSpace(item);
                 villager.CurrentRole = (Roles)value;
+                
                 TutorialStageSeven?.Invoke();
                 yield break;
             }
+        }
+
+        topRoleSelectField.SetValueWithoutNotify(originalRole);
+        if (villagerInformation.ContainsKey(villager))
+        {
+            villagerInformation[villager].Q<EnumField>().value = originalRole;
         }
     }
     #endregion
@@ -509,7 +518,6 @@ public class UIToolkitManager : MonoBehaviour
         topBar.Q<EnumField>("RoleSelector").Init(villager.CurrentRole);
 
         topBarVillager = villager;
-        Debug.Log(topBarVillager);
         
         topBar.Q<TextElement>("VillagerLog").text = Level.GetVillagerLog(villager);
         topBar.Q<ScrollView>().contentContainer.RegisterCallback<GeometryChangedEvent>(evt =>
@@ -521,8 +529,9 @@ public class UIToolkitManager : MonoBehaviour
     public void RoleSelectTopBar(ChangeEvent<Enum>evt)
     {
         Enum.TryParse(evt.newValue.ToString(), out Roles role);
-        topBarVillager.CurrentRole = role;
-        topRoleSelectField.SetValueWithoutNotify(evt.newValue);
+        // topBarVillager.CurrentRole = role;
+        StartCoroutine(RoleChanged((int)role, topBarVillager));
+        // topRoleSelectField.SetValueWithoutNotify(evt.newValue);
     }
 
     #endregion

@@ -129,7 +129,56 @@ public class VillagerManager : MonoBehaviour
         value = villagerToReturn;
         return villagerToReturn;
     }
+    
+    public static bool TryGetVillagerByRole(out Villager value, Vector3 movePosition)
+    {
+        Villager villagerToReturn = null;
 
+        foreach (var villager in GetVillagers())
+        {
+            if (villagerToReturn)
+            {
+                if (!villager.ignoreQueue && TaskHandler.CanReachPosition(movePosition, villager.agent))
+                {
+                    villagerToReturn = villager;
+                }
+            }
+            else if (!villager.ignoreQueue && TaskHandler.CanReachPosition(movePosition, villager.agent))
+            {
+                villagerToReturn = villager;
+            }
+        }
+        value = villagerToReturn;
+        return villagerToReturn;
+    }
+
+    public static bool TryGetVillagerByRole(List<Roles> roles, out Villager value, Vector3 movePosition)
+    {
+        Villager villagerToReturn = null;
+        foreach (var role in roles)
+        {
+            foreach (var villager in GetVillagers())
+            {
+                if (villagerToReturn)
+                {
+                    if (villager.CurrentRole == role && !villager.ignoreQueue || villager.CurrentRole == Roles.Leader)
+                    {
+                        if (TaskHandler.CanReachPosition(movePosition, villager.agent))
+                        {
+                            villagerToReturn = villager;
+                        }
+                    }
+                }
+                else if (villager.CurrentRole == role && !villager.ignoreQueue || villager.CurrentRole == Roles.Leader && TaskHandler.CanReachPosition(movePosition, villager.agent))
+                {
+                    villagerToReturn = villager;
+                }
+            }
+        }
+        value = villagerToReturn;
+        return villagerToReturn;
+    }
+    
     public void GenerateNewVillagerStats(Villager villager)
     {
             villager.VillagerStats.Craft = Random.Range(1, 7);

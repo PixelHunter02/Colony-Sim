@@ -29,11 +29,6 @@ public class HarvestableObject : MonoBehaviour, IInteractable
 
     public void OnInteraction()
     {
-        // if (_gameManager.IsOverUI())
-        // {
-        //     return;
-        // }
-
         if (uIToolkitManager.IsPointerOverUI(_gameManager.inputManager.playerInputActions.UI.Point.ReadValue<Vector2>()))
         {
             return; 
@@ -41,7 +36,7 @@ public class HarvestableObject : MonoBehaviour, IInteractable
         
         TutorialStageEight?.Invoke();
 
-        VillagerManager.TryGetVillagerByRole(harvestableObject.canInteract, out Villager villager);
+        VillagerManager.TryGetVillagerByRole(harvestableObject.canInteract, out Villager villager, transform.position);
         
         Debug.Log(villager.VillagerStats.VillagerName);
         IEnumerator cr = _gameManager.taskHandler.RunTaskCR(villager, this);

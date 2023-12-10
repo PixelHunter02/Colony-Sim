@@ -12,6 +12,8 @@ public class MainMenuUIScript : MonoBehaviour
     VisualElement root;
     private string gameScene = "GameScene";
 
+    UIDocument settingsUI;
+
     [SerializeField] private Villager villager;
     public Material[] hairColours;
     private int currentHairColourIndex;
@@ -97,6 +99,8 @@ public class MainMenuUIScript : MonoBehaviour
     }
     private void OnSettingsButtonPress(ClickEvent evt)
     {
+        var settingsUIManager = SettingsUIManager.Instance;
+        settingsUIManager.OpenSettingsUI();
         print("settings button pressed");
     }
     private void OnExitButtonPress(ClickEvent evt)

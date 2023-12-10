@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SG_Tasks;
+using UnityEngine.AI;
 
 public class TaskHandler : MonoBehaviour
 {
@@ -22,13 +23,14 @@ public class TaskHandler : MonoBehaviour
 
     public IEnumerator TaskToAssign(BuildStats task)
     {
-        if (VillagerManager.TryGetVillagerByRole(out Villager villager))
+        if (VillagerManager.TryGetVillagerByRole(out Villager villager,task.transform.position))
         {
             yield return StartCoroutine(RunTaskCR(villager, task));
             queuedTasks.Dequeue();
         }
         else
         {
+            Debug.Log("Unable To Find Villager, Retrying in 3 Seconds.");
             yield return new WaitForSeconds(3f);
             StartCoroutine(TaskToAssign(task));
         }
@@ -165,5 +167,27 @@ public class TaskHandler : MonoBehaviour
         yield return null;
     }
     
+    public static bool CanReachPosition(Vector3 position, NavMeshAgent agent)
+    {
+        var path = new NavMeshPath();
+        agent.CalculatePath(position, path);
+        if (path.status == NavMeshPathStatus.PathComplete)
+        {
+            Debug.Log($"{agent.name} will be able to reach {position}.");
+            return true;
+        }
+        if (path.status == NavMeshPathStatus.PathPartial)
+        {
+            Debug.Log($"{agent.name} will only be able to move partway to {position}.");
+            return false;
+        }
+        if (path.status == NavMeshPathStatus.PathInvalid)
+        {
+            Debug.Log($"There is no valid path for {agent.name} to reach {position}.");
+            return false;
+        }
+
+        return false;
+    }
 }
 

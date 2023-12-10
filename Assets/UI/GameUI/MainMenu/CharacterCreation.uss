@@ -8,6 +8,8 @@
     transition-duration: 0.1s;
     opacity: 1;
     transition-delay: 0s;
+    -unity-font: url('project://database/Assets/Fonts/BOBCAT.TTF?fileID=12800000&guid=c31f514c75b1ba042b6ba876816f7303&type=3#BOBCAT');
+    -unity-font-definition: initial;
 }
 
 .CCButton:hover {

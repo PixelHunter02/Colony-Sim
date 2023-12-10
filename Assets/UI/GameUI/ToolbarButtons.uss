@@ -35,7 +35,7 @@
 .PanelBase {
     flex-grow: 1;
     background-color: rgba(0, 0, 0, 0);
-    background-image: url('project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&guid=17ffd138921d55b4386a068c711508d3&type=3#uipack_rpg_vector');
+    background-image: url('project://database/Assets/Images/Button.png?fileID=2800000&guid=8fe0c4b41e25470428660aa2cc6b41af&type=3#Button');
     -unity-slice-left: 343;
     -unity-slice-top: 343;
     -unity-slice-right: 343;
@@ -48,6 +48,10 @@
     justify-content: center;
     align-self: center;
     flex-direction: column-reverse;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
 }
 
 #RoleSelector VisualElement {
@@ -204,4 +208,18 @@
 
 #BuildScrollView #unity-content-viewport {
     height: 100%;
+}
+
+Label {
+    -unity-font: url('project://database/Assets/Fonts/BOBCAT.TTF?fileID=12800000&guid=c31f514c75b1ba042b6ba876816f7303&type=3#BOBCAT');
+    -unity-font-definition: initial;
+}
+
+TextElement {
+    -unity-font: url('project://database/Assets/Fonts/BOBCAT.TTF?fileID=12800000&guid=c31f514c75b1ba042b6ba876816f7303&type=3#BOBCAT');
+    -unity-font-definition: initial;
+    font-size: 31px;
+    color: rgb(34, 34, 34);
+    -unity-font-style: normal;
+    -unity-text-align: upper-left;
 }

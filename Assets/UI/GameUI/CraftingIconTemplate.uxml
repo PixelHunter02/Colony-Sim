@@ -1,17 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/GameUI/CraftingIcon.uss?fileID=7433441132597879392&amp;guid=3cd4c24ad6210564cbbc95201a1953d2&amp;type=3#CraftingIcon" />
     <ui:VisualElement style="flex-shrink: 0; width: 250px; height: 250px; max-height: 250px; min-height: 250px; min-width: 250px; max-width: 250px;">
-        <ui:VisualElement name="VisualElement" style="background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vector.png?fileID=2800000&amp;guid=17ffd138921d55b4386a068c711508d3&amp;type=3#uipack_rpg_vector&apos;); -unity-slice-left: 420; -unity-slice-top: 420; -unity-slice-right: 420; -unity-slice-bottom: 420; width: 100%; height: 100%;">
-            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vectorLight.png?fileID=2800000&amp;guid=a860cb54d4596fe4ba46c921262efc8d&amp;type=3#uipack_rpg_vectorLight&apos;); margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px; -unity-slice-left: 420; -unity-slice-top: 420; -unity-slice-right: 420; -unity-slice-bottom: 420;">
-                <ui:VisualElement name="CraftingIcon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
-                    <ui:Button text="Button" display-tooltip-when-elided="true" name="CraftButton" style="opacity: 0; width: 100%; height: 100%;" />
-                </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" style="background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/Images/Button.png?fileID=2800000&amp;guid=8fe0c4b41e25470428660aa2cc6b41af&amp;type=3#Button&apos;); -unity-slice-left: 420; -unity-slice-top: 420; -unity-slice-right: 420; -unity-slice-bottom: 420; width: 100%; height: 100%;">
+            <ui:VisualElement name="CraftingIcon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
+                <ui:Button text="Button" display-tooltip-when-elided="true" name="CraftButton" style="opacity: 0; width: 100%; height: 100%;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="LabelBox" class="LabelDown" style="transition-duration: 0.25s;">
-            <ui:VisualElement name="LabelInner" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; background-image: url(&apos;project://database/Assets/Sprites/ui/uipack_rpg_vectorLight.png?fileID=2800000&amp;guid=a860cb54d4596fe4ba46c921262efc8d&amp;type=3#uipack_rpg_vectorLight&apos;); width: 90%; height: 80%; bottom: 4px; left: 13px; -unity-slice-left: 420; -unity-slice-top: 420; -unity-slice-right: 420; -unity-slice-bottom: 420; -unity-slice-scale: 1.9px;">
-                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="LabelText" style="-unity-text-align: middle-center; font-size: 36px; padding-bottom: 8px;" />
-            </ui:VisualElement>
+        <ui:VisualElement name="LabelBox" class="LabelDown LabelUp" style="transition-duration: 0.25s; -unity-slice-scale: 0.1px; -unity-slice-left: 418; -unity-slice-top: 418; -unity-slice-right: 418; -unity-slice-bottom: 418; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="LabelText" style="-unity-text-align: middle-center; font-size: 40px; padding-bottom: 8px; -unity-font: url(&apos;project://database/Assets/Fonts/BOBCAT.TTF?fileID=12800000&amp;guid=c31f514c75b1ba042b6ba876816f7303&amp;type=3#BOBCAT&apos;); -unity-font-definition: initial; margin-top: 11px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

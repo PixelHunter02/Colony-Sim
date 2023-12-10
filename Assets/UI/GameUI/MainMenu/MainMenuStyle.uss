@@ -1,7 +1,7 @@
 .MainMenuButton {
     width: 20%;
     height: 50%;
-    font-size: 50px;
+    font-size: 69px;
     margin-top: 0;
     background-image: url('project://database/Assets/Images/Button.png?fileID=2800000&guid=8fe0c4b41e25470428660aa2cc6b41af&type=3#Button');
     -unity-background-image-tint-color: rgb(255, 255, 255);
@@ -20,6 +20,8 @@
     -unity-slice-right: 433;
     -unity-slice-bottom: 0;
     -unity-text-outline-color: rgba(0, 0, 0, 0);
+    -unity-font: url('project://database/Assets/Fonts/BOBCAT.TTF?fileID=12800000&guid=c31f514c75b1ba042b6ba876816f7303&type=3#BOBCAT');
+    -unity-font-definition: initial;
 }
 
 .MainMenuButton:hover {

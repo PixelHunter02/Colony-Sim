@@ -108,7 +108,9 @@ public class NewTutorial : MonoBehaviour
         {
             return;
         }
-        
+        GameManager.Instance.inputManager.playerInputActions.Player.Enable(); 
+        // GameManager.Instance.inputManager.playerInputActions.UI.Enable();  
+        // GameManager.Instance.inputManager.playerInputActions.Touch.Enable();
         stageTwoRun = true;
         var trappedVillager = VillagerManager.GetVillagers()[1];
         Level.AddToVillagerLog(trappedVillager, "Help! You can use the WASD keys to move the camera over to me! You will also need to rotate the camera by pressing the right mouse button and dragging.");

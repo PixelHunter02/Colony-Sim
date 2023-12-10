@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.InputSystem.Users;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 
@@ -20,7 +21,7 @@ public class CameraMovement : MonoBehaviour
     
     //Movement
     private Vector2 _lastMousePosition;
-    [SerializeField] private float speed;
+    [SerializeField] private float keyboardMoveSpeed = 30;
     [SerializeField] private float panningSpeed;
     
     //Rotate
@@ -56,11 +57,7 @@ public class CameraMovement : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name.Equals("GameScene") || SceneManager.GetActiveScene().name.Equals("Tablet"))
         {
-            // if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-            // {
-            // }
             CameraZoom();
-
             MoveCamera();
             MoveCursor();
         }
@@ -71,7 +68,7 @@ public class CameraMovement : MonoBehaviour
         var movementDirection = new Vector3(_gameManager.inputManager.GetNormalizedMovement().x, 0, _gameManager.inputManager.GetNormalizedMovement().y);
 
         movementDirection = followObject.transform.forward * movementDirection.z + followObject.transform.right * movementDirection.x;
-        followObject.transform.position += movementDirection * (speed * Time.deltaTime);
+        followObject.transform.position += movementDirection * (keyboardMoveSpeed * Time.deltaTime * SettingsManager.keyboardMoveSpeedModifier);
     }
 
     private void StartCameraPanning(InputAction.CallbackContext context)
@@ -93,7 +90,7 @@ public class CameraMovement : MonoBehaviour
 
             var mousePosition = followObject.transform.forward * (_gameManager.inputManager.GetScaledCursorPositionThisFrame(position).y - _lastMousePosition.y) + followObject.transform.right*(_gameManager.inputManager.GetScaledCursorPositionThisFrame(position).x-_lastMousePosition.x);
             var movementDirection = new Vector3(mousePosition.x, 0, mousePosition.z);
-            followObject.transform.position += movementDirection * (Time.deltaTime * panningSpeed);
+            followObject.transform.position += movementDirection * (Time.deltaTime * panningSpeed * SettingsManager.mousePanSpeedModifier);
             _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
 
             // if (_gameManager.IsOverUI())
@@ -149,15 +146,9 @@ public class CameraMovement : MonoBehaviour
 
             var value = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position) - _lastMousePosition;
             var rotation = followObject.transform.rotation.eulerAngles;
-            rotation.y += value.x * _gameManager.settingsManager.rotationSpeed * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime;
+            rotation.y += value.x * SettingsManager.rotationSpeedModifier * _gameManager.settingsManager.CameraXModifier() * Time.deltaTime * 5;
             followObject.transform.rotation = Quaternion.Euler(rotation);
             _lastMousePosition = _gameManager.inputManager.GetScaledCursorPositionThisFrame(position);
-            
-            // if (_gameManager.IsOverUI())
-            // {
-            //     yield break;
-            // }
-            //
             yield return null;
         }
     }
