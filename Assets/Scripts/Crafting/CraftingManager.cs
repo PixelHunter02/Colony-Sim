@@ -131,6 +131,7 @@ public class CraftingManager : MonoBehaviour
         _gameManager.storageManager.AddToStorage(itemToAdd);
         
         //PLAY CRAFT ANIMATION
+        assignedVillager.craftingParticle.Play();
         assignedVillager.CurrentState = VillagerStates.Crafting;
         yield return new WaitForSeconds(3f);
         
@@ -147,6 +148,7 @@ public class CraftingManager : MonoBehaviour
     
     private IEnumerator PlaceCraftedItem(Villager assignedVillager, Item location)
     {
+        assignedVillager.craftingParticle.Stop();
         // Allow The Villager to move and set a destination.
         Villager.StopVillager(assignedVillager,false);
         Villager.SetVillagerDestination(assignedVillager, location.storageLocation);

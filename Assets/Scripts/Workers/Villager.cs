@@ -16,6 +16,7 @@ public class Villager : MonoBehaviour, IInteractable
     [SerializeField] private GameObject nearestObject;
     [SerializeField] private List<GameObject> objInTriggerZone;
     [SerializeField] private List<GameObject> objInAwarenessZone;
+    public ParticleSystem craftingParticle;
     public GameObject target;
     private bool attackStarted;
     private bool finding;

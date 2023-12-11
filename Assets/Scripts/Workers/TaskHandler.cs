@@ -44,6 +44,7 @@ public class TaskHandler : MonoBehaviour
     {
         
         yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position, () => {task.harvestParticle.Play();}));
+        yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position, () => { task.audioSource.Play(); }));
         yield return StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
     }
     
@@ -76,7 +77,7 @@ public class TaskHandler : MonoBehaviour
         yield return StartCoroutine(task.CRSpawnHarvestDrops());
         Destroy(task.gameObject);
         
-        //Set The Villager To Its  Idle State
+        // Set The Villager To Its Idle State
         Villager.StopVillager(assignedVillager, false);
         assignedVillager.CurrentState = VillagerStates.Idle;
         

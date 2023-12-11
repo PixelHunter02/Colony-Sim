@@ -9,7 +9,8 @@ public class HarvestableObject : MonoBehaviour, IInteractable
 
     private GameManager _gameManager;
     public ParticleSystem harvestParticle;
-    
+    public AudioSource audioSource;
+
     Villager villagerToAssign;
 
     public delegate void OnHarvestCompleted();
@@ -57,6 +58,7 @@ public class HarvestableObject : MonoBehaviour, IInteractable
     public IEnumerator CRSpawnHarvestDrops()
     {
         harvestParticle.Stop();
+        audioSource.Stop();
         const float pushIntensity = 0.5f;
         const float timeBetweenSpawns = 0.3f;
         var min = harvestableObject.minDropAmount;
