@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SG_Tasks;
+using Unity.AI.Navigation;
 using UnityEngine.AI;
 
 public class TaskHandler : MonoBehaviour
@@ -11,6 +12,8 @@ public class TaskHandler : MonoBehaviour
     private GameManager _gameManager;
     public Queue<Coroutine> queuedTasks;
     public List<Roles> crafters;
+
+    public NavMeshSurface navSurface;
 
     private void Awake()
     {
@@ -23,17 +26,20 @@ public class TaskHandler : MonoBehaviour
 
     public IEnumerator TaskToAssign(BuildStats task)
     {
-        if (VillagerManager.TryGetVillagerByRole(out Villager villager,task.transform.position))
-        {
-            yield return StartCoroutine(RunTaskCR(villager, task));
-            queuedTasks.Dequeue();
-        }
-        else
-        {
-            Debug.Log("Unable To Find Villager, Retrying in 3 Seconds.");
-            yield return new WaitForSeconds(3f);
-            StartCoroutine(TaskToAssign(task));
-        }
+       
+            if (VillagerManager.TryGetVillagerByRole(out Villager villager,task.transform.position))
+            {
+                yield return StartCoroutine(RunTaskCR(villager, task));
+                queuedTasks.Dequeue();
+                yield break;
+            }
+            else
+            {
+                Debug.Log("Unable To Find Villager, Retrying in 3 Seconds.");
+                yield return new WaitForSeconds(3f);
+                StartCoroutine(TaskToAssign(task));
+            }
+
     }
 
     #endregion
@@ -43,8 +49,12 @@ public class TaskHandler : MonoBehaviour
     public IEnumerator RunTaskCR(Villager assignedVillager, HarvestableObject task)
     {
         
-        yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position, () => {task.harvestParticle.Play();}));
-        yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position, () => { task.audioSource.Play(); }));
+        yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position, () =>
+        {
+            task.harvestParticle.Play();
+            task.audioSource.Play();
+        }));
+        // yield return StartCoroutine(Tasks.WalkToLocation(assignedVillager, task.standPoint.position, () => {  }));
         yield return StartCoroutine(VillagerDoesTaskCR(assignedVillager, task));
     }
     
@@ -93,6 +103,7 @@ public class TaskHandler : MonoBehaviour
     public IEnumerator RunTaskCR(Villager assignedVillager, BuildStats buildStats)
     {
             List<Item> resourcesToRemove = new List<Item>();
+            Debug.Log("Building");
 
             foreach (var required in buildStats.craftingRecipe.craftingRecipe)
             {
@@ -119,14 +130,41 @@ public class TaskHandler : MonoBehaviour
 
             foreach (var item in resourcesToRemove)
             {
-                yield return StartCoroutine(PickUpItems(assignedVillager, item));
+                // yield return StartCoroutine(PickUpItems(assignedVillager, item));
+                StorageManager.EmptyStockpileSpace(item);
             }
 
-            yield return Tasks.WalkToLocation(assignedVillager, buildStats.transform.position);
-            yield return new WaitForSeconds(3);
-            assignedVillager.CurrentState = VillagerStates.Idle;
+            // yield return Tasks.WalkToLocation(assignedVillager, buildStats.transform.position);
+            // yield return new WaitForSeconds(3);
+
+            // Vector3 position = Vector3.zero;
+            // foreach (var pos in buildStats.buildPoints)
+            // {
+            //     if (CanReachPosition(pos.position, assignedVillager.agent))
+            //     {
+            //         position = pos.position;
+            //     }
+            // }
+            //
+            // Villager.StopVillager(assignedVillager,false);
+            // Villager.SetVillagerDestination(assignedVillager, position);
+            // assignedVillager.CurrentState = VillagerStates.Walking;
+            //
+            //
+            // while (Vector3.Distance(assignedVillager.transform.position, position) > 2f )
+            // {
+            //     yield return null;
+            // }
+            //
+            // assignedVillager.CurrentState = VillagerStates.Idle;
+            // assignedVillager.CurrentState = VillagerStates.Idle;
             buildStats.building.SetActive(false);
             buildStats.built.SetActive(true);
+            if (!navSurface)
+            {
+                navSurface = GameObject.Find("NavMesh").GetComponent<NavMeshSurface>();
+            }
+            // navSurface.BuildNavMesh();
     }
     
     private IEnumerator PickUpItems(Villager assignedVillager, Item location)

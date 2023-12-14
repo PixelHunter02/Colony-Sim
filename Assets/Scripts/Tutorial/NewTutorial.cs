@@ -43,7 +43,7 @@ public class NewTutorial : MonoBehaviour
         
         HarvestableObject.TutorialStageEight += TutorialStage8;
         
-        BuildingManager.TutorialStageNine += TutorialStage9;
+        TutorialStageNine += TutorialStage9;
     }
 
     private void OnDisable()
@@ -64,7 +64,7 @@ public class NewTutorial : MonoBehaviour
         
         HarvestableObject.TutorialStageEight -= TutorialStage8;
 
-        BuildingManager.TutorialStageNine -= TutorialStage9;
+        TutorialStageNine -= TutorialStage9;
     }
 
     private void Update()
@@ -175,7 +175,8 @@ public class NewTutorial : MonoBehaviour
         var trappedVillager = VillagerManager.GetVillagers()[1];
         Level.AddToVillagerLog(trappedVillager,"Alright, next up im going to need to cut down some trees, you can get me to do this by clicking on the tree when it is highlighted.");
     }
-    
+    public static event Action TutorialStageNine;
+
     private void TutorialStage8()
     {
         if (stageEightRun || !stageSevenRun)
@@ -186,6 +187,7 @@ public class NewTutorial : MonoBehaviour
         stageEightRun = true;
         var trappedVillager = VillagerManager.GetVillagers()[1];
         Level.AddToVillagerLog(trappedVillager,"Whew, we are almost out of here! The last step we need to do is build the bridge, this can be done by selecting the hammer icon and selecting the bridge icon in the tool bar. Once you do that just place it where the old bridge was and Ill get to work!");
+        TutorialStageNine?.Invoke();
     }
     
     private void TutorialStage9()
@@ -196,6 +198,7 @@ public class NewTutorial : MonoBehaviour
         }
         
         stageNineRun = true;
+        GameManager.Instance.level.villageHeart.GetComponent<VillageHeart>().Experience += 20;
         var trappedVillager = VillagerManager.GetVillagers()[1];
         Level.AddToVillagerLog(trappedVillager,"Thanks so much for helping me get back to our village! As a token of my thanks I was hoping to show you a little secret, this colony was brought together by the village heart, completing tasks and ensuring the villagers are safe and happy powers it up and allows us to expand our colony, it appears to be ready to grow now. I would love for you to do the honours, click on the village heart and level it up.");
     }

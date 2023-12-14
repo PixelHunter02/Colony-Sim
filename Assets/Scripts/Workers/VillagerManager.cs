@@ -179,6 +179,33 @@ public class VillagerManager : MonoBehaviour
         return villagerToReturn;
     }
     
+    public static bool TryGetVillagerByRole(List<Roles> roles, out Villager value, Vector3 movePosition1, Vector3 movePosition2)
+    {
+        Villager villagerToReturn = null;
+        foreach (var role in roles)
+        {
+            foreach (var villager in GetVillagers())
+            {
+                if (villagerToReturn)
+                {
+                    if (villager.CurrentRole == role && !villager.ignoreQueue || villager.CurrentRole == Roles.Leader)
+                    {
+                        if (TaskHandler.CanReachPosition(movePosition1, villager.agent) || TaskHandler.CanReachPosition(movePosition2, villager.agent))
+                        {
+                            villagerToReturn = villager;
+                        }
+                    }
+                }
+                else if (villager.CurrentRole == role && !villager.ignoreQueue || villager.CurrentRole == Roles.Leader && (TaskHandler.CanReachPosition(movePosition1, villager.agent)||TaskHandler.CanReachPosition(movePosition2, villager.agent)))
+                {
+                    villagerToReturn = villager;
+                }
+            }
+        }
+        value = villagerToReturn;
+        return villagerToReturn;
+    }
+    
     public void GenerateNewVillagerStats(Villager villager)
     {
             villager.VillagerStats.Craft = Random.Range(1, 7);

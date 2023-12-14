@@ -19,7 +19,7 @@ public class ObjectInformation : MonoBehaviour, IStorable
         if (!CanBeStored())
             return;
 
-        FindAvailableVillager();
+        StartCoroutine(FindAvailableVillager());
     }
 
     public void AssignStorage()
@@ -30,14 +30,24 @@ public class ObjectInformation : MonoBehaviour, IStorable
         StorageManager.UseStorageSpace(location);
     }
     
-    private void FindAvailableVillager()
+    private IEnumerator FindAvailableVillager()
     {
         AssignStorage();
 
-        VillagerManager.TryGetVillagerByRole(out Villager villager, transform.position);
-        IEnumerator cr = Tasks.StoreItem(villager, this);
-        Debug.Log(villager);
-        villager.villagerQueue.Enqueue(cr);
+        Villager foundVillager = null;
+        while (!foundVillager)
+        {
+            VillagerManager.TryGetVillagerByRole(out Villager villager, transform.position);
+            if (villager)
+            {
+                foundVillager = villager;
+            }
+
+            yield return null;
+        }
+        IEnumerator cr = Tasks.StoreItem(foundVillager, this);
+        Debug.Log(foundVillager);
+        foundVillager.villagerQueue.Enqueue(cr);
     }
     
     private bool CanBeStored() => StorageManager.HasStorageSpace() && !_isStored && !_storageAssigned;

@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 878ba3fe7fd5b05498331b73a8f42033, type: 3}
-  m_Name: Fence
+  m_Name: Pickaxe
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8799760028346810535, guid: 04c88e53193d90f498567a36e76f34b3, type: 3}
-  objectName: Fence
-  uiSprite: {fileID: 21300000, guid: 51c66c0160f4cea41857e814f61834b5, type: 3}
-  canBePlaced: 1
+  prefab: {fileID: 100000, guid: 1c6a9cc786ee51644a0ee0c2dc61befa, type: 3}
+  objectName: Pickaxe
+  uiSprite: {fileID: 21300000, guid: 1b3fa240110de12469c4fcd732bde71f, type: 3}
+  canBePlaced: 0
   craftingRecipe:
   - itemSO: {fileID: 11400000, guid: 950d01fadf8da244692cceeaffa3fcda, type: 2}
     storageLocation: {x: 0, y: 0, z: 0}
     go: {fileID: 0}
     amount: 2
-  itemDescrition: This Item Costs 2 Wood To Craft
-  assignRole: 0
-  levelUnlocked: 0
+  itemDescrition: 'Requirements: 2 wood 3 stone --- A pickaxe allows you to assign
+    the role "Miner" The miner will harvest stone for you'
+  assignRole: 4
+  levelUnlocked: 2

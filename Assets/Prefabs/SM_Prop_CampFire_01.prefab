@@ -33,6 +33,7 @@ Transform:
   - {fileID: 2645027443662835790}
   - {fileID: 3749195606084864152}
   - {fileID: 885206993100620501}
+  - {fileID: 1878486193575139312}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,6 +52,8 @@ MonoBehaviour:
   craftingRecipe: {fileID: 11400000, guid: 1d251a9640f53a147a56f9b1cd7be030, type: 2}
   building: {fileID: 6671804338487449665}
   built: {fileID: 829333884174036585}
+  buildPoints:
+  - {fileID: 1878486193575139312}
 --- !u!208 &6788807712324637477
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -942,6 +945,37 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!1 &8811577159622219058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1878486193575139312}
+  m_Layer: 0
+  m_Name: BuildPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1878486193575139312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8811577159622219058}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.282, y: 0.14897728, z: -0.198}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4585559402303324}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6587551801625008705
 PrefabInstance:
   m_ObjectHideFlags: 0

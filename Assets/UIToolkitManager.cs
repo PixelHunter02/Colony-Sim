@@ -114,6 +114,7 @@ public class UIToolkitManager : MonoBehaviour
 
         topRoleSelectField = topBar.Q<EnumField>("RoleSelector");
         topRoleSelectField.RegisterCallback<ChangeEvent<Enum>>(evt => RoleSelectTopBar(evt));
+        root.Q<Button>("HomeButton");
         
         // Settings UI
         settingsUIManager = SettingsUIManager.Instance;

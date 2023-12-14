@@ -23,4 +23,4 @@ MonoBehaviour:
     amount: 2
   itemDescrition: 
   assignRole: 0
-  levelUnlocked: 0
+  levelUnlocked: 2

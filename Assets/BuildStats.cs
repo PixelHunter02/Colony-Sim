@@ -10,6 +10,7 @@ public class BuildStats : MonoBehaviour
     private GameManager _gameManager;
     public GameObject building;
     public GameObject built;
+    public Transform[] buildPoints;
 
     private void Awake()
     {
